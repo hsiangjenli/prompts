@@ -16,12 +16,12 @@
 ## 執行流程概覽
 
 ```mermaid
-flowchart LR
+flowchart TB
     PI[index<br/>入口導覽] --> PRQ[requirements<br/>需求定義]
     PRQ --> PRC[requirements-change<br/>需求變更]
     PRC --> PD[design<br/>技術設計]
-    PD --> PT[任務拆解模板<br/>(待擴充)]
-    PT --> PIMPL[實作 / 測試模板<br/>(待擴充)]
+    PD --> PT[任務拆解模板<br/>（待擴充）]
+    PT --> PIMPL[實作 / 測試模板<br/>（待擴充）]
     PRC --> GH1[GitHub Issue<br/>更新既有需求]
     PRQ --> GH1
     PD --> GH[GitHub Issue / PR<br/>交付]
