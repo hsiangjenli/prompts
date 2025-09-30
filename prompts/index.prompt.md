@@ -1,72 +1,68 @@
 ---
 mode: agent
----
----
-description: 作為入口導覽，根據使用者提供或既有資產的專案狀態推薦合適的指令／Prompt 與後續步驟。
+description: 入口指令；盤點現況、找出缺口並推薦下一步 Prompt
+inputs:
+  summary: 需先掌握使用者當前問題與現有產出
+  required:
+    - 目前的卡關點、目標與時程限制
+    - 現有文件與路徑（例如 docs/spec/, docs/design/, CHANGELOG.md）
+    - 相關 GitHub Issue 編號與重點留言（可透過 MCP 取得）
+    - 近期已執行的指令／Prompt 及其主要輸出
+    - 語言或格式需求（預設繁體中文 + Markdown）
+outputs:
+  summary: 提供決策所需的全貌、推薦步驟與後續動作
+  include:
+    - 專案現況摘要（含資料來源與信賴等級：🔵 確定／🟡 推測／🔴 假設）
+    - 近期變更重點（CHANGELOG、Git 提交或 Issue 摘要）
+    - 推薦指令清單（建議 ≤3 項），說明目的、必要輸入、預期產出與 EARS/GWT 覆蓋
+    - 建議動作：需建立或更新的 Issue／PR、需補文件、待確認事項（可用 MCP 直接建立）
+    - 開放問題：列出尚待使用者提供的資訊
 ---
 
 # index
 
 ## 目的
 
-在面對眾多 tsumiki / kairo / 自訂指令時，協助使用者釐清目前所處階段、整合資料來源，並輸出下一步應執行的 Prompt（名稱不必限定含有「kairo」），同時提示應產出的 EARS 需求與 GWT（Given-When-Then）驗收描述。
+此指令作為流程入口，負責總覽專案現況、辨識需求缺口，並推薦接下來應執行的 Prompt 或指令。關鍵任務包含：
+- 判斷 EARS 需求與 GWT 驗收是否齊備。
+- 盤點是否已有設計／任務／實作輸出。
+- 修正指令使用順序，避免重工。
 
-## Input
+## 流程
 
-- 使用者當前的問題描述、目標與時程要求
-- 已完成或既有的文件清單（例如 `docs/spec/`、`docs/design/`、`CHANGELOG.md`）
-- 相關 GitHub Issue 編號與重點留言（若無可請使用者補充）
-- 既有指令或 Prompt 的執行情況與結果（若已執行過）
-- 語言或輸出格式偏好（預設為繁體中文）
+在進入 Phase 0 前，請確認：
+- 已具備專案目錄讀取權限（`docs/`、`.github/`、`commands/` 等）。
+- 可透過 MCP 或 API 存取 GitHub Issue／留言；若權限不足需在輸出中註明並向使用者索取資訊。
+- 回覆語言設定為繁體中文。
 
-## Output
+### Phase 0：自動蒐集
+1. 讀取 `README.md`、`CHANGELOG.md`（或等效檔）、`docs/spec/`、`docs/design/`。
+2. 透過 MCP 取得最新的 GitHub Issue / Comments，了解需求或變更討論。
+3. 將已有輸出與缺漏整理成清單。
 
-- 專案現況摘要（含資料來源、信賴等級標示）
-- 最近 Changelog、GitHub Issue/Comment 的重點整理
-- 推薦指令／Prompt 清單與執行順序，說明各自的目的、必要輸入與預期產出
-- 對 EARS 與 GWT 覆蓋情況的檢查結果與缺口
-- 建議的後續動作：需建立的 Issue／PR／Draft、需閱讀的文件、下一個 Prompt
+### Phase 1：使用者訪談
+1. 根據缺漏提出封閉式問題（EARS、GWT、設計、任務、實作、CI/CD）。
+2. 判斷此次是否為既有需求的變更；若是，優先納入 `requirements-change`。
+3. 確認期望交付與時間限制。
 
-## 前提
-
-- 可讀取專案根目錄（如 `docs/`、`.github/`、`commands/`、`change` 或 `CHANGELOG.md`）。
-- 擁有 GitHub API 權限或可取得 Issue 與 Comments（若無權限，需告知使用者並改為索取摘要）。
-
-## 執行流程
-
-1. **蒐集上下文**
-   - 讀取 `README.md`、`docs/spec/`、`docs/design/`、`CHANGELOG.md`（或等效檔）了解版本與近期變更。
-   - 透過 GitHub API / CLI 擷取最近的 Issue 與主要留言（摘要即可），特別是與需求、Bug、設計相關的項目。
-   - 若無法存取 Issue/Comment，向使用者說明限制並請對方提供要點。
-   - 確認語系需求，預設以繁體中文回應。
-
-2. **盤點需求階段（與使用者互動）**
-   - 需求是否已經以 EARS 形式撰寫？若沒有，標記為缺口。
-   - 是否存在對應的 GWT 驗收描述或測試案例？
-   - 是否需要技術設計、資料流程、介面定義？
-   - 是否已拆分任務或準備建立 Issue / PR？
-   - 是否屬於對既有需求的新增或調整？若是，預設優先建議 `requirements-change`。
-   - 是否進入實作或測試（TDD、CI/CD）階段？
-
-3. **彙整輸入資訊**
-   - 列出使用者目標、既有文件來源、GitHub Issue 摘要、最近的 Changelog 重點。
-   - 標示各階段完成狀態與缺漏（🔵 確定 / 🟡 推測 / 🔴 假設）。
-
-4. **推薦指令 / Prompt**
-   - 依據缺漏與目標，列出 3~5 個最適合的指令（不限名稱前綴，可包含 `requirements-change`、`design`、`tdd-*` 等自訂 Prompt）。
-   - 指令說明需包含：目的、預期輸入、主要產出（例如 EARS 需求、GWT 驗收、Issue 草稿、CI/CD 任務）。
-   - 若需跨多階段，提供執行順序與依賴關係。
-
-5. **輸出格式**
-   - 以 Markdown 條列：
-     - 專案現況摘要（含來源、信賴等級）
-     - 最近 Changelog 與 GitHub Issue/Comment 的重點整理
-     - 推薦指令清單（依優先順序）
-     - 每個指令的輸入需求、產出（需明確指出 EARS、GWT 是否涵蓋）、注意事項
-     - 建議下一步，包括是否需在 GitHub 建立 Issue / PR / Draft
+### Phase 2：決策與輸出
+1. 依狀態對照推薦：
+   | 主要缺口 | 優先指令 |
+   | --- | --- |
+   | 缺少正式需求 | `requirements.prompt.md` |
+   | 既有需求需調整 | `requirements-change.prompt.md` |
+   | 需求已確認需設計 | `design.prompt.md` |
+   | 需求與設計已就緒 | 視情況建議任務拆解／實作模板 |
+2. 組成輸出：
+   - 現況摘要（含來源與信賴等級）。
+   - CHANGELOG／Issue 重點。
+   - 推薦指令（目的、必要輸入、預期產出、EARS/GWT 覆蓋情況）。
+   - 建議動作（必要時直接透過 MCP 建立 Issue／PR）。
+   - 開放問題與待補資訊。
 
 ## 注意事項
 
-- 若遇到客製化模板，請將其加入建議清單並描述其用途。
-- 資訊不足時必須向使用者追問，而非自行臆測。
-- 回應維持繁體中文；若可使用 MCP 或自動化工具，請直接建立／更新 GitHub Issue 留存輸出，僅在無法存取時再請使用者協助。
+- 先確認資訊是否完整；不足時應向使用者追問。
+- 回覆需保持結構化，方便貼入 GitHub Issue。
+- 若偵測輸出重複，提醒使用者檢視是否可沿用。
+- 可使用自動化工具時，優先主動建立／更新 Issue 並附連結。
