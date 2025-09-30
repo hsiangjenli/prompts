@@ -1,8 +1,22 @@
 ---
 mode: agent
----
----
-description: 針對已存在的需求定義進行新增或修改，更新 EARS 需求與 GWT 驗收描述，並規劃對 GitHub Issue/PR 的後續動作。
+description: 針對已存在的需求定義進行新增或修改，更新 EARS 與 GWT，並同步規劃 GitHub Issue / PR 行動
+inputs:
+  summary: 確認此次變更的來源、影響範圍與限制，避免與既有文件衝突
+  required:
+    - 變更依據的 GitHub Issue（編號與連結）或等效紀錄
+    - 使用者提供的變更摘要（原因、期望成果、優先順序）
+    - 相關文件與路徑（需求、驗收、設計、程式碼、CI/CD 等）
+    - 受影響的時程、部署或流程限制
+    - 語言與輸出格式偏好（預設繁體中文 + Markdown）
+outputs:
+  summary: 提供更新後的需求與驗收描述，並列出同步行動
+  include:
+    - 變更摘要與資料來源（含信賴等級與 Issue 連結）
+    - 更新後的 EARS 條目（標記新增、修改、沿用）與對應 GWT 驗收描述
+    - 影響分析：需更新的文件、程式碼、測試、CI/CD 項目
+    - 建議建立或更新的 GitHub Issue／PR（標題、標籤、重點）與分支／Commit 範例
+    - 後續建議 Prompt 與待確認事項，提醒將輸出留存於 GitHub Issue
 ---
 
 # requirements-change
@@ -11,28 +25,11 @@ description: 針對已存在的需求定義進行新增或修改，更新 EARS �
 
 當專案已經擁有需求文件，但使用者提出新增或調整時，協助辨識影響範圍、更新 EARS 需求與 GWT 驗收描述，並整理後續在 GitHub 上應採取的 Issue、PR 或文件更新步驟。
 
-## Input
+## 前置條件
 
-- 需要處理的 GitHub Issue（編號與連結），或明確說明若為新建議變更
-- 使用者提供的變更摘要（為何要改、期望成果、優先順序）
-- 相關文件位置（既有需求、驗收、設計、程式碼等路徑）
-- 任何受影響的 CI/CD 規則或部署需求（若有）
-- 已知的時間限制或交付時程
-
-## Output
-
-- 變更摘要與資料來源清單（含 Issue 連結與信賴等級）
-- 更新後的 EARS 需求與對應的狀態標示（新增／修改／沿用）
-- 更新或新增的 GWT 驗收描述
-- 影響分析：需同步更新的文件、程式碼、測試、CI/CD 項目
-- 建議建立或更新的 GitHub Issue／PR 內容（標題、標籤、重點）與分支命名／Commit 範例
-- 後續建議指令（如 `design`、任務拆解或實作相關模板）與待確認事項
-
-## 前提
-
-- `docs/spec/` 目錄內已有既定的需求文件（例如 `*-requirements.md`、`*-acceptance-criteria.md`）。
-- 可讀取 `CHANGELOG.md`、Git 提交歷史與相關 GitHub Issue／評論。
-- 使用者能描述此次變更的背景、優先順序與預期交付時間。
+- `docs/spec/` 內已有既定需求文件或等效紀錄。
+- 可參考 `CHANGELOG.md`、Git 歷史與相關 Issue／評論；若無法讀取需向使用者索取摘要。
+- 使用者能說明此次變更的背景、優先順序與交付時程。
 
 ## 執行流程
 
@@ -68,7 +65,7 @@ description: 針對已存在的需求定義進行新增或修改，更新 EARS �
      - 專案現況摘要與資料來源。
      - 更新後的 EARS / GWT 清單。
      - 建議建立或更新的 Issue / PR。
-     - 建議使用的後續 Prompt（例如 `design`、任務拆解或實作模板）。
+     - 建議使用的後續 Prompt（例如 `bdd.prompt.md`、`sdd.prompt.md`、`tdd.prompt.md` 或後續任務拆解 / 實作流程）。
    - 明確指出需人工確認的問題或待決策事項。
 
 ## 注意事項

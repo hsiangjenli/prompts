@@ -6,6 +6,7 @@
 
 | 檔名 | 目的 | 主要產出 | 推薦情境 |
 | --- | --- | --- | --- |
+| `tech-stack.prompt.md` | 盤點技術堆疊並補齊缺項，統一實作依據 | 技術清單（已定案 / 暫用 / 待決定）、後續待辦 | 專案初始、需要確認或更新技術決策時 |
 | `index.prompt.md` | 入口導覽，依專案現況建議下一步 Prompt | 專案現況摘要、指令清單、EARS/GWT 缺口檢視 | 不確定該用哪個指令、需要流程總覽時 |
 | `requirements.prompt.md` | 釐清需求來源並整理 EARS / GWT 雛形 | 需求摘要、情境清單、後續 BDD 問題集 | 需求尚未完整或需重新盤點時 |
 | `requirements-change.prompt.md` | 針對既有需求變更，更新 EARS / GWT | 變更摘要、更新後的需求與驗收描述 | 已有文件但臨時調整或新增需求時 |
@@ -33,13 +34,14 @@
 | `bdd.md` | 建立 BDD 驗收場景 Issue | Gherkin 情境、驗收訊號、對應 SDD / TDD Issue 編號 |
 | `sdd.md` | 記錄契約設計與合約測試計畫 | 契約對照表、Mock/樣本策略、版本與部署規劃 |
 | `tdd.md` | 追蹤 TDD 測試與實作進度 | 測試矩陣、流程紀錄、風險應對、後續交付 |
-| `bug_report.md` | 既有的錯誤回報模板 | 再現步驟、預期行為、實際行為、環境資訊 |
+| `bug_report.md` | 標準化缺陷回報，含嚴重度與相關 Scenario | 復現步驟、預期/實際行為、環境與風險、後續建議 |
 
 ## 執行流程概覽
 
 ```mermaid
 flowchart TB
-    PI[index
+    TS[tech-stack
+技術堆疊盤點] --> PI[index
 入口導覽] --> PRQ[requirements
 需求盤點]
     PRQ -->|需求調整| PRC[requirements-change
@@ -63,11 +65,12 @@ flowchart TB
 交付]
 ```
 
-1. 從 `index` 確認專案現況與缺口，再決定下一步。  
-2. `requirements` 整理需求雛形，若需求變更則使用 `requirements-change`。  
-3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。  
-4. TDD 透過總覽 Prompt 與六個子流程反覆迭代，必要時可由 `tdd-red`/`tdd-green` 透過 MCP 留言或調整 Issue 標籤。  
-5. 完成驗證後，可進入 `design` 或其他任務拆解 / 實作流程，並將成果同步至 GitHub Issue / PR。
+1. 先用 `tech-stack` 盤點既有技術與缺口，缺項時可沿用 README 預設並標記為暫用。  
+2. 從 `index` 確認專案現況與缺口，再決定下一步。  
+3. `requirements` 整理需求雛形，若需求變更則使用 `requirements-change`。  
+4. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。  
+5. TDD 透過總覽 Prompt 與六個子流程反覆迭代，必要時可由 `tdd-red`/`tdd-green` 透過 MCP 留言或調整 Issue 標籤。  
+6. 完成驗證後，可接續任務拆解或實作流程（例如建立 PR、同步程式碼），並將成果同步至 GitHub Issue / PR。
 
 ## 自動化腳本
 
@@ -81,3 +84,4 @@ flowchart TB
 - 新增 Prompt 或 Issue Template 時，請同步更新本 README、Mermaid 圖與 `index.prompt.md` 的推薦邏輯。
 - 儘量使用 GitHub Issue 留存成果；若需輸出本地 Markdown，請在 Prompt 中明確指示檔案路徑。
 - 使用 MCP 操作 GitHub（留言、變更標籤、建立 Issue 等）時，務必附上理由與對應的錯誤紀錄，維持追蹤性。
+- 實作或撰寫腳本時，請回顧 `tech-stack.prompt.md`、`README.md`、`AGENTS.md` 技術堆疊章節，確保決策一致並即時更新。
