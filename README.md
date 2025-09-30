@@ -111,19 +111,12 @@ class TDDState(PromptState):
         return self.context
 
 
-def delivery_pipeline(context: str) -> dict:
-    """
-    Args:
-        context: 入口盤點所需的資訊，例如主要 Issue 編號、可參考的文件清單。
-
-    Returns:
-        dict: 同步到 GitHub 的結果摘要（更新了哪些 Issue、建立了哪些 PR、下一個建議 Prompt）。
-    """
+def delivery_pipeline(context: dict) -> dict:
+    """串起各 Prompt 的最小流程，並標註欄位含意。"""
 
     # 1. 入口盤點 ─ 若缺技術決策，會建議先跑 tech-stack
     index_state: PromptState = run("index.prompt.md", context)
     if "tech-stack" in index_state.recommendations:
-        # tech-stack 用於確認共同的框架 / 語言 / 部署策略，避免後續 Prompt 不同調
         run("tech-stack.prompt.md", index_state.context)
 
     # 2. 建立或調整需求
@@ -138,19 +131,21 @@ def delivery_pipeline(context: str) -> dict:
             req_state = change_state.next_inputs
 
     # 3. 行為（BDD）與契約（SDD）
-    # index_state.context 會帶入上一個 Prompt 的輸出摘要，這裡沿用既有 BDD 結果
-    bdd_state: PromptState = run("bdd.prompt.md", req_state) if req_state else index_state.context.get("existing_bdd")
-    sdd_state: PromptState = (
-        run("sdd.prompt.md", bdd_state)
-        if getattr(bdd_state, "needs_contract_update", False)
-        else index_state.context.get("existing_sdd")
-    )
+    if req_state:
+        bdd_state: PromptState = run("bdd.prompt.md", req_state)
+    else:
+        bdd_state = index_state.context.get("existing_bdd")
+
+    needs_contract_update = bool(bdd_state and bdd_state.context.get("needs_contract_update"))
+    if needs_contract_update:
+        sdd_state: PromptState = run("sdd.prompt.md", bdd_state)
+    else:
+        sdd_state = index_state.context.get("existing_sdd")
 
     # 4. TDD 迭代（必要時回到需求變更）
-    # tdd_state.is_verified 表示六個 TDD 子流程是否都完成並驗證成功
     tdd_state: TDDState = run("tdd.prompt.md", sdd_state)
     while not tdd_state.is_verified:
-        assert tdd_state.next_prompt is not None  # 尚未驗證時必定提供下一步
+        assert tdd_state.next_prompt is not None
         run(tdd_state.next_prompt.file, tdd_state.next_prompt.context)
         if tdd_state.next_prompt.requires_requirement_change:
             return delivery_pipeline(tdd_state.next_prompt.context)
@@ -161,7 +156,8 @@ def delivery_pipeline(context: str) -> dict:
 
 
 # 以下函式為範例佔位，實際專案可由 CLI / MCP 實作
-def run(prompt_file: str, context: str):
+
+def run(prompt_file: str, context: dict):
     ...
 
 
@@ -169,7 +165,7 @@ def update_existing_issues(targets):
     ...
 
 
-def deliver_to_github(summary: str) -> dict:
+def deliver_to_github(summary: dict) -> dict:
     ...
 ```
 
