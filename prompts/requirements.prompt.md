@@ -1,8 +1,8 @@
 ---
 mode: agent
-description: 蒐集並確認需求後，以 EARS 與 GWT 為核心，串接 BDD→SDD→TDD 循環產生正式需求輸出
+description: 先理解需求並整理 EARS / GWT 雛形，為後續 BDD→SDD→TDD Prompt 提供完整輸入
 inputs:
-  summary: 先釐清需求來源與限制再執行本 Prompt
+  summary: 使用本 Prompt 釐清需求來源與限制
   required:
     - 使用者提供的需求概要與最終目標（對話、文件或 Issue）
     - 目前可用的專案文件清單與路徑（例如 docs/spec/, README.md, CLAUDE.md）
@@ -10,13 +10,13 @@ inputs:
     - 語言與輸出格式偏好（預設繁體中文 + Markdown）
     - 必須遵循的時程、技術或 CI/CD 限制
 outputs:
-  summary: 形成可追蹤的需求定義並安排後續動作
+  summary: 整理可追蹤的需求摘要，並準備執行 BDD Prompt 所需的材料
   include:
     - EARS 記法整理的功能需求（附信賴等級與來源）
-    - BDD（Gherkin）案例、SDD 契約更新、TDD 測試計畫
+    - 初步的 GWT 驗收草稿與 BDD 情境清單（供下一步擴充）
     - 任務幅度與涉及子系統（前端／後端／AI／資料處理等）的界線說明
-    - 建議建立或更新的 GitHub Issue（標題、標籤、重點）
-    - 推薦下一個 Prompt 與待確認事項，並提醒將輸出留存於 GitHub Issue（可由 MCP 直接建立）
+    - 推薦建立或更新的 GitHub Issue（需求摘要），以及建議後續交給 `bdd.prompt.md` 的重點題目
+    - 提醒將輸出留存於 GitHub Issue，並標註下一個將執行的 Prompt（預設為 `bdd.prompt.md`）
 ---
 
 # requirements
@@ -77,19 +77,19 @@ outputs:
 **目標**：把人話需求對應到可執行的測試、契約與實作計畫。
 
 1. **BDD（行為驅動）**
-   - 依主題整理使用者故事（WHO/WHAT/WHY），並為每個故事建立 Gherkin 範例。
-   - 若涵蓋多子系統，將案例分組（例如：API 呼叫、前端互動、批次流程、模型推論、監控警示）。
-   - 標示每個案例的信賴等級，未定義者列入開放問題。
+   - 依主題整理使用者故事（WHO/WHAT/WHY），先列出候選情境與重要步驟。
+   - 若涵蓋多子系統，將候選情境分組（例如：API 呼叫、前端互動、批次流程、模型推論、監控警示）。
+   - 為每個候選情境標示信賴等級，未定義者列入開放問題，供 `bdd.prompt.md` 深挖。
 2. **SDD（規格驅動）**
-   - 從 BDD 案例萃取介面或資料契約：OpenAPI／AsyncAPI／GraphQL／gRPC、事件 schema、資料表／檔案格式、特徵與模型版本、UI 元件協定、排程設定、監控 KPI。
-   - 為每項契約明確指定：版本策略、mock／樣本檔、合約測試或資料驗證方式。
-   - 若屬「資料／契約優先」工作，可先定義 SDD，但需補回對應的 BDD 案例。
+   - 根據上述候選情境，紀錄可能涉及的介面或資料契約（OpenAPI／AsyncAPI／GraphQL／gRPC、事件 schema、資料表／檔案格式、特徵與模型版本、UI 元件協定、排程設定、監控 KPI 等）。
+   - 為每項契約先草擬需釐清的重點（版本策略、mock／樣本、合約驗證方式），交由 `sdd.prompt.md` 詳化。
+   - 若屬「資料／契約優先」工作，可在此階段記下需優先處理的契約，再提醒後續 BDD 需補齊行為。
 3. **TDD（測試驅動）**
-   - 建立單元／元件／資料處理／模型驗證測試清單，標示 Red → Green → Refactor 步驟。
-   - 確認測試所需環境（container、雲資源、GPU、排程器）、資料集與守護性檢查（schema 驗證、模型 drift、資安掃描）。
-   - 為每個測試對應的 BDD 案例與 SDD 契約建立映射表。
+   - 先列出必須驗證的測試類型（單元／元件／資料處理／模型驗證等）與可能的 Red → Green → Refactor 步驟。
+   - 紀錄可能需要的環境、資料集與檢查項目（schema 驗證、模型表現、資安掃描），交由 `tdd.prompt.md` 詳細展開。
+   - 將候選測試與前述 BDD 情境、SDD 契約建立初步映射，供後續細化。
 4. **Issue 輸出與同步**
-   - 優先採用 `.github/ISSUE_TEMPLATE/` 下的模板（例如 `userstory`, `spec`, `tdd`, `gwt`, `datascience`, `frontend`）。
+   - 優先採用 `.github/ISSUE_TEMPLATE/` 下的模板（例如 `bdd`, `sdd`, `tdd`, `userstory`, `spec`, `gwt`, `datascience`, `frontend`）。
    - 若無合適模板，使用暫用格式（標題、任務幅度、EARS、Gherkin、契約需求、TDD 計畫、信賴等級、下一步），並在輸出中建議新增正式模板。
    - 透過 MCP 建立或更新 Issue，附上檔案連結、mock、資料樣本或模型位置。
 5. **本地補充（選擇性）**
@@ -98,10 +98,10 @@ outputs:
 ## 產出清單
 
 - 需求摘要：任務幅度、EARS 條列、信賴等級、待決議題。
-- BDD：Gherkin 案例清單、對應子系統與 Issue 連結。
-- SDD：介面／資料／模型／UI／排程等契約需求、預計採用的規格與驗證策略。
-- TDD：測試待辦與環境需求、Red → Green → Refactor 規劃、風險與守護性檢查。
-- 後續指令建議：例如 `design.prompt.md`、`requirements-change.prompt.md` 或任務拆解流程。
+- BDD 準備：待確認的情境清單、預期問題、需補的資料來源。
+- SDD 預期：可能涉及的契約或資料資產（僅列出重點，詳細留給 SDD Prompt）。
+- TDD 提醒：後續需要驗證的重點風險與測試類型。
+- 後續指令建議：依序建議執行 `bdd.prompt.md` → `sdd.prompt.md` → `tdd.prompt.md`，並視需求再啟動 `design.prompt.md`、`requirements-change.prompt.md` 或其他任務拆解流程。
 - GitHub Issue 更新：提醒由 AI（透過 MCP）或使用者將輸出附加於相關 Issue，以利追蹤。
 
 ## 後續行動

@@ -1,0 +1,72 @@
+---
+mode: agent
+description: 依照 BDD 驗收場景模板整理 Gherkin 案例，銜接 requirements → BDD → SDD/TDD 流程
+inputs:
+  summary: 需先掌握需求要點與既有輸出，避免重複定義
+  required:
+    - 最新的需求彙整或 Issue（含需求編號、EARS 條列）
+    - 相關文件或討論連結（設計稿、會議記錄、對話）
+    - 目標時程、Milestone 與責任人
+    - 已知的子系統範圍與限制（API、前端、AI、資料等）
+    - 語言與輸出格式偏好（預設繁體中文 + Markdown）
+outputs:
+  summary: 產出符合 `.github/ISSUE_TEMPLATE/bdd.md` 的內容並安排下一步
+  include:
+    - 至少一個成功情境與一個例外情境的 Gherkin 案例，標示信賴等級
+    - 成功／失敗訊號、監控需求與所需測試資料
+    - 任務幅度矩陣與相關子系統說明
+    - 待建立或已建立的 SDD / TDD Issue 編號與建議
+    - 提醒將結果透過 MCP 建立或更新 BDD Issue，並在欄位填寫對應的 SDD / TDD Issue 編號
+---
+
+# bdd
+
+## 目的
+
+在 `requirements.prompt.md` 理解需求後，協助快速定義可驗證的行為案例，以 BDD（Gherkin）格式輸出，為 SDD 與 TDD 做好前置準備。
+
+## 執行前確認
+
+- 取得最新的需求摘要（EARS + GWT）與任務幅度矩陣（可直接沿用 `requirements.prompt.md` 輸出）。
+- 若專案已存在相關 BDD Issue，需要增補或修正，先整理差異重點（例如新增 Scenario 或更新訊號），再進行訪談。
+- 回覆語言維持繁體中文。
+
+## 提問準則
+
+- 採單題 + 選項（最多 4 項）+「⑤ 其他（自由輸入）」的格式。
+- 針對不同子系統（API、前端、資料、AI、Infra）分別確認情境與輸入輸出。
+- 若資訊不足，應直接追問，不得自行杜撰。
+
+## 流程
+
+### Phase 0：情境盤點
+1. **對齊需求重點**：摘要需求編號、核心目標、不可變限制，標示信賴等級。
+2. **盤點子系統**：列出涉及的模組，勾選 API、前端、資料、AI 等，若多項請分開處理。
+3. **蒐集參考資料**：記錄可引用的設計稿、流程圖、舊 Issue（含既有 BDD Issue 如需更新）。
+
+### Phase 1：行為訪談
+1. **先定義 Happy Path**：針對主要使用者或服務路徑提問，確認輸入條件、觸發事件、預期結果。
+2. **補齊例外 / 邊界情境**：詢問錯誤狀況、資料不齊、外部系統失敗等，確認補救流程。
+3. **確認成功與失敗訊號**：包含監控指標、日誌、UI 狀態、回應碼。
+4. **盤點測試資料需求**：若需樣本資料或模型，請列出來源與準備方式。
+
+### Phase 2：整理輸出
+1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。
+2. **標註信賴等級**：每個 Scenario 以 🔵／🟡／🔴 標示。
+3. **完成驗收訊號**：整理成功／失敗訊號、監控需求、測試資料項目。
+4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，給出建議的標題與範圍；若已建立，記錄 Issue 編號並更新模板欄位。
+5. **列出開放問題**：將未確定事項成列點，方便後續追蹤。
+6. **建立或更新 Issue**：透過 MCP 或人工方式，用 `.github/ISSUE_TEMPLATE/bdd.md` 內容開 Issue；若是更新既有 Issue，需在描述註明此次差異並補上 SDD / TDD Issue 編號。
+
+## 產出要求
+
+- Markdown 區塊應可直接貼入 Issue，不得遺漏表格或勾選項目。
+- Scenario 與需求編號需建立對照表。
+- 若有跨子系統情境，需清楚標示影響範圍與責任人。
+- 在回覆末段提醒使用者檢視並確認新建或更新的 BDD Issue，以及對應的 SDD / TDD Issue 編號。
+
+## 後續建議
+
+- 完成 BDD Issue 後，立即啟動 `sdd.prompt.md` 將案例轉為契約。
+- 若需求再次變動，先更新 BDD Issue 再通知 SDD / TDD 負責人。
+- 將所有關鍵連結（需求、設計、BDD、SDD、TDD Issue）整理於輸出摘要，方便後續追蹤。
