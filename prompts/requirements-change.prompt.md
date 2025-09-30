@@ -25,6 +25,8 @@ outputs:
 
 當專案已經擁有需求文件，但使用者提出新增或調整時，協助辨識影響範圍、更新 EARS 需求與 GWT 驗收描述，並整理後續在 GitHub 上應採取的 Issue、PR 或文件更新步驟。
 
+> **判定原則**：只要 `docs/spec/`、GitHub Issue / PR、或專案維運文件中已有可追溯的需求描述（例如 `*-requirements.md`、`requirements` 標籤 Issue），即視為「既有需求」。若判定為新需求，請改用 `requirements.prompt.md` 建立基準再回到本 Prompt。
+
 ## 前置條件
 
 - `docs/spec/` 內已有既定需求文件或等效紀錄。
@@ -48,7 +50,9 @@ outputs:
 3. **影響分析**
    - 列出受影響的 EARS 需求條目（新增、修改、刪除），並標註信賴等級 🔵🟡🔴。
    - 為每個功能變更撰寫或調整 GWT（Given-When-Then）驗收描述。
+   - 檢查既有 BDD Scenario ID、SDD 契約、TDD 測試矩陣是否受到影響，標記需更新的對照表。
    - 分析非功能需求、設計文件、測試案例是否需要同步更新。
+   - 若牽涉新的框架、部署或第三方服務，記錄需重新執行 `tech-stack.prompt.md` 的原因與時程。
    - 評估是否需要新增/調整 CI/CD 工作或檢查。
 
 4. **變更方案草稿**
@@ -56,7 +60,7 @@ outputs:
      - 變更摘要與動機。
      - 更新後的 EARS 需求列表（標示新增、修改、沿用）。
      - 對應的 GWT 驗收表格或清單。
-     - 影響分析（文件、程式碼、測試、CI/CD）。
+     - 影響分析（文件、程式碼、測試、CI/CD），並指明涉及的 BDD Scenario ID / SDD 契約 / TDD 測試項。
    - 提供 GitHub Issue 建議內容（標題、標籤、內文要點）或直接建議更新既有 Issue。
    - 若需 PR，給出分支命名、Commit Message 模板與主要檔案路徑。
 

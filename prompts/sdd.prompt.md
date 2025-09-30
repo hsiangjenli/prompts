@@ -12,7 +12,7 @@ inputs:
 outputs:
   summary: 產出符合 `.github/ISSUE_TEMPLATE/sdd.md` 的內容，並排定合約測試與 mock 待辦
   include:
-    - 對每個 Gherkin 情境的契約類型、名稱、關鍵欄位與驗證方式
+    - 對每個 Gherkin 情境（以 `BDD-###` 標識）對應的契約類型、名稱、關鍵欄位與驗證方式
     - Mock／樣本資料策略與預期失敗案例
     - 版本與部署策略（相容性、切換、監控）
     - 對應的 TDD Issue 建議與開放問題
@@ -40,7 +40,7 @@ outputs:
 ## 流程
 
 ### Phase 0：資料同步
-1. **讀取 BDD 案例**：整理 Scenario 與對應需求編號，標示信賴等級。
+1. **讀取 BDD 案例**：整理 Scenario 與對應需求編號／Scenario ID（`BDD-###`），標示信賴等級。
 2. **盤點既有契約**：確認是否已有 OpenAPI、AsyncAPI、Schema、模型版本等可沿用資源。
 3. **確認子系統範圍**：列出 API、事件流、資料表、UI、模型、排程、監控等範疇。
 

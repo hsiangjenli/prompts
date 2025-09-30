@@ -35,29 +35,34 @@ outputs:
 - 回覆語言設定為繁體中文。
 
 ### Phase 0：自動蒐集
-1. 讀取 `README.md`、`CHANGELOG.md`（或等效檔）、`docs/spec/`。若已有 BDD / SDD / TDD Issue，列出其狀態。
-2. 透過 MCP 取得最新的 GitHub Issue / Comments，了解需求或變更討論。
-3. 將已有輸出與缺漏整理成清單（需求、行為案例、契約、測試、實作等）。
+1. 讀取 `README.md`（含技術堆疊章節）、`CHANGELOG.md`（或等效檔）、`docs/spec/`。記錄最新修改日期與版本。
+2. 透過 MCP 取得相關 GitHub Issue / Comments，整理需求（REQ）、行為（BDD）、契約（SDD）、測試（TDD）等進度。
+3. 將現有輸出整理成「狀態檢查表」，對每項標記 ✅（完成）、⚠️（部分）、❌（缺失），並附來源連結。
 
 ### Phase 1：使用者訪談
-1. 根據缺漏提出封閉式問題（EARS、GWT、BDD、SDD、TDD、CI/CD）。
-2. 判斷此次是新需求、需求變更，或進入測試/實作階段，方便推薦對應 Prompt。
-3. 確認期望交付與時間限制。
+1. 根據狀態檢查表的 ⚠️／❌ 項目提出封閉式問題（EARS、GWT、BDD、SDD、TDD、CI/CD、技術堆疊）。
+2. 判斷此次情境：
+   - **新需求**：尚無對應需求文件或 Issue。
+   - **需求變更**：已有正式需求，但需新增/調整。
+   - **進入測試/實作**：需求已明確，正在 BDD / SDD / TDD 任一階段。
+3. 確認技術堆疊是否需要重新盤點（例：新增子系統、部署目標改變）。
+4. 確認交付時程、責任人與期望輸出載體（Issue / PR / Markdown）。
 
 ### Phase 2：決策與輸出
-1. 依狀態對照推薦：
-   | 主要缺口 | 優先 Prompt |
-   | --- | --- |
-   | 缺少正式需求 | `requirements.prompt.md` |
-   | 既有需求需調整 | `requirements-change.prompt.md` |
-   | 需求已確認需建立行為案例 | `bdd.prompt.md` |
-   | 行為案例已定需契約化 | `sdd.prompt.md` |
-   | 需要規劃 / 執行 TDD 迭代 | `tdd.prompt.md` |
+1. 依狀態檢查表與訪談結果套用以下決策矩陣：
+   | 條件 | 推薦 Prompt | 附註 |
+   | --- | --- | --- |
+   | ❌ 無正式需求／EARS 未建立 | `requirements.prompt.md` | 若找到既有需求草稿，請先整理成基準文件 |
+   | ✅ 需求已存在但需增修 | `requirements-change.prompt.md` | 請引用既有文件或 Issue 編號 |
+   | EARS/GWT 已確認，但 Scenario 缺或過時 | `bdd.prompt.md` | 同步產出 Scenario ↔ Issue 對照表 |
+   | BDD 完整，需契約化或更新介面 | `sdd.prompt.md` | 標記需新建或更新的契約檔案 |
+   | SDD 就緒，需要安排測試迭代 | `tdd.prompt.md` | 若已有部分子流程結果請彙整 |
+   | 技術堆疊有重大變更或尚未定義 | `tech-stack.prompt.md` | 必須在需求或設計變更後 24h 內同步 README |
 2. 組成輸出：
-   - 現況摘要（含來源與信賴等級）。
+   - 狀態檢查表摘要（含來源、信賴等級）。
    - CHANGELOG／Issue 重點。
-   - 推薦 Prompt（目的、必要輸入、預期產出、EARS/GWT 覆蓋情況）。
-   - 建議動作（必要時透過 MCP 建立 Issue／PR、留言或更新標籤）。
+   - 推薦 Prompt（目的、需要的輸入、預期產出、EARS/GWT 覆蓋狀態）。
+   - 建議動作：需建立或更新的 Issue／PR、需補文件、MCP 操作提醒。
    - 開放問題與待補資訊。
 
 ## 注意事項

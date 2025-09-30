@@ -44,13 +44,13 @@ outputs:
 
 ## 操作流程
 
-在任何階段都需為資訊標記信賴等級：🔵（直接引用）、🟡（合理推測）、🔴（尚待確認）。
+在任何階段都需為資訊標記信賴等級：🔵（直接引用）、🟡（合理推測）、🔴（尚待確認）。若發現 `docs/spec/`、GitHub Issue 或 PR 中已有正式需求文件，請評估是否應改用 `requirements-change.prompt.md` 並向使用者確認；若仍選擇使用本 Prompt，需在輸出中記錄「建立新基準」的理由。
 
 ### Phase 0：盤點現況（Discovery）
 
 **目標**：掌握既有資產、任務幅度與限制條件。
 
-1. **掌握上下文**：讀取 `CLAUDE.md`、`AGENTS.md`、`README.md`、`CHANGELOG.md` 或同等文件，列出近期變更。
+1. **掌握上下文**：讀取 `CLAUDE.md`、`AGENTS.md`、`README.md`、`CHANGELOG.md` 或同等文件，列出近期變更。確認是否已有 `*-requirements.md` 或相關 Issue 作為基準，若有需註記來源並提醒後續如涉及變更應改用 `requirements-change`。
 2. **收斂規範**：檢視 `docs/rule/`、`docs/rule/kairo/requirements/` 或其他專案規範。
 3. **資產清查**：使用 `rg --files` 盤點 `docs/spec/`、`docs/design/`、`commands/`、`notebooks/` 等，標示曾產出的規格、模型、流程圖。
 4. **GitHub 連結**：透過 MCP 取得相關 Issue／PR，整理標題、狀態、指派人。
@@ -84,6 +84,7 @@ outputs:
    - 根據上述候選情境，紀錄可能涉及的介面或資料契約（OpenAPI／AsyncAPI／GraphQL／gRPC、事件 schema、資料表／檔案格式、特徵與模型版本、UI 元件協定、排程設定、監控 KPI 等）。
    - 為每項契約先草擬需釐清的重點（版本策略、mock／樣本、合約驗證方式），交由 `sdd.prompt.md` 詳化。
    - 若屬「資料／契約優先」工作，可在此階段記下需優先處理的契約，再提醒後續 BDD 需補齊行為。
+   - 若出現新的框架、部署或第三方服務，記錄需安排 `tech-stack.prompt.md` 重新盤點的原因與預計時程。
 3. **TDD（測試驅動）**
    - 先列出必須驗證的測試類型（單元／元件／資料處理／模型驗證等）與可能的 Red → Green → Refactor 步驟。
    - 紀錄可能需要的環境、資料集與檢查項目（schema 驗證、模型表現、資安掃描），交由 `tdd.prompt.md` 詳細展開。
@@ -101,11 +102,11 @@ outputs:
 - BDD 準備：待確認的情境清單、預期問題、需補的資料來源。
 - SDD 預期：可能涉及的契約或資料資產（僅列出重點，詳細留給 SDD Prompt）。
 - TDD 提醒：後續需要驗證的重點風險與測試類型。
-- 後續指令建議：依序建議執行 `bdd.prompt.md` → `sdd.prompt.md` → `tdd.prompt.md`，並視需求再啟動 `design.prompt.md`、`requirements-change.prompt.md` 或其他任務拆解流程。
+- 後續指令建議：依序建議執行 `bdd.prompt.md` → `sdd.prompt.md` → `tdd.prompt.md`，並視需求再啟動 `requirements-change.prompt.md` 或其他任務拆解 / 實作流程。
 - GitHub Issue 更新：提醒由 AI（透過 MCP）或使用者將輸出附加於相關 Issue，以利追蹤。
 
 ## 後續行動
 
 - 依產出清單建立或更新 GitHub Issue，確認指派與時程。
-- 若進入設計或實作階段，建議切換至 `design.prompt.md`、任務拆解或實作模板。
+- 若進入設計或實作階段，建議自行選擇合適的任務拆解或實作模板（例如專案自訂腳本 / Issue 流程）。
 - 維護訪談紀錄、信賴等級、任務幅度矩陣，以便日後需求變更時快速回溯。

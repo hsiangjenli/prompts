@@ -12,7 +12,7 @@ inputs:
 outputs:
   summary: 形成 `.github/ISSUE_TEMPLATE/tdd.md`「測試計畫」欄位的初稿
   include:
-    - 測試項目清單（含 Scenario、需求 ID、預期狀態）
+    - 測試項目清單（含 Scenario ID `BDD-###`、需求 ID、預期狀態）
     - 必要的測試資料、環境與依賴說明
     - 評估優先順序與 Red → Green → Refactor 預期路徑
     - 待補資料與轉交 `tdd-red.prompt.md` 的重點

@@ -16,14 +16,14 @@
 
 ### TDD 子流程 Prompt
 
-| 檔名 | 目的 | 主要內容 |
-| --- | --- | --- |
-| `tdd-requirements.prompt.md` | 以 TDD 角度整理需求背景與邊界 | 功能概要、輸入輸出、限制條件、待補事項 |
-| `tdd-testcases.prompt.md` | 擴充測試矩陣，規劃 Red 階段測試 | 測試項目清單、資料/Mock 要求、優先順序 |
-| `tdd-red.prompt.md` | 撰寫會失敗的測試並記錄阻塞 | 新增測試摘要、錯誤紀錄、MCP 留言/改標籤規則 |
-| `tdd-green.prompt.md` | 最小實作讓測試轉綠並維持紀錄 | 修改摘要、測試結果、MCP 留言/改標籤規則 |
-| `tdd-refactor.prompt.md` | 在綠燈狀態下重構與更新文件 | 重構內容、品質檢查、技術債追蹤 |
-| `tdd-verify.prompt.md` | 總驗證 TDD 迭代成果 | 測試/品質檢查結果、契約同步、結束或回圈判定 |
+| 檔名 | 目的 | 主要內容 | 推薦情境 |
+| --- | --- | --- | --- |
+| `tdd-requirements.prompt.md` | 以 TDD 角度整理需求背景與邊界 | 功能概要、輸入輸出、限制條件、待補事項 | 初次建立 TDD Issue 或需求在迭代中有重大調整時 |
+| `tdd-testcases.prompt.md` | 擴充測試矩陣，規劃 Red 階段測試 | 測試項目清單、資料/Mock 要求、優先順序 | 進入 Red 前需要確認測試覆蓋與資料準備 |
+| `tdd-red.prompt.md` | 撰寫會失敗的測試並記錄阻塞 | 新增測試摘要、錯誤紀錄、MCP 留言/改標籤規則 | 需要建立失敗測試或更新測試矩陣中的 Red 項目時 |
+| `tdd-green.prompt.md` | 最小實作讓測試轉綠並維持紀錄 | 修改摘要、測試結果、MCP 留言/改標籤規則 | Red 測試已備妥，準備進行實作轉綠 |
+| `tdd-refactor.prompt.md` | 在綠燈狀態下重構與更新文件 | 重構內容、品質檢查、技術債追蹤 | Green 完成後需整理結構、補文件或還技術債時 |
+| `tdd-verify.prompt.md` | 總驗證 TDD 迭代成果 | 測試/品質檢查結果、契約同步、結束或回圈判定 | 準備提交成果或判定是否需再迭代時 |
 
 > Red / Green 階段若遇到同一錯誤連續 3 次，須透過 MCP 在 TDD Issue 留言；連續 5 次則需透過 MCP 將 Issue 標籤調整為 `human_required` 並說明原因。
 
@@ -40,14 +40,17 @@
 
 ```mermaid
 flowchart TB
-    TS[tech-stack
-技術堆疊盤點] --> PI[index
-入口導覽] --> PRQ[requirements
+    PI[index
+入口導覽] -->|新需求| PRQ[requirements
 需求盤點]
-    PRQ -->|需求調整| PRC[requirements-change
+    PI -->|需求已存在| PRC[requirements-change
 需求變更]
+    PRQ -->|需確認或大幅調整技術| TS[tech-stack
+技術堆疊盤點]
+    PRC -->|重大技術變更| TS
     PRQ --> PBDD[bdd
 行為案例]
+    TS --> PBDD
     PRC --> PBDD
     PBDD --> PSDD[sdd
 契約設計]
@@ -61,22 +64,45 @@ flowchart TB
         TGR --> TRF[tdd-refactor]
         TRF --> TVF[tdd-verify]
     end
-    TVF --> GH[GitHub Issue / PR
+    TVF -->|全部通過| GH[GitHub Issue / PR
 交付]
+    TVF -->|需補強| PTDD
+    TVF -->|需求偏移| PRC
 ```
 
-1. 先用 `tech-stack` 盤點既有技術與缺口，缺項時可沿用 README 預設並標記為暫用。  
-2. 從 `index` 確認專案現況與缺口，再決定下一步。  
-3. `requirements` 整理需求雛形，若需求變更則使用 `requirements-change`。  
-4. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。  
-5. TDD 透過總覽 Prompt 與六個子流程反覆迭代，必要時可由 `tdd-red`/`tdd-green` 透過 MCP 留言或調整 Issue 標籤。  
-6. 完成驗證後，可接續任務拆解或實作流程（例如建立 PR、同步程式碼），並將成果同步至 GitHub Issue / PR。
+1. 先執行 `index` 盤點現況與缺口。若發現技術尚未定義或變更幅度大，再啟動 `tech-stack`。  
+2. `requirements` 釐清新需求，若目標是調整既有需求則改用 `requirements-change`。  
+3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。  
+4. TDD 透過總覽 Prompt 與六個子流程反覆迭代；`tdd-verify` 若未通過會回到 `tdd`/`requirements-change` 依缺口補強。  
+5. 驗證通過後，接續任務拆解或實作流程（建立 PR、同步程式碼）並更新 GitHub Issue / PR。
 
 ## 自動化腳本
 
 | 腳本 | 說明 |
 | --- | --- |
 | `scripts/tdd-cycle.sh` | 依序觸發 `tdd-requirements → tdd-testcases → tdd-red → tdd-green → tdd-refactor → tdd-verify`，支援指定 Issue 編號、測試名稱與略過前置階段。請在執行過程遵守 MCP 留言與標籤調整規則。 |
+
+### 異常情境處理
+
+- `requirements` ↔ `requirements-change`：若 `docs/spec/` 或已存在的需求 Issue/PR 中有對應章節，視為「既有需求」。調整既有需求時改用 `requirements-change`，並於輸出註明引用的既有文件。
+- BDD / SDD 迭代：若在 SDD 或 TDD 發現情境缺漏，先回到對應的 BDD Issue 更新，再同步影響的 SDD / TDD Issue。
+- TDD 回圈：`tdd-verify` 未通過時，依檢查清單判定要回到 `tdd-red`（測試不足）、`tdd-green`（實作未完成）或 `tdd-refactor`（品質問題）。若根本需求改變，回到 `requirements-change`。
+- 技術堆疊：發生重大技術調整、調整部署目標或跨專案共用時，再啟動 `tech-stack` 重新盤點並更新 README。
+
+### Issue 關聯規範
+
+- 所有 BDD / SDD / TDD Issue 需在描述欄內標示來源需求（Issue 編號或文件路徑）與信賴等級符號（🔵／🟡／🔴）。
+- BDD Issue 的「關聯工作」欄必須填寫對應 SDD / TDD Issue 編號，格式建議 `#123 (SDD)`、`#124 (TDD)`；若尚未建立，請標記 `待建立` 並在輸出提供建議標題。
+- SDD Issue 應列出所依賴的 BDD Scenario 標籤（例如 `BDD-001`）與預計更新的契約檔案路徑。
+- TDD Issue 中的測試矩陣需同步列出對應 BDD Scenario 與 SDD 契約 ID，方便追蹤來源。
+- 建議透過 MCP 操作 GitHub 時，一併更新彼此的 Issue 交互連結與狀態（例如使用 `linked pull requests`、`/link` 指令）。
+
+### TDD 自動化腳本注意事項
+
+- `scripts/tdd-cycle.sh` 執行失敗時，請查看 CLI 回傳碼：非零代表某個 Prompt 未完成，需手動檢查輸出並至少更新 TDD Issue 的阻塞欄位。
+- 若 MCP 操作（留言、改標籤）失敗，腳本不會自動重試；請人工處理並在 Issue 中註明。
+- 使用 `--skip-*` 參數時，請確保已手動完成對應階段並在 TDD Issue 中標記為 ✅，避免跳過必要步驟。
+- 每輪執行結束後，確認 CLI 輸出含有「✅ TDD 全流程執行完畢」字樣；若無，視為未完成需重新檢查。
 
 ## 使用建議
 

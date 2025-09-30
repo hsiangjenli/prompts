@@ -15,7 +15,7 @@ outputs:
     - 至少一個成功情境與一個例外情境的 Gherkin 案例，標示信賴等級
     - 成功／失敗訊號、監控需求與所需測試資料
     - 任務幅度矩陣與相關子系統說明
-    - 待建立或已建立的 SDD / TDD Issue 編號與建議
+    - Scenario ↔ SDD / TDD Issue 對照表（格式建議：`Scenario ID | SDD Issue | TDD Issue`）
     - 提醒將結果透過 MCP 建立或更新 BDD Issue，並在欄位填寫對應的 SDD / TDD Issue 編號
 ---
 
@@ -51,10 +51,10 @@ outputs:
 4. **盤點測試資料需求**：若需樣本資料或模型，請列出來源與準備方式。
 
 ### Phase 2：整理輸出
-1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。
+1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。每個 Scenario 請命名並生成唯一 ID（建議格式 `BDD-###`），供 SDD / TDD 參考。
 2. **標註信賴等級**：每個 Scenario 以 🔵／🟡／🔴 標示。
 3. **完成驗收訊號**：整理成功／失敗訊號、監控需求、測試資料項目。
-4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，給出建議的標題與範圍；若已建立，記錄 Issue 編號並更新模板欄位。
+4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，給出建議的標題與範圍；若已建立，記錄 Issue 編號並更新模板欄位，並補上 Scenario 對照表。
 5. **列出開放問題**：將未確定事項成列點，方便後續追蹤。
 6. **建立或更新 Issue**：透過 MCP 或人工方式，用 `.github/ISSUE_TEMPLATE/bdd.md` 內容開 Issue；若是更新既有 Issue，需在描述註明此次差異並補上 SDD / TDD Issue 編號。
 
