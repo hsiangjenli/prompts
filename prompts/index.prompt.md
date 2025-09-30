@@ -5,7 +5,7 @@ mode: agent
 description: 作為入口導覽，根據使用者提供或既有資產的專案狀態推薦合適的指令／Prompt 與後續步驟。
 ---
 
-# prompt-index
+# index
 
 ## 目的
 
@@ -53,7 +53,7 @@ description: 作為入口導覽，根據使用者提供或既有資產的專案�
    - 標示各階段完成狀態與缺漏（🔵 確定 / 🟡 推測 / 🔴 假設）。
 
 4. **推薦指令 / Prompt**
-   - 依據缺漏與目標，列出 3~5 個最適合的指令（不限 `kairo-*`，可包含 `requirements-change`、`tdd-*`、自訂 Prompt）。
+   - 依據缺漏與目標，列出 3~5 個最適合的指令（不限名稱前綴，可包含 `requirements-change`、`design`、`tdd-*` 等自訂 Prompt）。
    - 指令說明需包含：目的、預期輸入、主要產出（例如 EARS 需求、GWT 驗收、Issue 草稿、CI/CD 任務）。
    - 若需跨多階段，提供執行順序與依賴關係。
 

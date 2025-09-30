@@ -26,7 +26,7 @@ description: 針對已存在的需求定義進行新增或修改，更新 EARS �
 - 更新或新增的 GWT 驗收描述
 - 影響分析：需同步更新的文件、程式碼、測試、CI/CD 項目
 - 建議建立或更新的 GitHub Issue／PR 內容（標題、標籤、重點）與分支命名／Commit 範例
-- 後續建議指令（如 `kairo-design`、`kairo-tasks` 等）與待確認事項
+- 後續建議指令（如 `design`、任務拆解或實作相關模板）與待確認事項
 
 ## 前提
 
@@ -68,7 +68,7 @@ description: 針對已存在的需求定義進行新增或修改，更新 EARS �
      - 專案現況摘要與資料來源。
      - 更新後的 EARS / GWT 清單。
      - 建議建立或更新的 Issue / PR。
-     - 建議使用的後續 Prompt（例如 `kairo-design`、`kairo-tasks` 發動更新）。
+     - 建議使用的後續 Prompt（例如 `design`、任務拆解或實作模板）。
    - 明確指出需人工確認的問題或待決策事項。
 
 ## 注意事項

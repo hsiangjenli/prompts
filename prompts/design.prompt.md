@@ -5,11 +5,26 @@ mode: agent
 description: 根據已核准的需求定義書產出技術設計文件，內容包含資料流程圖、TypeScript 介面、資料庫結構與 API 規格。
 ---
 
-# kairo-design
+# design
 
 ## 目的
 
 根據已核准的需求定義書，建立完整的技術設計文件，涵蓋資料流程圖、TypeScript 介面、資料庫結構與 API 規格。
+
+## Input
+
+- 最新的需求定義書路徑（`docs/spec/` 下的 requirements/user-stories/acceptance-criteria）
+- 相關的 GitHub Issue 編號與設計討論紀錄（若有）
+- 既定的技術堆疊與架構約束（例如 `docs/tech-stack.md`、`CLAUDE.md`）
+- 非功能需求、性能或合規限制
+- 目標輸出語言或框架（如需要生成 TypeScript／其他語言介面）
+
+## Output
+
+- `docs/design/{要件名}/` 下的設計文件草稿（architecture, dataflow, interfaces 等）
+- 對應的資料流程 Mermaid 圖與型別定義
+- 需建立或更新的 GitHub Issue／PR 建議（包含分支、Commit 訊息）
+- 後續建議的 Prompt（例如任務拆解、實作流程）與注意事項
 
 ## 前提
 

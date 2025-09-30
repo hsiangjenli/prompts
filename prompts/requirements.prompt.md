@@ -5,12 +5,28 @@ mode: agent
 description: 分析使用者提供的需求概要，並以 EARS（Easy Approach to Requirements Syntax）記法撰寫含詳細驗收標準的需求定義書。
 ---
 
-# kairo-requirements
+# requirements
 
 ## 目的
 
 蒐集與分析現有專案資訊，向使用者進行需求訪談，並使用 EARS 記法整理成含驗收標準的需求定義書。
 提問時請採一問一答形式，提供選項與自由輸入的組合。
+
+## Input
+
+- 使用者提供的需求概要與目標（可來自對話、文件或 Issue）
+- 目前可用的專案文件清單與路徑（如 `docs/spec/`、`README.md`、`CLAUDE.md`）
+- 已存在的 GitHub Issue 編號或需求來源敘述（若有）
+- 語言偏好與輸出格式要求（預設繁體中文、Markdown）
+- 任何特別限制（時程、技術棧、合規要求、CI/CD 條件）
+
+## Output
+
+- 完整的需求定義書（EARS 記法、信賴等級、引用來源）
+- 使用者故事與驗收標準的 Markdown 檔案草稿
+- 必要的 GWT 驗收描述列表與測試建議
+- 建議建立或更新的 GitHub Issue 內容（標題、標籤、重點）
+- 後續要執行的 Prompt 建議（例如 `design`）與待確認事項
 
 ## 前提條件
 
@@ -244,7 +260,7 @@ description: 分析使用者提供的需求概要，並以 EARS（Easy Approach 
 
 ## 下一步建議
 
-- 建議執行 `kairo-design` 產出設計文件
+- 建議執行 `design` 產出設計文件
 - 提醒使用者進一步確認需求
 
 以上流程可確保需求資訊完整掌握並與既有資產一致。
