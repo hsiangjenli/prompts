@@ -31,7 +31,6 @@ outputs:
 ## 流程
 
 在進入 Phase 0 前，請確認：
-- 已具備專案目錄讀取權限（`docs/`、`.github/`、`commands/` 等）。
 - 可透過 MCP 或 API 存取 GitHub Issue／留言；若權限不足需在輸出中註明並向使用者索取資訊。
 - 回覆語言設定為繁體中文。
 
