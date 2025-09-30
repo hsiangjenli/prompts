@@ -9,23 +9,23 @@
 | `tech-stack.prompt.md` | 盤點技術堆疊並補齊缺項，統一實作依據 | 技術清單（已定案 / 暫用 / 待決定）、後續待辦 | 專案初始、需要確認或更新技術決策時 |
 | `index.prompt.md` | 入口導覽，依專案現況建議下一步 Prompt | 專案現況摘要、指令清單、EARS/GWT 缺口檢視 | 不確定該用哪個指令、需要流程總覽時 |
 | `requirements.prompt.md` | 釐清需求來源並整理 EARS / GWT 雛形 | 需求摘要、情境清單、後續 BDD 問題集 | 需求尚未完整或需重新盤點時 |
-| `requirements-change.prompt.md` | 針對既有需求變更，更新 EARS / GWT | 變更摘要、更新後的需求與驗收描述 | 已有文件但臨時調整或新增需求時 |
+| `requirements-change.prompt.md` | 針對既有需求變更，更新 EARS / GWT 並評估下游影響 | 變更摘要、更新後的需求與驗收描述、下游同步清單 | 已有文件但臨時調整或新增需求時 |
 | `bdd.prompt.md` | 將需求轉為 Gherkin 驗收案例並建議後續 Issue | BDD Issue 內容（Scenario、驗收訊號、對應 SDD/TDD 編號） | 需求確認後，需要行為測試範例時 |
 | `sdd.prompt.md` | 從 BDD 案例萃取介面 / 資料契約與合約測試 | SDD Issue 內容（契約對照表、Mock、版本策略） | 行為案例已定，需要規範契約或資料流時 |
-| `tdd.prompt.md` | TDD 迭代總覽，決定下一個子 Prompt | 現況評估、子流程建議、阻塞清單 | 需要掌握 TDD 進度或排程下一步時 |
+| `tdd.prompt.md` | TDD 迭代總覽，決定下一個子 Prompt | 現況評估、子流程建議、阻塞／回圈判斷 | 需要掌握 TDD 進度或排程下一步時 |
 
 ### TDD 子流程 Prompt
 
 | 檔名 | 目的 | 主要內容 | 推薦情境 |
 | --- | --- | --- | --- |
 | `tdd-requirements.prompt.md` | 以 TDD 角度整理需求背景與邊界 | 功能概要、輸入輸出、限制條件、待補事項 | 初次建立 TDD Issue 或需求在迭代中有重大調整時 |
-| `tdd-testcases.prompt.md` | 擴充測試矩陣，規劃 Red 階段測試 | 測試項目清單、資料/Mock 要求、優先順序 | 進入 Red 前需要確認測試覆蓋與資料準備 |
+| `tdd-testcases.prompt.md` | 擴充測試矩陣，規劃 Red 階段測試 | 標準化測試矩陣、資料/Mock 要求、優先順序 | 進入 Red 前需要確認測試覆蓋與資料準備 |
 | `tdd-red.prompt.md` | 撰寫會失敗的測試並記錄阻塞 | 新增測試摘要、錯誤紀錄、MCP 留言/改標籤規則 | 需要建立失敗測試或更新測試矩陣中的 Red 項目時 |
 | `tdd-green.prompt.md` | 最小實作讓測試轉綠並維持紀錄 | 修改摘要、測試結果、MCP 留言/改標籤規則 | Red 測試已備妥，準備進行實作轉綠 |
 | `tdd-refactor.prompt.md` | 在綠燈狀態下重構與更新文件 | 重構內容、品質檢查、技術債追蹤 | Green 完成後需整理結構、補文件或還技術債時 |
 | `tdd-verify.prompt.md` | 總驗證 TDD 迭代成果 | 測試/品質檢查結果、契約同步、結束或回圈判定 | 準備提交成果或判定是否需再迭代時 |
 
-> Red / Green 階段若遇到同一錯誤連續 3 次，須透過 MCP 在 TDD Issue 留言；連續 5 次則需透過 MCP 將 Issue 標籤調整為 `human_required` 並說明原因。
+> Red / Green 階段若遇到同一錯誤連續 3 次，須透過 MCP 在 TDD Issue 留言；連續 5 次則需透過 MCP 將 Issue 標籤調整為 `human_required` 並說明原因。所有 Issue 連結一律使用 `#編號` 格式（例如 `#123`）。
 
 ## Issue Template 清單
 
@@ -43,15 +43,19 @@ flowchart TB
     PI[index
 入口導覽] -->|新需求| PRQ[requirements
 需求盤點]
-    PI -->|需求已存在| PRC[requirements-change
-需求變更]
-    PRQ -->|需確認或大幅調整技術| TS[tech-stack
+    PI -->|已有需求| PRC[requirements-change
+需求變更請求]
+    PRQ -->|技術未定或需大幅調整| TS[tech-stack
 技術堆疊盤點]
-    PRC -->|重大技術變更| TS
     PRQ --> PBDD[bdd
 行為案例]
+    PRC --> PRV[impact review
+變更影響評估]
+    PRV -->|僅更新既有交付物| PUPD[既有 BDD/SDD/TDD
+更新作業]
+    PRV -->|需新增行為| PBDD
     TS --> PBDD
-    PRC --> PBDD
+    PUPD --> PSDD
     PBDD --> PSDD[sdd
 契約設計]
     PSDD --> PTDD[tdd
@@ -71,23 +75,116 @@ flowchart TB
 ```
 
 1. 先執行 `index` 盤點現況與缺口。若發現技術尚未定義或變更幅度大，再啟動 `tech-stack`。  
-2. `requirements` 釐清新需求，若目標是調整既有需求則改用 `requirements-change`。  
-3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。  
-4. TDD 透過總覽 Prompt 與六個子流程反覆迭代；`tdd-verify` 若未通過會回到 `tdd`/`requirements-change` 依缺口補強。  
+2. `requirements` 用於建立新需求；`requirements-change` 啟動後需先在「變更影響評估」整理既有 BDD / SDD / TDD Issue 是否更新即可，僅在需要新增行為時才重新進入 BDD。  
+3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。既有 Scenario 或契約若僅需調整，沿用對應 Issue 更新即可。  
+4. TDD 透過總覽 Prompt 與六個子流程反覆迭代；`tdd` 需紀錄子階段狀態與回圈條件，`tdd-verify` 未通過時依檢查結果回到適當階段或 `requirements-change`。  
 5. 驗證通過後，接續任務拆解或實作流程（建立 PR、同步程式碼）並更新 GitHub Issue / PR。
+
+### 流程 Pseudocode
+
+以下用 Python 語法示意主要流程：當 `index.prompt.md` 判定技術決策還不穩定時，會先引導執行 `tech-stack.prompt.md`，補齊共用的技術堆疊基準，再往下走需求、BDD、SDD 與 TDD。
+
+```python
+class PromptState:
+    context: str # 供下一個 Prompt 使用的輸入資料，通常是上一個 Prompt 的輸出
+    recommendations: Set[str] # 建議後續應執行的 Prompt 名稱集合，例如 {"requirements", "tech-stack"}
+
+class ChangeState(PromptState):
+    """`requirements-change.prompt.md` 的回傳格式。"""
+    only_updates_existing: bool  # True 表示僅需更新既有 Issue，不需新增流程
+    next_inputs: Optional[dict]  # 若需新增行為，交給後續 Prompt 的輸入資料
+    targets: list[str]           # 需要同步的既有 Issue 編號（字串，如 "#123"）
+
+class NextPrompt:
+    file: str        # 下一個要執行的 Prompt 檔名
+    context: dict    # 下一個 Prompt 所需輸入
+    requires_requirement_change: bool = False  # True 表示需回到 requirements-change
+
+class TDDState(PromptState):
+    """TDD 流程的回傳格式。"""
+    is_verified: bool                 # 全部子流程是否已驗證完成（true 即可交付）
+    next_prompt: Optional[NextPrompt] # TDD 流程尚未完成時，下一個建議的 TDD 子 Prompt
+    summary: dict                     # 交付摘要（接著會送往 deliver_to_github）
+
+    def refresh_context(self) -> dict:
+        """回傳更新後的輸入，供下一次呼叫 `tdd.prompt.md` 使用。"""
+        return self.context
+
+
+def delivery_pipeline(context: str) -> dict:
+    """
+    Args:
+        context: 入口盤點所需的資訊，例如主要 Issue 編號、可參考的文件清單。
+
+    Returns:
+        dict: 同步到 GitHub 的結果摘要（更新了哪些 Issue、建立了哪些 PR、下一個建議 Prompt）。
+    """
+
+    # 1. 入口盤點 ─ 若缺技術決策，會建議先跑 tech-stack
+    index_state: PromptState = run("index.prompt.md", context)
+    if "tech-stack" in index_state.recommendations:
+        # tech-stack 用於確認共同的框架 / 語言 / 部署策略，避免後續 Prompt 不同調
+        run("tech-stack.prompt.md", index_state.context)
+
+    # 2. 建立或調整需求
+    if "requirements" in index_state.recommendations:
+        req_state: PromptState = run("requirements.prompt.md", index_state.context)
+    else:
+        change_state: ChangeState = run("requirements-change.prompt.md", index_state.context)
+        if change_state.only_updates_existing:
+            update_existing_issues(change_state.targets)
+            req_state = None
+        else:
+            req_state = change_state.next_inputs
+
+    # 3. 行為（BDD）與契約（SDD）
+    # index_state.context 會帶入上一個 Prompt 的輸出摘要，這裡沿用既有 BDD 結果
+    bdd_state: PromptState = run("bdd.prompt.md", req_state) if req_state else index_state.context.get("existing_bdd")
+    sdd_state: PromptState = (
+        run("sdd.prompt.md", bdd_state)
+        if getattr(bdd_state, "needs_contract_update", False)
+        else index_state.context.get("existing_sdd")
+    )
+
+    # 4. TDD 迭代（必要時回到需求變更）
+    # tdd_state.is_verified 表示六個 TDD 子流程是否都完成並驗證成功
+    tdd_state: TDDState = run("tdd.prompt.md", sdd_state)
+    while not tdd_state.is_verified:
+        assert tdd_state.next_prompt is not None  # 尚未驗證時必定提供下一步
+        run(tdd_state.next_prompt.file, tdd_state.next_prompt.context)
+        if tdd_state.next_prompt.requires_requirement_change:
+            return delivery_pipeline(tdd_state.next_prompt.context)
+        tdd_state = run("tdd.prompt.md", tdd_state.refresh_context())
+
+    # 5. 交付成果
+    return deliver_to_github(tdd_state.summary)
+
+
+# 以下函式為範例佔位，實際專案可由 CLI / MCP 實作
+def run(prompt_file: str, context: str):
+    ...
+
+
+def update_existing_issues(targets):
+    ...
+
+
+def deliver_to_github(summary: str) -> dict:
+    ...
+```
 
 ## 自動化腳本
 
 | 腳本 | 說明 |
 | --- | --- |
-| `scripts/tdd-cycle.sh` | 依序觸發 `tdd-requirements → tdd-testcases → tdd-red → tdd-green → tdd-refactor → tdd-verify`，支援指定 Issue 編號、測試名稱與略過前置階段。請在執行過程遵守 MCP 留言與標籤調整規則。 |
+| `scripts/tdd-cycle.sh` | 依序觸發 `tdd-requirements → tdd-testcases → tdd-red → tdd-green → tdd-refactor → tdd-verify`，支援指定 Issue 編號、測試名稱與略過前置階段。請在執行過程遵守 MCP 留言與標籤調整規則；腳本內含錯誤捕捉，失敗時請回到 TDD Issue 更新阻塞。 |
 
 ### 異常情境處理
 
-- `requirements` ↔ `requirements-change`：若 `docs/spec/` 或已存在的需求 Issue/PR 中有對應章節，視為「既有需求」。調整既有需求時改用 `requirements-change`，並於輸出註明引用的既有文件。
-- BDD / SDD 迭代：若在 SDD 或 TDD 發現情境缺漏，先回到對應的 BDD Issue 更新，再同步影響的 SDD / TDD Issue。
-- TDD 回圈：`tdd-verify` 未通過時，依檢查清單判定要回到 `tdd-red`（測試不足）、`tdd-green`（實作未完成）或 `tdd-refactor`（品質問題）。若根本需求改變，回到 `requirements-change`。
-- 技術堆疊：發生重大技術調整、調整部署目標或跨專案共用時，再啟動 `tech-stack` 重新盤點並更新 README。
+- `requirements` ↔ `requirements-change`：若 `docs/spec/` 或既有 Issue/PR 中已有正式需求，即視為「既有需求」。執行 `requirements-change` 時請先用變更影響評估檢查既有 BDD / SDD / TDD Issue 是否只需更新；僅在新增行為或契約時再走完整流程。
+- BDD / SDD 迭代：在 SDD 或 TDD 發現情境缺漏時，優先更新既有 BDD Issue 的 Scenario，並同步註記受影響的 SDD / TDD Issue（使用 `#編號` 格式）。
+- TDD 回圈：`tdd-verify` 未通過時，依檢查清單判定要回到 `tdd-red`（測試不足）、`tdd-green`（實作未完成）或 `tdd-refactor`（品質問題）；若產生需求差異則轉回 `requirements-change`。
+- 技術堆疊：發生重大技術調整、部署目標或跨專案共用時，再啟動 `tech-stack` 重新盤點並更新 README 與相關 Issue。
 
 ### Issue 關聯規範
 
