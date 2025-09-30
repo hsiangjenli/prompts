@@ -104,6 +104,7 @@ outputs:
 - TDD 提醒：後續需要驗證的重點風險與測試類型。
 - 後續指令建議：依序建議執行 `bdd.prompt.md` → `sdd.prompt.md` → `tdd.prompt.md`，並視需求再啟動 `requirements-change.prompt.md` 或其他任務拆解 / 實作流程。
 - GitHub Issue 更新：提醒由 AI（透過 MCP）或使用者將輸出附加於相關 Issue，以利追蹤。
+- 引用 GitHub Issue 時使用 `#編號`，並附上資料來源與信賴等級。
 
 ## 後續行動
 

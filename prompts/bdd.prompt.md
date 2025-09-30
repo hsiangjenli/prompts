@@ -5,6 +5,7 @@ inputs:
   summary: 需先掌握需求要點與既有輸出，避免重複定義
   required:
     - 最新的需求彙整或 Issue（含需求編號、EARS 條列）
+    - 既有 BDD Issue / Scenario ID 與狀態（若無請註記「首度建立」）
     - 相關文件或討論連結（設計稿、會議記錄、對話）
     - 目標時程、Milestone 與責任人
     - 已知的子系統範圍與限制（API、前端、AI、資料等）
@@ -28,7 +29,7 @@ outputs:
 ## 執行前確認
 
 - 取得最新的需求摘要（EARS + GWT）與任務幅度矩陣（可直接沿用 `requirements.prompt.md` 輸出）。
-- 若專案已存在相關 BDD Issue，需要增補或修正，先整理差異重點（例如新增 Scenario 或更新訊號），再進行訪談。
+- 若專案已存在相關 BDD Issue，先彙整既有 Scenario ID、對應的 SDD / TDD Issue（使用 `#編號` 格式）與需更新的欄位，再帶著差異點進行訪談，避免重複定義。
 - 回覆語言維持繁體中文。
 
 ## 提問準則
@@ -54,7 +55,7 @@ outputs:
 1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。每個 Scenario 請命名並生成唯一 ID（建議格式 `BDD-###`），供 SDD / TDD 參考。
 2. **標註信賴等級**：每個 Scenario 以 🔵／🟡／🔴 標示。
 3. **完成驗收訊號**：整理成功／失敗訊號、監控需求、測試資料項目。
-4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，給出建議的標題與範圍；若已建立，記錄 Issue 編號並更新模板欄位，並補上 Scenario 對照表。
+4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，給出建議的標題與範圍；若已建立，記錄 Issue 編號（使用 `#編號` 格式）並更新模板欄位，標示「沿用」「更新」或「新增」。同時補上 Scenario 對照表。
 5. **列出開放問題**：將未確定事項成列點，方便後續追蹤。
 6. **建立或更新 Issue**：透過 MCP 或人工方式，用 `.github/ISSUE_TEMPLATE/bdd.md` 內容開 Issue；若是更新既有 Issue，需在描述註明此次差異並補上 SDD / TDD Issue 編號。
 
@@ -62,6 +63,7 @@ outputs:
 
 - Markdown 區塊應可直接貼入 Issue，不得遺漏表格或勾選項目。
 - Scenario 與需求編號需建立對照表。
+- 若更新既有 Scenario，需標註原 Scenario ID 與對應 Issue `#編號`，並描述差異摘要。
 - 若有跨子系統情境，需清楚標示影響範圍與責任人。
 - 在回覆末段提醒使用者檢視並確認新建或更新的 BDD Issue，以及對應的 SDD / TDD Issue 編號。
 
