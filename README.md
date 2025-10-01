@@ -12,7 +12,7 @@
 | `requirements-change.prompt.md` | 針對既有需求變更，更新 EARS / GWT 並評估下游影響 | 變更摘要、更新後的需求與驗收描述、下游同步清單 | 已有文件但臨時調整或新增需求時 |
 | `bdd.prompt.md` | 將需求轉為 Gherkin 驗收案例並建議後續 Issue | BDD Issue 內容（Scenario、驗收訊號、對應 SDD/TDD 編號） | 需求確認後，需要行為測試範例時 |
 | `sdd.prompt.md` | 從 BDD 案例萃取介面 / 資料契約與合約測試 | SDD Issue 內容（契約對照表、Mock、版本策略） | 行為案例已定，需要規範契約或資料流時 |
-| `tdd.prompt.md` | TDD 迭代總覽，決定下一個子 Prompt | 現況評估、子流程建議、阻塞／回圈判斷 | 需要掌握 TDD 進度或排程下一步時 |
+| `tdd.prompt.md` | TDD 迭代總覽／進度檢查，協助決定下一個子 Prompt | 子流程完成度盤點、阻塞／回圈判斷、後續建議 | 需要確認 TDD 目前位於哪個階段或決定下一步時 |
 
 ### TDD 子流程 Prompt
 
@@ -24,6 +24,8 @@
 | `tdd-green.prompt.md` | 最小實作讓測試轉綠並維持紀錄 | 修改摘要、測試結果、MCP 留言/改標籤規則 | Red 測試已備妥，準備進行實作轉綠 |
 | `tdd-refactor.prompt.md` | 在綠燈狀態下重構與更新文件 | 重構內容、品質檢查、技術債追蹤 | Green 完成後需整理結構、補文件或還技術債時 |
 | `tdd-verify.prompt.md` | 總驗證 TDD 迭代成果 | 測試/品質檢查結果、契約同步、結束或回圈判定 | 準備提交成果或判定是否需再迭代時 |
+
+> **TDD 基本順序**：`tdd-requirements` → `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`。`tdd.prompt.md` 負責在各階段之間檢查進度並推薦下一步，並非流程的第一步。
 
 > Red / Green 階段若遇到同一錯誤連續 3 次，須透過 MCP 在 TDD Issue 留言；連續 5 次則需透過 MCP 將 Issue 標籤調整為 `human_required` 並說明原因。所有 Issue 連結一律使用 `#編號` 格式（例如 `#123`）。
 
@@ -58,15 +60,25 @@ flowchart TB
     PUPD --> PSDD
     PBDD --> PSDD[sdd
 契約設計]
-    PSDD --> PTDD[tdd
-迭代總覽]
+    PSDD --> TRQ[tdd-requirements]
     subgraph "TDD 子流程"
-        PTDD --> TRQ[tdd-requirements]
         TRQ --> TTC[tdd-testcases]
         TTC --> TRD[tdd-red]
         TRD --> TGR[tdd-green]
         TGR --> TRF[tdd-refactor]
         TRF --> TVF[tdd-verify]
+        PTDD[tdd
+進度檢查] -.-> TRQ
+        PTDD -.-> TTC
+        PTDD -.-> TRD
+        PTDD -.-> TGR
+        PTDD -.-> TRF
+        PTDD -.-> TVF
+        TRQ --> PTDD
+        TTC --> PTDD
+        TRD --> PTDD
+        TGR --> PTDD
+        TRF --> PTDD
     end
     TVF -->|全部通過| GH[GitHub Issue / PR
 交付]
@@ -77,7 +89,7 @@ flowchart TB
 1. 先執行 `index` 盤點現況與缺口。若發現技術尚未定義或變更幅度大，再啟動 `tech-stack`。  
 2. `requirements` 用於建立新需求；`requirements-change` 啟動後需先在「變更影響評估」整理既有 BDD / SDD / TDD Issue 是否更新即可，僅在需要新增行為時才重新進入 BDD。  
 3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。既有 Scenario 或契約若僅需調整，沿用對應 Issue 更新即可。  
-4. TDD 透過總覽 Prompt 與六個子流程反覆迭代；`tdd` 需紀錄子階段狀態與回圈條件，`tdd-verify` 未通過時依檢查結果回到適當階段或 `requirements-change`。  
+4. 進入 TDD 時，先執行 `tdd-requirements` 建立背景，再依 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify` 的順序推進；`tdd.prompt.md` 則穿插在各階段之間做進度檢查與回圈判斷，`tdd-verify` 未通過時依檢查結果回到適當階段或 `requirements-change`。  
 5. 驗證通過後，接續任務拆解或實作流程（建立 PR、同步程式碼）並更新 GitHub Issue / PR。
 
 ### 流程 Pseudocode
@@ -86,7 +98,7 @@ flowchart TB
 
 ```python
 class PromptState:
-    context: str # 供下一個 Prompt 使用的輸入資料，通常是上一個 Prompt 的輸出
+    context: object # 供下一個 Prompt 使用的輸入資料，通常是上一個 Prompt 的輸出
     recommendations: Set[str] # 建議後續應執行的 Prompt 名稱，例如 {"requirements", "tech-stack"}
 
 class ChangeState(PromptState):
@@ -106,9 +118,12 @@ class TDDState(PromptState):
     next_prompt: Optional[NextPrompt] # TDD 流程尚未完成時，下一個建議的 TDD 子 Prompt
     summary: dict                     # 交付摘要（接著會送往 deliver_to_github）
 
-    def refresh_context(self) -> dict:
-        """回傳更新後的輸入，供下一次呼叫 `tdd.prompt.md` 使用。"""
-        return self.context
+    def refresh_context(self) -> list[object]:
+        """回傳迭代歷程（例如各階段輸出列表），供下一次呼叫 `tdd.prompt.md` 使用。"""
+        context = self.context or []
+        if isinstance(context, list):
+            return list(context)
+        return [context]
 
 
 def delivery_pipeline(context: dict) -> dict:
