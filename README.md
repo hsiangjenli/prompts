@@ -12,7 +12,7 @@
 | `requirements-change.prompt.md` | 針對既有需求變更，更新 EARS / GWT 並評估下游影響 | 變更摘要、更新後的需求與驗收描述、下游同步清單 | 已有文件但臨時調整或新增需求時 |
 | `bdd.prompt.md` | 將需求轉為 Gherkin 驗收案例並建議後續 Issue | BDD Issue 內容（Scenario、驗收訊號、對應 SDD/TDD 編號） | 需求確認後，需要行為測試範例時 |
 | `sdd.prompt.md` | 從 BDD 案例萃取介面 / 資料契約與合約測試 | SDD Issue 內容（契約對照表、Mock、版本策略） | 行為案例已定，需要規範契約或資料流時 |
-| `tdd.prompt.md` | TDD 迭代總覽／進度檢查，協助決定下一個子 Prompt | 子流程完成度盤點、阻塞／回圈判斷、後續建議 | 需要確認 TDD 目前位於哪個階段或決定下一步時 |
+| `tdd.prompt.md` | TDD 迭代總覽／進度檢查，協助決定下一個子 Prompt | 子流程完成度盤點、阻塞／回圈判斷、後續建議 | 已執行過任一 TDD 子流程後，需要檢查進度或決定下一步時 |
 
 ### TDD 子流程 Prompt
 
@@ -25,7 +25,7 @@
 | `tdd-refactor.prompt.md` | 在綠燈狀態下重構與更新文件 | 重構內容、品質檢查、技術債追蹤 | Green 完成後需整理結構、補文件或還技術債時 |
 | `tdd-verify.prompt.md` | 總驗證 TDD 迭代成果 | 測試/品質檢查結果、契約同步、結束或回圈判定 | 準備提交成果或判定是否需再迭代時 |
 
-> **TDD 基本順序**：`tdd-requirements` → `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`。`tdd.prompt.md` 負責在各階段之間檢查進度並推薦下一步，並非流程的第一步。
+> **TDD 基本順序**：首次進入請直接執行 `tdd-requirements`，其輸出會交給 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`。`tdd.prompt.md` 僅在上述任一子流程完成後，用於檢查最新狀態、統整阻塞與推薦下一步，**不作為 TDD 流程的開場指令**。
 
 > Red / Green 階段若遇到同一錯誤連續 3 次，須透過 MCP 在 TDD Issue 留言；連續 5 次則需透過 MCP 將 Issue 標籤調整為 `human_required` 並說明原因。所有 Issue 連結一律使用 `#編號` 格式（例如 `#123`）。
 
@@ -91,6 +91,15 @@ flowchart TB
 3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。既有 Scenario 或契約若僅需調整，沿用對應 Issue 更新即可。  
 4. 進入 TDD 時，先執行 `tdd-requirements` 建立背景，再依 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify` 的順序推進；`tdd.prompt.md` 則穿插在各階段之間做進度檢查與回圈判斷，`tdd-verify` 未通過時依檢查結果回到適當階段或 `requirements-change`。  
 5. 驗證通過後，接續任務拆解或實作流程（建立 PR、同步程式碼）並更新 GitHub Issue / PR。
+
+### TDD 入口決策
+
+| 情境 | 採取的 Prompt | 備註 |
+| --- | --- | --- |
+| 尚未建立 TDD Issue 或第一次進行該需求的測試迭代 | `tdd-requirements.prompt.md` | 建立背景、輸入輸出與限制；產出直接交給 `tdd-testcases` |
+| 已完成 `tdd-requirements`，準備設計測試案例 | `tdd-testcases.prompt.md` | 若遇到契約資料缺口，請依表格中的判斷回到 `sdd` 或補資料 |
+| 任何 TDD 子流程完成後需要確認下一步、統整阻塞或回圈 | `tdd.prompt.md` | 作為進度檢查點，評估是否繼續下一個子流程或返回需求變更 |
+| TDD 子流程執行中斷、遇到需求矛盾或跨子系統影響 | `tdd.prompt.md` → 覆核結果後可能轉 `requirements-change.prompt.md` | 依 `tdd.prompt.md` 的回圈建議決定下一步 |
 
 ### 流程 Pseudocode
 
@@ -158,13 +167,25 @@ def delivery_pipeline(context: dict) -> dict:
         sdd_state = index_state.context.get("existing_sdd")
 
     # 4. TDD 迭代（必要時回到需求變更）
-    tdd_state: TDDState = run("tdd.prompt.md", sdd_state)
+    tdd_requirements: PromptState = run("tdd-requirements.prompt.md", sdd_state)
+    history = [tdd_requirements.context]
+    tdd_state: TDDState = run("tdd.prompt.md", {
+        "stage": "tdd-requirements",
+        "latest": tdd_requirements.context,
+        "history": list(history),
+    })
     while not tdd_state.is_verified:
         assert tdd_state.next_prompt is not None
-        run(tdd_state.next_prompt.file, tdd_state.next_prompt.context)
+        stage_result = run(tdd_state.next_prompt.file, tdd_state.next_prompt.context)
         if tdd_state.next_prompt.requires_requirement_change:
-            return delivery_pipeline(tdd_state.next_prompt.context)
-        tdd_state = run("tdd.prompt.md", tdd_state.refresh_context())
+            return delivery_pipeline(stage_result)
+        history = tdd_state.refresh_context()
+        history.append(stage_result)
+        tdd_state = run("tdd.prompt.md", {
+            "stage": tdd_state.next_prompt.file,
+            "latest": stage_result,
+            "history": history,
+        })
 
     # 5. 交付成果
     return deliver_to_github(tdd_state.summary)
@@ -183,6 +204,35 @@ def update_existing_issues(targets):
 def deliver_to_github(summary: dict) -> dict:
     ...
 ```
+
+
+## 信賴等級與來源標註規範
+
+- 使用符號：🔵（直接證據，如最新 Issue / PR / 正式文件）、🟡（合理推測，需後續驗證）、🔴（待確認，尚無資料佐證）。
+- 統一格式：`內容（來源 owner/repo#123 🔵）`；同 repo 可省略 `owner/repo`（例如 `（來源 #45 🟡）`）；引用檔案時請標示相對路徑：`（來源 docs/spec/... 🔵）`。
+- 若資訊僅來自同步對話，請以 `（來源 使用者口頭說明 🔴）` 註記，並在待辦列出補強動作。
+
+## Issue 引用與連結規範
+
+- 內部 Issue／PR：使用 `#編號`（例如 `#128`）。
+- 跨 repo：使用 `owner/repo#編號`（例如 `tsumiki/prompt-repo#17`）。
+- 指向特定留言時，於文字描述附上「留言者／時間」，避免依賴長網址。
+- 回覆完成後，請提醒使用者或透過 MCP 將輸出內容回寫到對應 Issue，保持單一事實來源。
+
+## MCP 錯誤處理與回圈規則
+
+- **連續錯誤累計**：同一測試（測試檔 + 測試名稱 + 錯誤訊息前 120 字）連續 3 次失敗 → 透過 MCP 在 TDD Issue 留言記錄錯誤、已嘗試步驟與下一步；連續 5 次 → MCP 將 Issue 標籤改為 `human_required` 並說明原因與建議回圈（如返回 `requirements-change`）。
+- **分類標準**：統一使用 `Test Failure`、`Build/Setup Failure`、`External Dependency`、`Spec Mismatch` 方便彙整與追蹤。
+- 各 TDD 子 Prompt 僅需引用本段規則，避免重複描述造成分歧。
+
+## 需求變更觸發檢查表（供 `requirements-change.prompt.md` 及下游參考）
+
+| 觸發情境 | 建議動作 |
+| --- | --- |
+| 新增或大幅調整使用情境、使用者故事、EARS 條目 | 執行 `requirements-change.prompt.md`，更新需求基線並同步 BDD |
+| SDD 契約新增欄位、版本策略或跨系統介面改動 | 先更新 `requirements-change`，再由 `sdd` 進行契約調整與影響分析 |
+| TDD 無法設計測試或實作因需求／契約缺漏 | 暫停迭代，回到 `requirements-change` 或 `sdd` 補齊資訊後再繼續 |
+| 監控指標、SLO、部署/CI/CD 守門條件改變 | 視為需求調整，更新 `requirements-change` 並通知後續流程 |
 
 
 ## 自動化腳本
