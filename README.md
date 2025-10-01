@@ -87,7 +87,7 @@ flowchart TB
 ```python
 class PromptState:
     context: str # 供下一個 Prompt 使用的輸入資料，通常是上一個 Prompt 的輸出
-    recommendations: Set[str] # 建議後續應執行的 Prompt 名稱集合，例如 {"requirements", "tech-stack"}
+    recommendations: Set[str] # 建議後續應執行的 Prompt 名稱，例如 {"requirements", "tech-stack"}
 
 class ChangeState(PromptState):
     """`requirements-change.prompt.md` 的回傳格式。"""
@@ -114,7 +114,7 @@ class TDDState(PromptState):
 def delivery_pipeline(context: dict) -> dict:
     """串起各 Prompt 的最小流程，並標註欄位含意。"""
 
-    # 1. 入口盤點 ─ 若缺技術決策，會建議先跑 tech-stack
+    # 1. 入口盤點 ─ 若缺少技術棧，建議先跑 tech-stack
     index_state: PromptState = run("index.prompt.md", context)
     if "tech-stack" in index_state.recommendations:
         run("tech-stack.prompt.md", index_state.context)
