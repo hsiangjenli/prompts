@@ -12,11 +12,11 @@ inputs:
 outputs:
   summary: 形成 `.github/ISSUE_TEMPLATE/tdd.md`「測試計畫」欄位的初稿
   include:
-    - 測試項目清單（欄位固定為：`Test ID`、`Scenario ID (BDD-###)`、`需求 #編號`、`測試類型`、`狀態`、`優先順序`、`備註`）
-    - 必要的測試資料、環境與依賴說明
+    - 測試項目清單（欄位固定為：`Test ID`、`Scenario ID (BDD-###)`、`需求 #`、`測試類型`、`資料/Mock`、`狀態`、`優先順序`、`備註`，每列附來源與信賴等級）
+    - 必要的測試資料、環境與依賴說明（使用 `#編號` 或檔案路徑標示來源）
     - 評估優先順序與 Red → Green → Refactor 預期路徑
-    - 待補資料與轉交 `tdd-red.prompt.md` 的重點
-    - 提醒同步更新 TDD Issue 及相關 TODO
+    - 待補資料與轉交 `tdd-red.prompt.md` 的重點，若因需求不完整無法前進，提醒回到 `requirements-change`
+    - 提醒同步更新 TDD Issue 及相關 TODO（勾選對應欄位並標示信賴等級）
 ---
 
 # tdd-testcases
@@ -29,7 +29,7 @@ outputs:
 
 ### Phase 0：情境確認
 1. 快速重點複習 TDD Issue 的「來源與範圍」。
-2. 列出需涵蓋的 Gherkin 情境與對應契約，標示信賴等級。
+2. 列出需涵蓋的 Gherkin 情境與對應契約，標示信賴等級與來源 `#編號`。
 3. 確認測試框架、格式（如 Vitest、Jest、Playwright、pytest 等）。
 
 ### Phase 1：測試設計
@@ -41,13 +41,13 @@ outputs:
 ### Phase 2：輸出整合
 1. 建立測試矩陣：欄位需包含 `Test ID`、`Scenario ID (BDD-###)`、`需求 #編號`、`測試類型`、`資料/Mock`、`狀態`（預設 Red）、`優先順序`、`備註`。
 2. 梳理 Red → Green → Refactor 的實作順序與里程碑，必要時標記 `Blocked` 原因（資料缺、契約待定等）。
-3. 列出待補的測試資料或環境設定，指派負責人或下一步。
+3. 列出待補的測試資料或環境設定，指派負責人或下一步，並標注是否需回到 `requirements-change` 或 `sdd`。
 4. 建議下一步執行 `tdd-red.prompt.md`，並帶入重點測試項目。
 5. 提醒更新 TDD Issue、TODO 或任務資料庫。
 
 ## 產出格式建議
 
-- **測試矩陣表格**：使用標題 `Test ID | Scenario ID (BDD-###) | 需求 # | 測試類型 | 資料/Mock | 狀態 | 優先順序 | 備註`，可直接貼入 TDD Issue。
+- **測試矩陣表格**：使用標題 `Test ID | Scenario ID (BDD-###) | 需求 # | 測試類型 | 資料/Mock | 狀態 | 優先順序 | 備註 | 信賴等級/來源`，可直接貼入 TDD Issue。
 - **資料 / Mock 清單**：標示檔案位置、建立方式、責任人。
 - **依賴與風險**：列出外部服務、守門檢查、回滾策略。
 - **後續動作**：明確寫出下一步必須執行 `tdd-red.prompt.md`。
@@ -56,4 +56,4 @@ outputs:
 
 - Red 階段前，確認測試檔案與案例命名規則。
 - 若測試案例有爭議，回到 BDD / SDD Issue 取得共識。
-- 在輸出末尾提醒使用者或 AI 建立／更新 TDD Issue 的測試區塊。
+- 在輸出末尾提醒使用者或 AI 建立／更新 TDD Issue 的測試區塊，並為每列標註來源與信賴等級。
