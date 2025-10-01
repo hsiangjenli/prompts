@@ -13,6 +13,7 @@
 | `bdd.prompt.md` | 將需求轉為 Gherkin 驗收案例並建議後續 Issue | BDD Issue 內容（Scenario、驗收訊號、對應 SDD/TDD 編號） | 需求確認後，需要行為測試範例時 |
 | `sdd.prompt.md` | 從 BDD 案例萃取介面 / 資料契約與合約測試 | SDD Issue 內容（契約對照表、Mock、版本策略） | 行為案例已定，需要規範契約或資料流時 |
 | `tdd.prompt.md` | TDD 迭代總覽／進度檢查，協助決定下一個子 Prompt | 子流程完成度盤點、阻塞／回圈判斷、後續建議 | 已執行過任一 TDD 子流程後，需要檢查進度或決定下一步時 |
+| `commit-message.prompt.md` | 產生 Angular 風格部分提交訊息並指引 partial staging | 分支檢查、暫存建議、commit 草稿、後續動作 | TDD 各階段（Red / Green / Refactor / Verify）完成後需提交當前成果時 |
 
 ### TDD 子流程 Prompt
 
@@ -100,6 +101,7 @@ flowchart TB
 | 已完成 `tdd-requirements`，準備設計測試案例 | `tdd-testcases.prompt.md` | 若遇到契約資料缺口，請依表格中的判斷回到 `sdd` 或補資料 |
 | 任何 TDD 子流程完成後需要確認下一步、統整阻塞或回圈 | `tdd.prompt.md` | 作為進度檢查點，評估是否繼續下一個子流程或返回需求變更 |
 | TDD 子流程執行中斷、遇到需求矛盾或跨子系統影響 | `tdd.prompt.md` → 覆核結果後可能轉 `requirements-change.prompt.md` | 依 `tdd.prompt.md` 的回圈建議決定下一步 |
+| TDD 各階段完成（Red / Green / Refactor / Verify）需提交成果 | `commit-message.prompt.md` | 確認分支為 `tdd-*`、僅暫存該階段檔案並產生 Angular 風格 commit |
 
 ### 流程 Pseudocode
 
@@ -270,3 +272,12 @@ def deliver_to_github(summary: dict) -> dict:
 - 儘量使用 GitHub Issue 留存成果；若需輸出本地 Markdown，請在 Prompt 中明確指示檔案路徑。
 - 使用 MCP 操作 GitHub（留言、變更標籤、建立 Issue 等）時，務必附上理由與對應的錯誤紀錄，維持追蹤性。
 - 實作或撰寫腳本時，請回顧 `tech-stack.prompt.md`、`README.md`、`AGENTS.md` 技術堆疊章節，確保決策一致並即時更新。
+
+## 各種 CLI 存放 Prompt 位置
+
+- GitHub Copilot：`$HOME/Library/Application Support/Code/User/prompts`
+- Codex CLI：`~/.codex/prompts`
+
+```shell
+cp -r ~/.codex/prompts/* "$HOME/Library/Application Support/Code/User/prompts/"
+```
