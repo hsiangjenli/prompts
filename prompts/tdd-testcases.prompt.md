@@ -46,7 +46,7 @@ outputs:
    - 合約完整但缺樣本資料、Mock 或測試環境 → 留在本階段補資料。
    - 需求描述與 BDD / SDD 明顯矛盾 → 參考 README 的「需求變更觸發檢查表」，回到 `requirements-change.prompt.md`。
 4. 建議下一步執行 `tdd-red.prompt.md`，並帶入重點測試項目。
-5. 提醒更新 TDD Issue、TODO 或任務資料庫。
+5. 提醒更新 TDD Issue、TODO 或任務資料庫，並勾選 Issue「迭代進度」中的 `Testcases` 核取框。
 
 ## 產出格式建議
 

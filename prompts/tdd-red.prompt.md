@@ -44,7 +44,7 @@ outputs:
 2. 若遇到資料或合約缺口，提醒回寫至 BDD / SDD Issue。
 3. 為每個錯誤標記分類（`Test Failure`、`Build/Setup Failure`、`External Dependency`、`Spec Mismatch`），並依 README〈MCP 錯誤處理與回圈規則〉累計次數：相同測試錯誤連續 3 次 → 透過 MCP 留言；連續 5 次 → 將標籤改為 `human_required` 並說明是否需回到 `requirements-change` 或 `sdd`，留言需引用來源 Issue 與信賴等級。
 4. 提醒更新 TDD Issue 中測試矩陣的狀態（保持 Red）。
-5. 建議下一步進行 `tdd-green.prompt.md`，並帶上此輪測試的重點與阻塞。
+5. 建議下一步進行 `tdd-green.prompt.md`，並帶上此輪測試的重點與阻塞。提醒在 TDD Issue 迭代進度中勾選 `Red` 核取框。
 
 ## 產出格式建議
 

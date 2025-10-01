@@ -44,7 +44,7 @@ outputs:
 3. 若發現需求描述與既有文件矛盾，立即標註需回到 `requirements-change.prompt.md`，說明矛盾點與來源。
 4. 彙整需同步到 BDD / SDD Issue 的更新項目，使用 `#編號` 格式列出。
 5. 建議下一步執行 `tdd-testcases.prompt.md`，並將重點問題帶入下一階段。
-6. 提醒透過 MCP 或人工方式更新 TDD Issue，確保欄位資訊同步。
+6. 提醒透過 MCP 或人工方式更新 TDD Issue，確保欄位資訊同步，並勾選 Issue「迭代進度」中的 `Requirements` 核取框。
 
 ## 產出格式建議
 

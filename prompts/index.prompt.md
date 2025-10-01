@@ -60,6 +60,7 @@ outputs:
    | BDD 完整，需契約化或更新介面 | `sdd.prompt.md` | 標記需新建或更新的契約檔案 |
    | SDD 就緒，需要安排測試迭代 | `tdd.prompt.md` | 若已有部分子流程結果請彙整 |
    | 技術堆疊有重大變更或尚未定義 | `tech-stack.prompt.md` | 必須在需求或設計變更後 24h 內同步 README |
+   | 任一 TDD 階段完成需要提交當前成果 | `commit-message.prompt.md` | 確認分支為 `tdd-*`，僅暫存該階段變更並產出 Angular 風格 commit |
 2. 組成輸出：
    - 狀態檢查表摘要（含來源、信賴等級）。
    - CHANGELOG／Issue 重點。

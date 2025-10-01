@@ -41,7 +41,7 @@ outputs:
 1. 彙整重構內容、測試結果、守門檢查（Lint、型別、Coverage、資安、建置時間、靜態分析等），並標註來源與信賴等級。
 2. 更新 TDD Issue 的測試矩陣備註，標示已完成重構項目與對應證據。
 3. 列出仍未解決的技術債或建議建立後續 Issue（含優先順序、責任人、預計完成時間）。
-4. 提醒下一步執行 `tdd-verify.prompt.md`，進行完整驗證；若品質檢查未通過，記錄需回到 `tdd-green` 或 `requirements-change`。
+4. 提醒下一步執行 `tdd-verify.prompt.md`，進行完整驗證；若品質檢查未通過，記錄需回到 `tdd-green` 或 `requirements-change`。同時在 TDD Issue 迭代進度中勾選 `Refactor` 核取框。
 
 ## 產出格式建議
 

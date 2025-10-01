@@ -46,7 +46,7 @@ outputs:
 2. 將主要修改與測試結果摘要整理成段落或表格，附來源與信賴等級。
 3. 更新 TDD Issue 測試矩陣的狀態為 Green，附上測試輸出連結或片段，標示來源（CI 執行、在地命令等）。
 4. 如果仍有阻塞或未完事項，列出並指派在 Refactor 階段處理；若屬需求/契約差異，記錄需回到 `requirements-change` 或 `sdd`。
-5. 提醒下一步執行 `tdd-refactor.prompt.md`。
+5. 提醒下一步執行 `tdd-refactor.prompt.md`，並在 TDD Issue 迭代進度中勾選 `Green` 核取框。
 
 ## 產出格式建議
 
