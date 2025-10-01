@@ -12,7 +12,7 @@
 | `requirements-change.prompt.md` | 針對既有需求變更，更新 EARS / GWT 並評估下游影響 | 變更摘要、更新後的需求與驗收描述、下游同步清單 | 已有文件但臨時調整或新增需求時 |
 | `bdd.prompt.md` | 將需求轉為 Gherkin 驗收案例並建議後續 Issue | BDD Issue 內容（Scenario、驗收訊號、對應 SDD/TDD 編號） | 需求確認後，需要行為測試範例時 |
 | `sdd.prompt.md` | 從 BDD 案例萃取介面 / 資料契約與合約測試 | SDD Issue 內容（契約對照表、Mock、版本策略） | 行為案例已定，需要規範契約或資料流時 |
-| `tdd.prompt.md` | TDD 迭代總覽／進度檢查，協助決定下一個子 Prompt | 子流程完成度盤點、阻塞／回圈判斷、後續建議 | 已執行過任一 TDD 子流程後，需要檢查進度或決定下一步時 |
+| `tdd-checkpoint.prompt.md` | TDD 迭代中繼檢查點，僅供進度盤點與決策 | 子流程完成度盤點、阻塞／回圈判斷、後續建議 | **僅在 `tdd-requirements` 或任一 TDD 子流程完成後**，需要檢查進度或決定下一步時 |
 | `commit-message.prompt.md` | 產生 Angular 風格部分提交訊息並指引 partial staging | 分支檢查、暫存建議、commit 草稿、後續動作 | TDD 各階段（Red / Green / Refactor / Verify）完成後需提交當前成果時 |
 
 ### TDD 子流程 Prompt
@@ -26,7 +26,7 @@
 | `tdd-refactor.prompt.md` | 在綠燈狀態下重構與更新文件 | 重構內容、品質檢查、技術債追蹤 | Green 完成後需整理結構、補文件或還技術債時 |
 | `tdd-verify.prompt.md` | 總驗證 TDD 迭代成果 | 測試/品質檢查結果、契約同步、結束或回圈判定 | 準備提交成果或判定是否需再迭代時 |
 
-> **TDD 基本順序**：首次進入請直接執行 `tdd-requirements`，其輸出會交給 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`。`tdd.prompt.md` 僅在上述任一子流程完成後，用於檢查最新狀態、統整阻塞與推薦下一步，**不作為 TDD 流程的開場指令**。
+> **TDD 基本順序**：首次進入請直接執行 `tdd-requirements`，其輸出會交給 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`。僅在完成 `tdd-requirements` 或任一子流程後，使用 `tdd-checkpoint.prompt.md` 檢查最新狀態與推薦下一步；**切勿在啟動 TDD 前直接呼叫檢查點 Prompt**。
 
 > Red / Green 階段若遇到同一錯誤連續 3 次，須透過 MCP 在 TDD Issue 留言；連續 5 次則需透過 MCP 將 Issue 標籤調整為 `human_required` 並說明原因。所有 Issue 連結一律使用 `#編號` 格式（例如 `#123`）。
 
@@ -90,7 +90,7 @@ flowchart TB
 1. 先執行 `index` 盤點現況與缺口。若發現技術尚未定義或變更幅度大，再啟動 `tech-stack`。  
 2. `requirements` 用於建立新需求；`requirements-change` 啟動後需先在「變更影響評估」整理既有 BDD / SDD / TDD Issue 是否更新即可，僅在需要新增行為時才重新進入 BDD。  
 3. BDD → SDD → TDD 逐步深化：先定義行為情境，再契約化介面/資料，最後規劃測試與實作。既有 Scenario 或契約若僅需調整，沿用對應 Issue 更新即可。  
-4. 進入 TDD 時，先執行 `tdd-requirements` 建立背景，再依 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify` 的順序推進；`tdd.prompt.md` 則穿插在各階段之間做進度檢查與回圈判斷，`tdd-verify` 未通過時依檢查結果回到適當階段或 `requirements-change`。  
+4. 進入 TDD 時，先執行 `tdd-requirements` 建立背景，再依 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify` 的順序推進；`tdd-checkpoint.prompt.md` 單純在各階段之間做進度檢查與回圈判斷，`tdd-verify` 未通過時依檢查結果回到適當階段或 `requirements-change`。  
 5. 驗證通過後，接續任務拆解或實作流程（建立 PR、同步程式碼）並更新 GitHub Issue / PR。
 
 ### TDD 入口決策
@@ -210,9 +210,9 @@ def deliver_to_github(summary: dict) -> dict:
 
 ## 信賴等級與來源標註規範
 
-- 使用符號：🔵（直接證據，如最新 Issue / PR / 正式文件）、🟡（合理推測，需後續驗證）、🔴（待確認，尚無資料佐證）。
-- 統一格式：`內容（來源 owner/repo#123 🔵）`；同 repo 可省略 `owner/repo`（例如 `（來源 #45 🟡）`）；引用檔案時請標示相對路徑：`（來源 docs/spec/... 🔵）`。
-- 若資訊僅來自同步對話，請以 `（來源 使用者口頭說明 🔴）` 註記，並在待辦列出補強動作。
+- 已能引用的資料（Issue、PR、文件）直接附上 `#編號` 或相對路徑即可，視為高信賴，無須額外標示符號。
+- 僅在資訊屬於推測或待確認時補上符號：🟡（推測，待驗證）、🔴（尚無佐證）。
+- 若資訊僅來自同步對話或未記錄的口頭說明，請標註 `（來源 使用者說明 🔴）` 並列入待辦補強。
 
 ## Issue 引用與連結規範
 
@@ -221,20 +221,31 @@ def deliver_to_github(summary: dict) -> dict:
 - 指向特定留言時，於文字描述附上「留言者／時間」，避免依賴長網址。
 - 回覆完成後，請提醒使用者或透過 MCP 將輸出內容回寫到對應 Issue，保持單一事實來源。
 
+> 若需詳細操作步驟，請參考 `.github/prompts/_issue-ops-guide.md`，其中整理了 MCP 與手動流程以及各模板建議欄位。
+
 ## MCP 錯誤處理與回圈規則
 
 - **連續錯誤累計**：同一測試（測試檔 + 測試名稱 + 錯誤訊息前 120 字）連續 3 次失敗 → 透過 MCP 在 TDD Issue 留言記錄錯誤、已嘗試步驟與下一步；連續 5 次 → MCP 將 Issue 標籤改為 `human_required` 並說明原因與建議回圈（如返回 `requirements-change`）。
 - **分類標準**：統一使用 `Test Failure`、`Build/Setup Failure`、`External Dependency`、`Spec Mismatch` 方便彙整與追蹤。
 - 各 TDD 子 Prompt 僅需引用本段規則，避免重複描述造成分歧。
 
+> **責任分工**：Red/Green/Refactor 只需記錄錯誤與疑慮（標註 🟡／🔴），最終是否回圈由 `tdd-checkpoint.prompt.md`（進度調度）與 `tdd-verify.prompt.md`（結案判定）統一決策。
+
+## TDD 提交節奏
+- **Red**：每個失敗測試至少一個 commit，內容僅含測試檔及必要輔助檔案。
+- **Green**：對應測試轉綠後立即提交，確保最小實作可追溯。
+- **Refactor**：以重構主題分批提交（命名、抽象、效能調整等），維持測試綠燈。
+- **Verify**：總驗證與文件同步後提交一次，若需 squash 由後續合併流程處理。
+- 任何提交都應在 `tdd-*` 分支上完成，partial staging 請依 `commit-message.prompt.md` 建議操作。
+
 ## 需求變更觸發檢查表（供 `requirements-change.prompt.md` 及下游參考）
 
-| 觸發情境 | 建議動作 |
-| --- | --- |
-| 新增或大幅調整使用情境、使用者故事、EARS 條目 | 執行 `requirements-change.prompt.md`，更新需求基線並同步 BDD |
-| SDD 契約新增欄位、版本策略或跨系統介面改動 | 先更新 `requirements-change`，再由 `sdd` 進行契約調整與影響分析 |
-| TDD 無法設計測試或實作因需求／契約缺漏 | 暫停迭代，回到 `requirements-change` 或 `sdd` 補齊資訊後再繼續 |
-| 監控指標、SLO、部署/CI/CD 守門條件改變 | 視為需求調整，更新 `requirements-change` 並通知後續流程 |
+| 觸發情境 | 判定流程 | 建議動作 |
+| --- | --- | --- |
+| 新增或大幅調整使用情境、使用者故事、EARS 條目 | 確認是否已有對應 Scenario／契約 | 執行 `requirements-change.prompt.md` 更新需求基線；若已有 BDD Scenario，標記需調整項目並同步 `bdd` |
+| 合約欄位／資料格式缺失，或跨系統介面改動 | 若契約已存在 → 回 SDD；若需求敘述模糊 → 先回需求 | 先透過 `requirements-change` 釐清需求，再執行 `sdd` 更新契約與版本策略 |
+| 測試案例與 Scenario 不符、測試資料無法對應 | 比對測試矩陣與 Scenario/契約；屬需求差異即回需求 | 若是資料樣本不足 → `tdd-testcases`／`tdd-red` 補 mock；若 Scenario 失真 → `requirements-change` 修正需求並更新 BDD |
+| 監控指標、SLO、部署或 CI/CD 守門條件改變 | 檢查是否影響交付品質或驗收標準 | 視為需求調整，更新 `requirements-change`，並同步提醒 `tdd-verify`、CI/CD 維護者 |
 
 
 ## 自動化腳本
@@ -248,6 +259,7 @@ def deliver_to_github(summary: dict) -> dict:
 - `requirements` ↔ `requirements-change`：若 `docs/spec/` 或既有 Issue/PR 中已有正式需求，即視為「既有需求」。執行 `requirements-change` 時請先用變更影響評估檢查既有 BDD / SDD / TDD Issue 是否只需更新；僅在新增行為或契約時再走完整流程。
 - BDD / SDD 迭代：在 SDD 或 TDD 發現情境缺漏時，優先更新既有 BDD Issue 的 Scenario，並同步註記受影響的 SDD / TDD Issue（使用 `#編號` 格式）。
 - TDD 回圈：`tdd-verify` 未通過時，依檢查清單判定要回到 `tdd-red`（測試不足）、`tdd-green`（實作未完成）或 `tdd-refactor`（品質問題）；若產生需求差異則轉回 `requirements-change`。
+- 回圈決策：Red / Green / Refactor 僅標記疑慮；實際是否回到上游階段以 `tdd-checkpoint` 或 `tdd-verify` 的結論為準。
 - 技術堆疊：發生重大技術調整、部署目標或跨專案共用時，再啟動 `tech-stack` 重新盤點並更新 README 與相關 Issue。
 
 ### Issue 關聯規範
@@ -257,6 +269,18 @@ def deliver_to_github(summary: dict) -> dict:
 - SDD Issue 應列出所依賴的 BDD Scenario 標籤（例如 `BDD-001`）與預計更新的契約檔案路徑。
 - TDD Issue 中的測試矩陣需同步列出對應 BDD Scenario 與 SDD 契約 ID，方便追蹤來源。
 - 建議透過 MCP 操作 GitHub 時，一併更新彼此的 Issue 交互連結與狀態（例如使用 `linked pull requests`、`/link` 指令）。
+
+#### Scenario ↔ Issue 對照範例
+
+```markdown
+| Scenario ID | 說明 | 需求 # | SDD Issue | TDD Issue | 狀態 |
+| --- | --- | --- | --- | --- | --- |
+| BDD-001 | 使用者登入成功 | #101 | #202 | #303 | ✅ |
+| BDD-002 | OTP 驗證失敗 | #101 | #202 | #304 | ⚠️ Mock 待補 🟡 |
+| BDD-003 | 帳號鎖定提示 | #101 | 待建立 | 待建立 | 🔴 需求待確認 |
+```
+
+> BDD 完成後請在 SDD / TDD Issue 內更新此表，並於每次迭代同步狀態。
 
 ### TDD 自動化腳本注意事項
 
