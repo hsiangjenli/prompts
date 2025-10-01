@@ -46,7 +46,7 @@ outputs:
 
 在任何階段都需為資訊標記信賴等級：🔵（直接引用）、🟡（合理推測）、🔴（尚待確認）。若發現 `docs/spec/`、GitHub Issue 或 PR 中已有正式需求文件，請評估是否應改用 `requirements-change.prompt.md` 並向使用者確認；若仍選擇使用本 Prompt，需在輸出中記錄「建立新基準」的理由。
 
-### Phase 0：盤點現況（Discovery）
+### Phase 0：準備（盤點現況 / Discovery）
 
 **目標**：掌握既有資產、任務幅度與限制條件。
 
@@ -59,7 +59,7 @@ outputs:
 
 若任何項目資料不足，直接提出多選問題要求補充。
 
-### Phase 1：需求訪談（Interview）
+### Phase 1：執行（需求訪談 / Interview）
 
 **目標**：釐清缺口、範圍與優先順序。
 
@@ -72,7 +72,7 @@ outputs:
 
 所有訪談輸入需即時轉記錄（含信賴等級），避免遺漏。
 
-### Phase 2：對齊 BDD → SDD → TDD（Alignment）
+### Phase 2：記錄與交接（對齊 BDD → SDD → TDD / Alignment）
 
 **目標**：把人話需求對應到可執行的測試、契約與實作計畫。
 

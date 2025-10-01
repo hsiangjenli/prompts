@@ -28,6 +28,13 @@ outputs:
 
 > **判定原則**：只要 `docs/spec/`、GitHub Issue / PR、或專案維運文件中已有可追溯的需求描述（例如 `*-requirements.md`、`requirements` 標籤 Issue），即視為「既有需求」。若判定為新需求，請改用 `requirements.prompt.md` 建立基準再回到本 Prompt。
 
+### 何時啟動
+- 新增或調整使用情境、使用者故事或 EARS 條目。
+- 契約（OpenAPI / Schema / 事件）新增欄位、版本策略或跨系統介面變更。
+- TDD 在設計或實作時因需求／契約缺漏無法推進。
+- 監控、SLO、部署或 CI/CD 守門條件發生調整。
+參考 README〈需求變更觸發檢查表〉，確認是否需要回到本流程。
+
 ## 前置條件
 
 - `docs/spec/` 內已有既定需求文件或等效紀錄。
