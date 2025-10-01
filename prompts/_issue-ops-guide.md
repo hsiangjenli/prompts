@@ -14,10 +14,18 @@ description: 共用的 GitHub Issue 操作指引（MCP 與手動流程）
 ## 共用欄位
 | 欄位 | 說明 |
 | --- | --- |
-| `title` | 以 `[類型] 主題` 命名，例：`[BDD] 使用者登入 Scenario` |
-| `labels` | 對應流程的類型標籤：`requirements`、`requirements-change`、`bdd`、`sdd`、`tdd`、`tech-debt` 等 |
-| `body` | 直接貼上各 Prompt 的主要輸出區塊（表格、清單、檢查表）。 |
-| `assignees` / `projects` | 依專案流程填寫。如不確定，可留空並在評論標註負責人。 |
+| `title` | 建議採 `[類型] 主題`，例：`[BDD] 使用者登入 Scenario` |
+| `labels` | 對應流程的類型標籤：`requirements`、`requirements-change`、`bdd`、`sdd`、`tdd`、`tech-debt`… |
+| `body` | 直接貼上各 Prompt 的輸出（表格、清單、檢查表），勿另寫摘要。 |
+| `assignees` / `projects` | 依專案流程填寫；不確定時可留空並在評論標註負責人。 |
+
+### 標準表格欄位
+- Scenario 對照表（BDD）：`Scenario ID | 需求 # | 對應 SDD Issue | 對應 TDD Issue | 備註 / 狀態`。
+- 契約對照表（SDD）：`Scenario ID | 契約類型 | 契約名稱/版本 | 關鍵欄位/事件 | 驗證方式 | 來源 # | 狀態`。
+- 測試矩陣（TDD）：`Test ID | Scenario ID | 需求 # | 測試類型 | 資料/Mock | 狀態（Red/Green/Refactor） | 優先順序 | 備註 | 來源/狀態`。
+- 交付清單 / 待辦追蹤：`項目 | 描述 | 來源 # | 負責人 | 截止日期 | 狀態`。
+
+> 建議在表格的「狀態」欄明確解釋符號含意，例如 ✅/⚠️/❌ 或 🔵/🟡/🔴。
 
 ## 模板對應
 | 流程 | 建議模板 | 其他提示 |
@@ -26,7 +34,7 @@ description: 共用的 GitHub Issue 操作指引（MCP 與手動流程）
 | 需求變更 | `.github/ISSUE_TEMPLATE/requirements-change.md` 或沿用原 Issue | 在評論摘要變更、影響範圍與下游任務 |
 | BDD | `.github/ISSUE_TEMPLATE/bdd.md` | 更新 Scenario 對照表並標註 SDD/TDD Issue 編號；沿用既有 Issue 時註明差異 |
 | SDD | `.github/ISSUE_TEMPLATE/sdd.md` | 附上契約對照表、Mock 策略、版本計畫與受影響服務 |
-| TDD | `.github/ISSUE_TEMPLATE/tdd.md` | 更新「來源與範圍」與「測試矩陣」，並勾選迭代進度核取框 |
+| TDD | `.github/ISSUE_TEMPLATE/tdd.md` | 更新「來源與範圍」與測試矩陣（含狀態欄），並勾選迭代進度核取框 |
 | 技術堆疊 | `.github/ISSUE_TEMPLATE/tech-stack.md`（若存在） | 補充現有決策、待確認項目與風險 |
 
 ## MCP 使用流程範例

@@ -51,14 +51,11 @@ Feature:
 
 ## Scenario 對照表
 
-| Scenario ID | 描述 | 對應 SDD Issue | 對應 TDD Issue |
-| --- | --- | --- | --- |
-|  |  |  |  |
-|  |  |  |  |
+| Scenario ID | 需求 # | 對應 SDD Issue | 對應 TDD Issue | 備註 / 狀態 |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
+|  |  |  |  |  |
 
-## 關聯工作
-- 對應 SDD Issue 編號（例如 `#123`）與摘要：
-- 對應 TDD Issue 編號（例如 `#124`）與摘要：
 - 其他相關 Issue / PR：
 
 ## 開放問題
@@ -66,4 +63,4 @@ Feature:
 2. 
 3. 
 
-> 建議在評論區附上 Scenario 與需求編號的對照表，並於建立對應的 SDD / TDD Issue 後更新上述編號，維持追蹤性。
+> 建議在評論區附上 Scenario 與需求編號的差異說明，並於建立對應的 SDD / TDD Issue 後更新表格與狀態（🔵／🟡／🔴）。

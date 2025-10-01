@@ -28,45 +28,38 @@ outputs:
 - 盤點是否已有 BDD / SDD / TDD 輸出及其完整度。
 - 修正 Prompt 使用順序，避免重工。
 
-## 流程
+## 操作步驟
 
-在進入 Phase 0 前，請確認：
-- 可透過 MCP 或 API 存取 GitHub Issue／留言；若權限不足需在輸出中註明並向使用者索取資訊。
-- 回覆語言設定為繁體中文。
+在開始前，確認回覆語言為繁體中文，並評估是否可透過 MCP 讀取 GitHub Issue／留言。若權限不足，需在輸出中標註資料來源並向使用者索取關鍵資訊。
 
-### Phase 0：自動蒐集
-1. 讀取 `README.md`（含技術堆疊章節）、`CHANGELOG.md`（或等效檔）、`docs/spec/`。記錄最新修改日期與版本。
-2. 透過 MCP 取得相關 GitHub Issue / Comments，整理需求（REQ）、行為（BDD）、契約（SDD）、測試（TDD）等進度。
-   - 若目前無法透過 MCP 存取 Issue，請改以向使用者詢問或手動輸入重點摘要，並在輸出中標示資料來源；對尚未確認的內容標註 🟡／🔴。
-3. 將現有輸出整理成「狀態檢查表」，對每項標記 ✅（完成）、⚠️（部分）、❌（缺失），並附來源連結。
-4. 依檢查表推論專案狀態：若需求、BDD、SDD、TDD 皆為 ❌，視為「新專案」；任一項為 ✅/⚠️ 則列為「既有專案」，記錄支援判斷的 Issue（使用 `#編號` 格式）與最近更新時間。
+### Step 1：快速盤點
+1. 檢視 `README.md`、`CHANGELOG.md`、`docs/spec/`（如存在）與主要說明文件，記錄最近更新與既有交付物。
+2. 擷取與需求、BDD、SDD、TDD 相關的 Issue／PR 編號與最新狀態（`#編號`），組成簡易的「狀態檢查表」（建議欄位：項目、完成度 ✅/⚠️/❌、最新來源）。
+3. 判斷是否存在正式需求基準：若需求仍為空白，預設走新需求流程；若已有文件，標記為既有專案並準備影響評估。
+4. 紀錄技術堆疊是否與現況不符（例如新框架、部署目標改變）。
 
-### Phase 1：使用者訪談
-1. 根據狀態檢查表的 ⚠️／❌ 項目提出封閉式問題（EARS、GWT、BDD、SDD、TDD、CI/CD、技術堆疊）。
-2. 根據 Phase 0 的專案狀態與使用者回覆確認情境：
-   - **新專案 / 新需求**：檢查表顯示所有交付物為 ❌，且使用者確認尚未建立正式需求文件或 Issue。
-   - **既有需求變更**：至少一項交付物已存在（✅／⚠️），且此次目標為新增或調整需求內容。
-   - **測試 / 實作進行中**：需求明確，焦點在 BDD / SDD / TDD 任一階段的阻塞或缺口。
-3. 確認技術堆疊是否需要重新盤點（例：新增子系統、部署目標改變）。
-4. 確認交付時程、責任人與期望輸出載體（Issue / PR / Markdown）。
+### Step 2：快速提問
+1. 依檢查表的 ⚠️／❌ 項目的種類，選擇少量封閉式問題追問（EARS、GWT、Scenario、契約、測試、CI/CD、技術堆疊）。
+2. 使用「選項 + ⑤ 其他」格式，避免冗長對話；對尚未拿到答案的項目標註 🟡／🔴。
+3. 確認本回合的主要目標與時程：是建立新需求、調整既有情境，還是解除 TDD 阻塞。
 
-### Phase 2：決策與輸出
-1. 依狀態檢查表與訪談結果套用以下決策矩陣：
-   | 條件 | 推薦 Prompt | 附註 |
+### Step 3：決策輸出
+1. 套用決策矩陣統一建議：
+   | 條件 | 推薦 Prompt | 後續提醒 |
    | --- | --- | --- |
-   | ❌ 無正式需求／EARS 未建立 | `requirements.prompt.md` | 若找到既有需求草稿，請先整理成基準文件 |
-   | ✅ 已有需求但需增修 | `requirements-change.prompt.md` | 先整理既有 Issue（`#編號`）與交付物，於影響評估決定更新或新增 |
-   | EARS/GWT 已確認，但 Scenario 缺或過時 | `bdd.prompt.md` | 同步產出 Scenario ↔ Issue 對照表 |
-   | BDD 完整，需契約化或更新介面 | `sdd.prompt.md` | 標記需新建或更新的契約檔案 |
-   | SDD 就緒，需要安排測試迭代 | `tdd-checkpoint.prompt.md` | 僅做進度盤點；若尚未建立 TDD Issue，請先跑 `tdd-requirements` |
-   | 技術堆疊有重大變更或尚未定義 | `tech-stack.prompt.md` | 必須在需求或設計變更後 24h 內同步 README |
-   | 任一 TDD 階段完成需要提交當前成果 | `commit-message.prompt.md` | 確認分支為 `tdd-*`，僅暫存該階段變更並產出 Angular 風格 commit |
-2. 組成輸出：
-   - 狀態檢查表摘要（附 `#編號`，對待確認項目標註 🟡／🔴）。
-   - CHANGELOG／Issue 重點。
-   - 推薦 Prompt（目的、需要的輸入、預期產出、EARS/GWT 覆蓋狀態）。
-   - 建議動作：需建立或更新的 Issue／PR、需補文件、MCP 操作提醒。
-   - 開放問題與待補資訊。
+   | 尚無正式需求基準 | `requirements.prompt.md` | 產出 EARS / GWT 雛形，預設下一步 `bdd.prompt.md` |
+   | 已有需求但需增修 | `requirements-change.prompt.md` | 先列既有 Issue 與交付物，決定更新或新增 |
+   | 需求已確認但缺乏情境 | `bdd.prompt.md` | 生成 Scenario 對照表，交給 `sdd.prompt.md` |
+   | Scenario 完整，需契約化 | `sdd.prompt.md` | 標記契約與 Mock 待辦，通知 `tdd-requirements.prompt.md` |
+   | TDD 尚未建立或需重新盤點 | `tdd-requirements.prompt.md` 或 `tdd-checkpoint.prompt.md` | 首次進入請用 `tdd-requirements`；完成任一子流程後再用 `tdd-checkpoint` |
+   | 技術決策不明或變更幅度大 | `tech-stack.prompt.md` | 輸出後記得回填 README / 需求文件 |
+   | 某 TDD 階段完成需 commit | `commit-message.prompt.md` | 確認正在 `tdd-*` 分支並僅暫存對應檔案 |
+2. 輸出內容至少包含：
+   - 狀態檢查表摘要與資料來源（`#編號` + 🔵／🟡／🔴 標示）。
+   - 近期變更重點（CHANGELOG、Issue、PR）。
+   - 推薦 Prompt 1~3 個，說明目的、必要輸入、預期輸出、EARS/GWT 覆蓋情況。
+   - 建議動作（需建立或更新的 Issue／PR、需補文件、MCP 操作）。
+   - 開放問題列表，方便下個 Prompt 追問。
 
 ## 注意事項
 
