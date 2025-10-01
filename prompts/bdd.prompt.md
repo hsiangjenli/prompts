@@ -13,7 +13,7 @@ inputs:
 outputs:
   summary: 產出符合 `.github/ISSUE_TEMPLATE/bdd.md` 的內容並安排下一步
   include:
-    - 至少一個成功情境與一個例外情境的 Gherkin 案例，標示信賴等級
+    - 至少一個成功情境與一個例外情境的 Gherkin 案例（引用來源附 `#編號`，對待確認的情境標註 🟡／🔴）
     - 成功／失敗訊號、監控需求與所需測試資料
     - 任務幅度矩陣與相關子系統說明
     - Scenario ↔ SDD / TDD Issue 對照表（格式建議：`Scenario ID | SDD Issue | TDD Issue`，若尚未建立請填寫 `待建立` 並提供建議的 Issue 標題與標籤）
@@ -41,7 +41,7 @@ outputs:
 ## 流程
 
 ### Phase 0：準備（情境盤點）
-1. **對齊需求重點**：摘要需求編號、核心目標、不可變限制，標示信賴等級。
+1. **對齊需求重點**：摘要需求編號、核心目標、不可變限制，引用來源附 `#編號`，對尚未確認的資訊標註 🟡／🔴。
 2. **盤點子系統**：列出涉及的模組，勾選 API、前端、資料、AI 等，若多項請分開處理。
 3. **蒐集參考資料**：記錄可引用的設計稿、流程圖、舊 Issue（含既有 BDD Issue 如需更新）。
 
@@ -53,11 +53,17 @@ outputs:
 
 ### Phase 2：記錄與交接（整理輸出）
 1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。每個 Scenario 請命名並生成唯一 ID（建議格式 `BDD-###`），供 SDD / TDD 參考。
-2. **標註信賴等級與來源**：每個 Scenario 以 🔵／🟡／🔴 標示並附來源（Issue `#編號` 或文件路徑）。
+2. **標註來源與狀態**：每個 Scenario 附上來源（Issue `#編號` 或文件路徑），對仍待確認的情境標註 🟡／🔴。
 3. **完成驗收訊號**：整理成功／失敗訊號、監控需求、測試資料項目。
 4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，提供建議的標題、標籤與範疇（建議格式：`[SDD] 功能摘要` / `[TDD] 功能摘要`）；若已建立，記錄 Issue 編號（使用 `#編號` 格式）並更新模板欄位，標示「沿用」「更新」或「新增」。同時補上 Scenario 對照表。
 5. **列出開放問題**：將未確定事項成列點，方便後續追蹤。
 6. **建立或更新 Issue**：透過 MCP 或人工方式，用 `.github/ISSUE_TEMPLATE/bdd.md` 內容開 Issue；若是更新既有 Issue，需在描述註明此次差異並補上 SDD / TDD Issue 編號。
+
+### 交付給 SDD 的輸出清單
+- Scenario 對照表（`BDD-###` ↔ 需求 `#` ↔ 建議的 SDD / TDD Issue 編號）。
+- 每個情境的觸發條件、輸入輸出與驗收訊號。
+- 需補強或待確認的情境（標註 🟡／🔴）與負責人。
+- 建議優先處理的契約或資料資產。
 
 ## 產出要求
 
@@ -65,10 +71,14 @@ outputs:
 - Scenario 與需求編號需建立對照表。
 - 若更新既有 Scenario，需標註原 Scenario ID 與對應 Issue `#編號`，並描述差異摘要。
 - 若有跨子系統情境，需清楚標示影響範圍與責任人。
-- 在回覆末段提醒使用者檢視並確認新建或更新的 BDD Issue，以及對應的 SDD / TDD Issue 編號與信賴等級。
+- 在回覆末段提醒使用者檢視並確認新建或更新的 BDD Issue，以及對應的 SDD / TDD Issue 編號與狀態。
 
 ## 後續建議
 
 - 完成 BDD Issue 後，立即啟動 `sdd.prompt.md` 將案例轉為契約。
 - 若需求再次變動，先更新 BDD Issue 再通知 SDD / TDD 負責人。
 - 將所有關鍵連結（需求、設計、BDD、SDD、TDD Issue）整理於輸出摘要，方便後續追蹤。
+
+## Issue 操作提醒
+
+依 `_issue-ops-guide.md` 的「BDD」指引建立或更新 Issue：貼上 Gherkin、Scenario 對照表與開放問題，更新關聯的 SDD / TDD Issue（互相引用），並於評論標註待確認情境（🟡／🔴）。

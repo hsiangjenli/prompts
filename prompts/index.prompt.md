@@ -12,7 +12,7 @@ inputs:
 outputs:
   summary: 提供決策所需的全貌、推薦步驟與後續動作
   include:
-    - 專案現況摘要（含資料來源與信賴等級：🔵 確定／🟡 推測／🔴 假設）
+    - 專案現況摘要（引用資料附 `#編號`，對推測或待確認的內容標註 🟡／🔴）
     - 近期變更重點（CHANGELOG、Git 提交或 Issue 摘要）
     - 推薦 Prompt 清單（建議 ≤3 項），說明目的、必要輸入、預期產出與 EARS/GWT 覆蓋
     - 建議動作：需建立或更新的 Issue／PR、需補文件、待確認事項（可用 MCP 直接建立）
@@ -37,7 +37,7 @@ outputs:
 ### Phase 0：自動蒐集
 1. 讀取 `README.md`（含技術堆疊章節）、`CHANGELOG.md`（或等效檔）、`docs/spec/`。記錄最新修改日期與版本。
 2. 透過 MCP 取得相關 GitHub Issue / Comments，整理需求（REQ）、行為（BDD）、契約（SDD）、測試（TDD）等進度。
-   - 若目前無法透過 MCP 存取 Issue，請改以向使用者詢問或手動輸入重點摘要，並在輸出中標示資料來源與信賴等級。
+   - 若目前無法透過 MCP 存取 Issue，請改以向使用者詢問或手動輸入重點摘要，並在輸出中標示資料來源；對尚未確認的內容標註 🟡／🔴。
 3. 將現有輸出整理成「狀態檢查表」，對每項標記 ✅（完成）、⚠️（部分）、❌（缺失），並附來源連結。
 4. 依檢查表推論專案狀態：若需求、BDD、SDD、TDD 皆為 ❌，視為「新專案」；任一項為 ✅/⚠️ 則列為「既有專案」，記錄支援判斷的 Issue（使用 `#編號` 格式）與最近更新時間。
 
@@ -58,11 +58,11 @@ outputs:
    | ✅ 已有需求但需增修 | `requirements-change.prompt.md` | 先整理既有 Issue（`#編號`）與交付物，於影響評估決定更新或新增 |
    | EARS/GWT 已確認，但 Scenario 缺或過時 | `bdd.prompt.md` | 同步產出 Scenario ↔ Issue 對照表 |
    | BDD 完整，需契約化或更新介面 | `sdd.prompt.md` | 標記需新建或更新的契約檔案 |
-   | SDD 就緒，需要安排測試迭代 | `tdd.prompt.md` | 若已有部分子流程結果請彙整 |
+   | SDD 就緒，需要安排測試迭代 | `tdd-checkpoint.prompt.md` | 僅做進度盤點；若尚未建立 TDD Issue，請先跑 `tdd-requirements` |
    | 技術堆疊有重大變更或尚未定義 | `tech-stack.prompt.md` | 必須在需求或設計變更後 24h 內同步 README |
    | 任一 TDD 階段完成需要提交當前成果 | `commit-message.prompt.md` | 確認分支為 `tdd-*`，僅暫存該階段變更並產出 Angular 風格 commit |
 2. 組成輸出：
-   - 狀態檢查表摘要（含來源、信賴等級）。
+   - 狀態檢查表摘要（附 `#編號`，對待確認項目標註 🟡／🔴）。
    - CHANGELOG／Issue 重點。
    - 推薦 Prompt（目的、需要的輸入、預期產出、EARS/GWT 覆蓋狀態）。
    - 建議動作：需建立或更新的 Issue／PR、需補文件、MCP 操作提醒。
@@ -74,4 +74,4 @@ outputs:
 - 回覆需保持結構化，方便貼入 GitHub Issue。
 - 若偵測輸出重複，提醒使用者檢視是否可沿用既有成果。
 - 可使用自動化工具時，優先主動建立或更新 Issue 並附連結。
-- 所有 Issue 皆以 `#編號` 表示，並確認於輸出中附來源摘要與信賴等級。
+- 所有 Issue 皆以 `#編號` 表示，並在輸出中標示待確認事項（🟡／🔴）。

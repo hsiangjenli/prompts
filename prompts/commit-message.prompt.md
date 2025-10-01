@@ -37,23 +37,34 @@ outputs:
 
 ### Phase 0：準備（檢查分支與變更）
 1. **分支確認**：若當前分支非 `tdd-*`，產生 `git checkout -b tdd-<keyword>` 建議並提醒使用者切換。
-2. **盤點變更**：列出所有已修改檔案，標示哪一些應納入此次提交、哪一些需保留未 stage。必要時可建議使用 `git diff --stat` 快速檢視。
-3. **風險提醒**：若偵測到測試或 CI 相關檔案，提示檢查是否需要同時更新對應的 pipeline／文件。
+2. **階段判定**：請使用者明確指出本次提交對應的 TDD 階段（Red / Green / Refactor / Verify）；可提示「Red 建議一個測試一個 commit、Green 以轉綠為界、Refactor 依重構主題分批、Verify 彙整最終驗證」。
+3. **盤點變更**：列出所有已修改檔案，標示哪一些應納入此次提交、哪一些需保留未 stage。必要時可建議使用 `git diff --stat` 快速檢視。
+4. **風險提醒**：若偵測到測試或 CI 相關檔案，提示檢查是否需要同時更新對應的 pipeline／文件。
 
 ### Phase 1：執行（部分暫存與訊息擬稿）
 1. **部分暫存**：
    - 建議使用 `git add -p <file>` 對相關檔案逐段暫存。
    - 若已有誤加的檔案，提示 `git restore --staged <file>` 或 `git reset HEAD <file>` 撤回。
+   - 需要一次暫存多個測試檔或指定型別時，可依下列範例調整：
+     ```bash
+     # 僅暫存測試與型別宣告檔
+     git add tests/**/*.test.ts src/**/*.d.ts
+
+     # 先取消全部暫存，再挑選需要的檔案
+     git reset
+     git add src/service/user.ts
+     git add -p src/service/user.test.ts
+     ```
 2. **分類摘要**：根據輸入的變更類型與 scope，整理每個檔案的修改目的，為 commit message body 做準備。
 3. **撰寫訊息**：
    - 依 Angular 規範組合 `type(scope): summary`。
-   - Body 以條列方式描述主要變更，並依 README 信賴等級規範標註來源（例如 `（來源 #123 🔵）`）。
+   - Body 以條列方式描述主要變更，引用資料附 `#編號`，對推測或待確認的內容標註 🟡／🔴。
    - Footer 加入 `Refs #123` 或 `Closes owner/repo#456` 等資訊，方便 changelog 工具解析。
 
 ### Phase 2：記錄與交接（提交前檢查）
 1. **`git status` 驗證**：提示使用者確認只有預期的檔案被 stage。
 2. **指令建議**：提供 `git commit`、`git push`、更新 changelog 或開 PR 的後續步驟。
-3. **同步提醒**：若提交會影響文件、測試或 CI，列出需同步更新的 Issue／PR／文件並附來源與信賴等級。
+3. **同步提醒**：若提交會影響文件、測試或 CI，列出需同步更新的 Issue／PR／文件並附 `#編號`；對尚未確認的事項標註 🟡／🔴。
 
 ## 產出格式建議
 

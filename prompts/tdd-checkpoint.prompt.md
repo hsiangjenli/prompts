@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: 總覽 TDD 迭代的中繼檢查點；在已執行任一 TDD 子流程後，決定是否啟動或續接 `tdd-requirements` → `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`
+description: 總覽 TDD 迭代的中繼檢查點；僅在已執行 `tdd-requirements` 或任一 TDD 子流程後，決定是否續接 `tdd-testcases` → `tdd-red` → `tdd-green` → `tdd-refactor` → `tdd-verify`
 inputs:
   summary: 透過本 Prompt 評估當前 TDD 迭代狀態並排定下一個子 Prompt
   required:
@@ -18,23 +18,23 @@ outputs:
     - 阻塞與風險摘要（含連續錯誤統計與 MCP 處理需求），以及與 TDD Issue 的同步提醒
 ---
 
-# tdd
+# tdd-checkpoint
 
 ## 目的
 
-作為 TDD 迭代的「看板」，快速盤點需求、測試與實作的進度，並決定下一個要執行的子 Prompt（`tdd-requirements`、`tdd-testcases`、`tdd-red`、`tdd-green`、`tdd-refactor`、`tdd-verify`）。首次進入 TDD 時請先直接使用 `tdd-requirements.prompt.md`，再回到本指令追蹤進度。
+作為 TDD 迭代的「看板」，快速盤點需求、測試與實作的進度，並決定下一個要執行的子 Prompt（`tdd-requirements`、`tdd-testcases`、`tdd-red`、`tdd-green`、`tdd-refactor`、`tdd-verify`）。⚠️ **請勿將本 Prompt 視為 TDD 的起點**：首次進入 TDD 時務必先執行 `tdd-requirements.prompt.md`，待該階段輸出完成後，再呼叫本指令追蹤進度。
 
 ## 適用情境
 
-- **首次進入 TDD**：`sdd.prompt.md` 完成後，需先跑 `tdd-requirements` 建立背景，再使用本 Prompt 確認後續順序。
+- **已完成 `tdd-requirements`，需排程下一步**：初次完成 `tdd-requirements` 後，以本 Prompt 盤點缺口並決定是否進入 `tdd-testcases`。
 - **子流程中斷或遇到阻塞**：任何階段停滯時，再次呼叫本 Prompt 重新盤點狀態與下一步。
 - **交付前稽核**：在 `tdd-verify` 前後，確認是否仍有 Red/Green/Refactor 待辦或需回到 `requirements-change`。
 
 ## 流程
 
 ### Phase 0：準備（狀態盤點）
-1. 讀取目標 TDD Issue 與對應的 BDD、SDD Issue，確認各自的最新留言與狀態。
-2. 蒐集既有輸出：若已跑過子 Prompt，彙整重點與待辦，建立「子流程進度表」（建議欄位：階段、完成度、最後更新時間、來源連結）。來源須標示 GitHub Issue / PR `#編號` 與信賴等級（🔵 直接引用／🟡 推測／🔴 待確認）。
+1. 讀取目標 TDD Issue 與對應的 BDD、SDD Issue，確認各自的最新留言與狀態；若尚未建立 TDD Issue，請先改跑 `tdd-requirements.prompt.md` 建立基線。
+2. 蒐集既有輸出：若已跑過子 Prompt，彙整重點與待辦，建立「子流程進度表」（建議欄位：階段、完成度、最後更新時間、來源連結）。引用既有資料時附上 GitHub Issue / PR `#編號`；僅對推測或待確認的資訊補上 🟡／🔴。
 3. 標示任務幅度矩陣與外部依賴，確認是否有阻塞或等待同步的 PR／部署。
 4. 依進度表判斷當前所處階段（需求／測試／實作／重構／驗證），若多個階段並行，記錄各自負責人與預期完成時間。
 
@@ -50,7 +50,7 @@ outputs:
 ### Phase 2：記錄與交接（行動建議）
 1. 依優先順序列出接下來要執行的子 Prompt：指明觸發條件、需要的輸入、期望輸出與負責人。
 2. 如需批次執行，提醒使用 `scripts/tdd-cycle.sh` 並確認錯誤處理機制（MCP 留言、標籤更新）。
-3. 若有阻塞或重複錯誤，提供「錯誤分類」（測試失敗、建置失敗、依賴缺失等）、連續錯誤次數（以「測試檔 + 測試名稱 + 錯誤摘要前 120 字」識別），並提醒遵守連續錯誤 3 / 5 次的 MCP 處理；若錯誤源自需求不一致，建議轉回 `requirements-change` 並在輸出中說明依據。
+3. 若有阻塞或重複錯誤，提供「錯誤分類」（測試失敗、建置失敗、依賴缺失等）、連續錯誤次數（以「測試檔 + 測試名稱 + 錯誤摘要前 120 字」識別），並提醒遵守連續錯誤 3 / 5 次的 MCP 處理；若錯誤源自需求不一致，僅需記錄「需求差異疑慮」並建議轉回 `requirements-change`，實際判定交由 `tdd-verify`／回圈決策處理。
 4. 在輸出末尾整理需同步到 TDD Issue 的重點，包含：進度表更新、需留言事項、待建立的追加 Issue。
 
 ## 產出格式建議
@@ -58,7 +58,7 @@ outputs:
 - **現況摘要表**：需求、測試、實作、重構、驗證的完成度（✅/⚠️/❌）。
 - **下一步清單**：序號、推薦子 Prompt、需要的輸入、預期產出。
 - **阻塞與風險**：列出問題、影響、建議處置。
-- **Issue 同步提醒**：哪些欄位需更新、是否要建立留言或新 Issue（全部使用 `#編號` 格式並附信賴等級）。
+- **Issue 同步提醒**：哪些欄位需更新、是否要建立留言或新 Issue（使用 `#編號` 引用，對待確認事項標註 🟡／🔴）。
 - **回圈條件**：標示何時需回到 `requirements-change`、`sdd` 或哪個 TDD 子流程，並附依據。
 
 ## 後續建議
@@ -66,3 +66,9 @@ outputs:
 - 若全流程皆需執行，可直接使用 `scripts/tdd-cycle.sh` 自動跑完各子 Prompt。
 - 每完成一個子 Prompt，建議回到本指令再次檢視，確保沒有遺漏。
 - 在輸出末尾提醒確認 TDD Issue 的測試矩陣與紀錄同步最新資訊。
+
+## Issue 操作提醒
+
+依 `_issue-ops-guide.md` 中的 TDD 範本更新目標 Issue：
+- 於描述或評論貼上進度檢查摘要並更新迭代核取框。
+- 若需新增阻塞追蹤或回到需求階段，建立新 Issue 後互相引用。
