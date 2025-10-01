@@ -26,17 +26,17 @@ outputs:
 
 ## 流程
 
-### Phase 0：檢查清單建立
+### Phase 0：準備（檢查清單建立）
 1. 根據 TDD Issue 測試矩陣列出所有需驗證的測試項目與指令。
 2. 列出品質守門檢查：Lint、型別、Coverage、靜態分析、資安掃描等。
 3. 確認契約、文件、監控設定是否需要更新或驗證。
 
-### Phase 1：執行驗證
+### Phase 1：執行（逐項驗證）
 1. 逐項執行測試與檢查，記錄輸出與結果。
 2. 若有未通過項目，詳細描述錯誤訊息、影響範圍與建議回到哪個階段處理。
 3. 確認契約檔案或文件是否與 SDD 一致，若需補件，記錄路徑與負責人。
 
-### Phase 2：判定與回報
+### Phase 2：記錄與交接（判定與回報）
 1. 將檢查清單結果統一為 ✅（通過）、⚠️（需跟進）、❌（未通過），並計算合格率與剩餘待辦；每項附來源與信賴等級。
 2. 若所有檢查項目均為 ✅，整理驗證摘要、耗時、關鍵指標，標示「合格」並確認是否可提交 PR 或部署，列出必要的後續行動（合併、部署、更新 changelog 等）。
 3. 若任一項為 ❌／⚠️，套用下列決策樹：
@@ -45,6 +45,19 @@ outputs:
    - 品質檢查未過、技術債未解 → 回到 `tdd-refactor`，註明須額外檢查項目。
    - 契約 / 文件未同步 → 回到 `sdd`（契約更新）或 `tdd-refactor`（文件修正），附路徑。
    - 需求偏移或跨子系統影響 → 建議啟動 `requirements-change`，並列出影響的需求與 Scenario。
+   ```pseudo
+   if 測試未通過:
+       if 案例缺漏: return "tdd-testcases" → "tdd-red"
+       else: return "tdd-green"
+   elif 品質檢查未過 or 技術債未收斂:
+       return "tdd-refactor"
+   elif 契約/文件不同步:
+       return "sdd" or "tdd-refactor"  # 視是否需調整契約內容
+   elif 需求偏移:
+       return "requirements-change"
+   else:
+       return "tdd-verify"  # 重新驗證直到全數通過
+   ```
 4. 提醒在 TDD Issue 更新測試矩陣與狀態，並附上驗證輸出或 CI 連結、來源、信賴等級。
 5. 建議後續動作（建立 PR、通知 reviewer、更新 changelog、安排上線），並列出責任人與時程；若需再次迭代，列出預計開始時間與負責人。
 
