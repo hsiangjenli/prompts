@@ -5,7 +5,7 @@ inputs:
   summary: 需先掌握使用者當前問題與現有產出
   required:
     - 目前的卡關點、目標與時程限制
-    - 現有文件與路徑（例如 docs/spec/, docs/prompts/, CHANGELOG.md）
+    - 現有文件與路徑（例如 docs/spec/, CHANGELOG.md）
     - 相關 GitHub Issue 編號與重點留言（可透過 MCP 取得）
     - 近期已執行的指令／Prompt 及其主要輸出
     - 語言或格式需求（預設繁體中文 + Markdown）
@@ -32,7 +32,6 @@ outputs:
 
 在進入 Phase 0 前，請確認：
 - 可透過 MCP 或 API 存取 GitHub Issue／留言；若權限不足需在輸出中註明並向使用者索取資訊。
-- 回覆語言設定為繁體中文。
 
 ### Phase 0：自動蒐集
 1. 讀取 `README.md`（含技術堆疊章節）、`CHANGELOG.md`（或等效檔）、`docs/spec/`。記錄最新修改日期與版本。
