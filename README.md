@@ -68,7 +68,7 @@ flowchart TB
         TRD --> TGR[tdd-green]
         TGR --> TRF[tdd-refactor]
         TRF --> TVF[tdd-verify]
-        PTDD[tdd
+        PTDD[tdd-checkpoint
 進度檢查] -.-> TRQ
         PTDD -.-> TTC
         PTDD -.-> TRD
@@ -99,8 +99,8 @@ flowchart TB
 | --- | --- | --- |
 | 尚未建立 TDD Issue 或第一次進行該需求的測試迭代 | `tdd-requirements.prompt.md` | 建立背景、輸入輸出與限制；產出直接交給 `tdd-testcases` |
 | 已完成 `tdd-requirements`，準備設計測試案例 | `tdd-testcases.prompt.md` | 若遇到契約資料缺口，請依表格中的判斷回到 `sdd` 或補資料 |
-| 任何 TDD 子流程完成後需要確認下一步、統整阻塞或回圈 | `tdd.prompt.md` | 作為進度檢查點，評估是否繼續下一個子流程或返回需求變更 |
-| TDD 子流程執行中斷、遇到需求矛盾或跨子系統影響 | `tdd.prompt.md` → 覆核結果後可能轉 `requirements-change.prompt.md` | 依 `tdd.prompt.md` 的回圈建議決定下一步 |
+| 任一 TDD 子流程完成後需要確認下一步或統整阻塞 | `tdd-checkpoint.prompt.md` | 單純盤點進度與缺口，輸出推薦的下一個子 Prompt 或待解阻塞 |
+| TDD 子流程執行中斷、遇到需求矛盾或跨子系統影響 | `tdd-checkpoint.prompt.md`（彙整議題）→ 視情況轉 `requirements-change.prompt.md` | `tdd-checkpoint` 僅列阻塞與疑慮；是否回圈由 `tdd-verify` 結案判定 |
 | TDD 各階段完成（Red / Green / Refactor / Verify）需提交成果 | `commit-message.prompt.md` | 確認分支為 `tdd-*`、僅暫存該階段檔案並產生 Angular 風格 commit |
 
 ### 流程 Pseudocode
@@ -130,7 +130,7 @@ class TDDState(PromptState):
     summary: dict                     # 交付摘要（接著會送往 deliver_to_github）
 
     def refresh_context(self) -> list[object]:
-        """回傳迭代歷程（例如各階段輸出列表），供下一次呼叫 `tdd.prompt.md` 使用。"""
+        """回傳迭代歷程（例如各階段輸出列表），供下一次呼叫 `tdd-checkpoint.prompt.md` 使用。"""
         context = self.context or []
         if isinstance(context, list):
             return list(context)
@@ -171,7 +171,7 @@ def delivery_pipeline(context: dict) -> dict:
     # 4. TDD 迭代（必要時回到需求變更）
     tdd_requirements: PromptState = run("tdd-requirements.prompt.md", sdd_state)
     history = [tdd_requirements.context]
-    tdd_state: TDDState = run("tdd.prompt.md", {
+    tdd_state: TDDState = run("tdd-checkpoint.prompt.md", {
         "stage": "tdd-requirements",
         "latest": tdd_requirements.context,
         "history": list(history),
@@ -183,7 +183,7 @@ def delivery_pipeline(context: dict) -> dict:
             return delivery_pipeline(stage_result)
         history = tdd_state.refresh_context()
         history.append(stage_result)
-        tdd_state = run("tdd.prompt.md", {
+        tdd_state = run("tdd-checkpoint.prompt.md", {
             "stage": tdd_state.next_prompt.file,
             "latest": stage_result,
             "history": history,

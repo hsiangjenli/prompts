@@ -52,18 +52,16 @@ outputs:
 4. **盤點測試資料需求**：若需樣本資料或模型，請列出來源與準備方式。
 
 ### Phase 2：記錄與交接（整理輸出）
-1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。每個 Scenario 請命名並生成唯一 ID（建議格式 `BDD-###`），供 SDD / TDD 參考。
-2. **標註來源與狀態**：每個 Scenario 附上來源（Issue `#編號` 或文件路徑），對仍待確認的情境標註 🟡／🔴。
-3. **完成驗收訊號**：整理成功／失敗訊號、監控需求、測試資料項目。
-4. **規劃後續 Issue**：若尚未建立 SDD / TDD Issue，提供建議的標題、標籤與範疇（建議格式：`[SDD] 功能摘要` / `[TDD] 功能摘要`）；若已建立，記錄 Issue 編號（使用 `#編號` 格式）並更新模板欄位，標示「沿用」「更新」或「新增」。同時補上 Scenario 對照表。
-5. **列出開放問題**：將未確定事項成列點，方便後續追蹤。
-6. **建立或更新 Issue**：透過 MCP 或人工方式，用 `.github/ISSUE_TEMPLATE/bdd.md` 內容開 Issue；若是更新既有 Issue，需在描述註明此次差異並補上 SDD / TDD Issue 編號。
+1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少一成功一失敗，必要時加入 Scenario Outline。每個 Scenario 生成唯一 ID（建議格式 `BDD-###`），供後續流程引用。
+2. **標註來源與狀態**：每個 Scenario 附上來源（Issue `#編號` 或文件路徑）；對仍待確認的情境標註 🟡／🔴。
+3. **整理驗收訊號與資料需求**：彙整成功／失敗訊號、監控指標與測試資料項目，包含誰提供、何時就緒。
+4. **建立「Scenario 對照與交付清單」**：以單一表格列出 `Scenario ID | 需求 # | 對應 SDD Issue | 對應 TDD Issue | 備註 / 狀態`，並於備註欄標記「沿用」「更新」「待建立」。若需新增 Issue，於此表直接提供建議標題與標籤。
+5. **列出待確認事項與後續行動**：以項目清單列出開放問題、負責人與預計完成時間，同時提醒依 `_issue-ops-guide.md` 建立或更新 BDD Issue、回填 Scenario 對照表與相關連結。
 
-### 交付給 SDD 的輸出清單
-- Scenario 對照表（`BDD-###` ↔ 需求 `#` ↔ 建議的 SDD / TDD Issue 編號）。
-- 每個情境的觸發條件、輸入輸出與驗收訊號。
-- 需補強或待確認的情境（標註 🟡／🔴）與負責人。
-- 建議優先處理的契約或資料資產。
+### 交付給 SDD / TDD 的重點
+- 「Scenario 對照與交付清單」可直接提供 SDD、TDD 參考，避免重複列示。
+- 每個情境的觸發條件、輸入輸出與驗收訊號應完整列在上述表格或相鄰段落。
+- 對於標註 🟡／🔴 的情境或資料，確認責任人與下一步後再通知下游。
 
 ## 產出要求
 
