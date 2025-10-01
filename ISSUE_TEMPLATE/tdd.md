@@ -21,12 +21,20 @@ assignees: ''
 - 信賴等級（🔵 已確認／🟡 推測／🔴 待確認）：
 
 ## 測試矩陣（Red → Green → Refactor）
-| Test ID | Scenario ID (BDD-###) | 需求 # | 測試項目 / 類型 | 資料 / Mock | Red | Green | Refactor | 信賴等級 / 來源 | 備註 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  | ☐ | ☐ | ☐ | （來源 # 🔵） |  |
-|  |  |  |  |  | ☐ | ☐ | ☐ | （來源 # 🔵） |  |
+| ✅? | Test ID | Scenario ID (BDD-###) | 需求 # | 測試項目 / 類型 | 資料 / Mock | Red | Green | Refactor | 信賴等級 / 來源 | 備註 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [ ] |  |  |  |  |  | ☐ | ☐ | ☐ | （來源 # 🔵） |  |
+| [ ] |  |  |  |  |  | ☐ | ☐ | ☐ | （來源 # 🔵） |  |
 
 - 請於每次 Red / Green / Refactor 循環後更新此表，並附上測試輸出或 PR 連結。
+
+## 迭代進度（完成後請勾選）
+- [ ] Requirements：已執行 `tdd-requirements` 並更新「來源與範圍」
+- [ ] Testcases：已執行 `tdd-testcases` 並更新測試矩陣
+- [ ] Red：已執行 `tdd-red` 並提交失敗測試
+- [ ] Green：已執行 `tdd-green` 並提交轉綠實作
+- [ ] Refactor：已執行 `tdd-refactor` 並提交重構成果
+- [ ] Verify：已執行 `tdd-verify` 並提交驗證報告
 
 ## 開發與驗證流程
 - 預計採用的測試框架與指令：
