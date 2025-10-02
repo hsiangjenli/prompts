@@ -74,4 +74,4 @@ outputs:
 
 ## Issue 操作提醒
 
-依 `_issue-ops-guide.md` 的「TDD」指引更新測試矩陣：貼上本次輸出、勾選 `Testcases` 核取框，並於評論註記資料缺口與責任人；如需額外待辦，建立新 Issue 後互相引用。
+依 `_issue-ops-guide.md` 的「TDD」指引更新測試矩陣：貼上本次輸出、勾選 `Testcases` 核取框，並於評論註記資料缺口與責任人；如需額外待辦，建立新 Issue 後互相引用；若需新建 TDD Issue，標題務必使用 `[TDD] 模組／測試套件名稱 - 簡述`。

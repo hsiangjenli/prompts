@@ -64,4 +64,4 @@ outputs:
 
 ## Issue 操作提醒
 
-依 `_issue-ops-guide.md` 的「TDD」指引：貼上驗證結果表、勾選 `Verify` 核取框，並於評論紀錄決策摘要與後續行動；若需回圈或新增任務，建立對應 Issue 後互相引用。
+依 `_issue-ops-guide.md` 的「TDD」指引：貼上驗證結果表、勾選 `Verify` 核取框，並於評論紀錄決策摘要與後續行動；若需回圈或新增任務，建立對應 Issue 後互相引用；若需新建 TDD Issue，標題務必使用 `[TDD] 模組／測試套件名稱 - 簡述`。

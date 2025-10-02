@@ -14,7 +14,7 @@ description: 共用的 GitHub Issue 操作指引（MCP 與手動流程）
 ## 共用欄位
 | 欄位 | 說明 |
 | --- | --- |
-| `title` | 建議採 `[類型] 主題`，例：`[BDD] 使用者登入 Scenario` |
+| `title` | 必須使用對應模板規定的格式（見「標題規範」），僅替換占位符內容 |
 | `labels` | 對應流程的類型標籤：`requirements`、`requirements-change`、`bdd`、`sdd`、`tdd`、`tech-debt`… |
 | `body` | 直接貼上各 Prompt 的輸出（表格、清單、檢查表），勿另寫摘要。 |
 | `assignees` / `projects` | 依專案流程填寫；不確定時可留空並在評論標註負責人。 |
@@ -36,6 +36,14 @@ description: 共用的 GitHub Issue 操作指引（MCP 與手動流程）
 | SDD | `.github/ISSUE_TEMPLATE/sdd.md` | 附上契約對照表、Mock 策略、版本計畫與受影響服務 |
 | TDD | `.github/ISSUE_TEMPLATE/tdd.md` | 更新「來源與範圍」與測試矩陣（含狀態欄），並勾選迭代進度核取框 |
 | 技術堆疊 | `.github/ISSUE_TEMPLATE/tech-stack.md`（若存在） | 補充現有決策、待確認項目與風險 |
+
+## 標題規範
+- BDD：`[BDD] 模組／功能名稱 - 簡述`
+- SDD：`[SDD] 模組／契約名稱 - 簡述`
+- TDD：`[TDD] 模組／測試套件名稱 - 簡述`
+- README：`[README] 專案名稱 - 範本與交付檢查`
+- Bug 回報：`[Bug] 功能區域 – 問題摘要`
+- 其他模板若已定義格式，請保留分類與後綴不變，僅替換占位符文字。
 
 ## MCP 使用流程範例
 ```pseudo

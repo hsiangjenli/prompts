@@ -31,6 +31,8 @@ outputs:
 - 先檢視 `README.md` 技術堆疊章節；若無，提醒使用者補充或沿用預設。
 - 若缺少專案專用定義，可引用 `README.md` 的「預設技術堆疊基準」，並於輸出標記為暫用（🟡）。
 - 若已存在其他說明（例如 `docs/tech-stack.md` 或變更紀錄），需合併資訊並附來源 `#編號`；對暫用或待確認的項目標註 🟡／🔴。
+- 檢查 `.github/ISSUE_TEMPLATE/readme.md` 是否已開啟 README 補齊流程，必要時提醒建立 Issue 並引用該模板。
+- 先詢問是否已有相關 GitHub Issue（例如標籤 `documentation`、`readme` 或 `tech-stack`），若無法存取請要求使用者提供連結或確認結果後再行建立。
 
 ## 問答策略
 
@@ -58,11 +60,30 @@ outputs:
 4. 指示後續 Prompt（BDD／SDD／TDD／實作）在招喚時需引用本清單；若調整影響既有 Issue，標記需回到 `requirements-change`、`bdd`、`sdd` 或 `tdd` 的項目。
 5. 建議使用 MCP 建立或更新 GitHub Issue、PR、模板，以追蹤未決項與文件更新。
 
+## README 模板參考
+
+- 標題區塊：專案名稱、徽章連結、一句話摘要。
+- 介紹區：`Overview`、`Core Features`，說明解決問題與主要情境。
+- 技術區：`Tech Stack` 表格、架構圖或流程圖與描述。
+- 起步指南：`Getting Started`（Prerequisites、Installation、Configuration、Running）與 `Usage` 範例。
+- 維運區：`Project Structure`、`Testing`、`Deployment`、品質門檻與回滾策略。
+- 社群區：`Contributing`、`License`、`Contact`、`Acknowledgements`。
+- 可引用 `.github/ISSUE_TEMPLATE/readme.md` 中的草稿模板，將占位符調整為專案實際需求。
+- 生成任何 Issue 內容時，必須完整貼合 `.github/ISSUE_TEMPLATE/readme.md` 的欄位順序與 Markdown，缺項以 `TODO` 或 `N/A` 填寫。
+
+## Issue 操作守則
+
+- 先比對現有 Issue：請求使用者提供查詢結果或自行盤點，避免重複建立；如發現類似 Issue，需提出合併或更新建議。
+- 當 README 章節缺漏或技術堆疊需更新時，主動建議「建立新 Issue」或「補充既有 Issue」，並提供建議的 `title`、`labels`、`assignees`、`body`，內容遵循對應的 Issue 模板。
+- 若需要建立 README Issue，使用 `.github/ISSUE_TEMPLATE/readme.md` 模板，其 Markdown 需可直接複製貼上；在輸出中以程式碼區塊呈現，標題固定為 `[README] 專案名稱 - 範本與交付檢查`。
+- 若需要技術堆疊跟進 Issue，建議標註與 `tech-stack` Prompt 相關的待辦、風險、受影響的 Issue 編號以及下一步行動。
+
 ## 輸出格式建議
 
 - 使用 Markdown 表格呈現技術堆疊（欄位範例：子領域、技術、狀態、理由、風險／備註）。
 - 在摘要中標記狀態：已確認（無符號）、暫用（🟡）、待確認（🔴）。
 - 結尾提醒後續實作與腳本（如 `scripts/tdd-cycle.sh`）引用本清單，並建議將輸出貼回 GitHub Issue 追蹤。
+- 若 README.md 缺少章節或最新資訊，附上 `.github/ISSUE_TEMPLATE/readme.md` 草稿模板重點章節，協助後續文件同步。
 
 ## 注意事項
 

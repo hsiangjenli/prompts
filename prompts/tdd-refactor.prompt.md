@@ -58,4 +58,4 @@ outputs:
 
 ## Issue 操作提醒
 
-依 `_issue-ops-guide.md` 的「TDD」指引：更新測試矩陣備註、記錄品質檢查結果並勾選 `Refactor` 核取框；若需建立技術債或文件更新 Issue，請互相引用。
+依 `_issue-ops-guide.md` 的「TDD」指引：更新測試矩陣備註、記錄品質檢查結果並勾選 `Refactor` 核取框；若需建立技術債或文件更新 Issue，請互相引用；若需新建 TDD Issue，標題務必使用 `[TDD] 模組／測試套件名稱 - 簡述`。

@@ -17,6 +17,7 @@ outputs:
     - 版本與部署策略（版號、相容性、切換、監控、回滾負責人）及需同步的文件/Issue
     - 對應的 TDD Issue 建議與開放問題（使用 `#編號`，若待建立需提供建議標題）
     - 提醒使用者透過 MCP 建立 SDD Issue、更新契約檔案位置並回填到對應的 BDD Issue（Scenario 對照表）
+    - 明確給出 Issue `title`，格式固定為 `[SDD] 模組／契約名稱 - 簡述`
 ---
 
 # sdd
@@ -82,3 +83,4 @@ outputs:
 ## Issue 操作提醒
 
 依 `_issue-ops-guide.md` 的「SDD」指引建立或更新 Issue：貼上契約對照表、Mock / 樣本策略與版本規畫，更新 Scenario 對照表並同步通知 BDD / TDD Issue（互相引用，對待確認項目標註 🟡／🔴）。
+- 若需新建 Issue，標題務必使用 `[SDD] 模組／契約名稱 - 簡述`，並將「模組／契約名稱」替換為實際名稱、保留後綴「- 簡述」。

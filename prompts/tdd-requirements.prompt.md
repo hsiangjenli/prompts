@@ -17,6 +17,7 @@ outputs:
     - BDD Scenario ↔ TDD 驗證項目的映射草稿（Scenario ID、對應測試範圍、建議欄位）
     - 建議寫入 TDD Issue 的欄位（可直接貼上，標示來源 `#編號` 與待確認事項）
     - 待確認事項、需轉回 `requirements-change` 的條件與建議切換到 `tdd-testcases.prompt.md` 的時機
+    - 若需新建 TDD Issue，提供 `title` 草稿，格式固定為 `[TDD] 模組／測試套件名稱 - 簡述`
 ---
 
 # tdd-requirements
@@ -28,7 +29,7 @@ outputs:
 ## 流程
 
 ### Step 1：建立共識
-1. 確認目標 TDD Issue 編號與標題，蒐集對應的需求、BDD、SDD Issue（使用 `#編號` 記錄）。
+1. 確認目標 TDD Issue 編號與標題，蒐集對應的需求、BDD、SDD Issue（使用 `#編號` 記錄）；若 Issue 尚未建立，先備妥 `[TDD] 模組／測試套件名稱 - 簡述` 的標題後再創建。
 2. 整理相關文件：需求摘要、設計圖、現有程式或測試、系統規範。
 3. 標記任務幅度矩陣（API、前端、資料處理、AI/ML、排程、資料庫、監控等），僅列出需要在本迭代處理的區塊。
 
@@ -65,4 +66,4 @@ outputs:
 
 ## Issue 操作提醒
 
-依 `_issue-ops-guide.md` 中的「TDD」指引更新或建立 Issue：貼上背景摘要與 Scenario 對照表、勾選 `Requirements` 核取框，並於評論紀錄待補事項與下一個子 Prompt。
+依 `_issue-ops-guide.md` 中的「TDD」指引更新或建立 Issue：貼上背景摘要與 Scenario 對照表、勾選 `Requirements` 核取框，並於評論紀錄待補事項與下一個子 Prompt；若需新建 Issue，標題務必使用 `[TDD] 模組／測試套件名稱 - 簡述`。

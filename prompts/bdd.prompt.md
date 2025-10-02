@@ -18,6 +18,7 @@ outputs:
     - 任務幅度矩陣與相關子系統說明
     - Scenario ↔ SDD / TDD Issue 對照表（格式建議：`Scenario ID | SDD Issue | TDD Issue`，若尚未建立請填寫 `待建立` 並提供建議的 Issue 標題與標籤）
     - 提醒將結果透過 MCP 建立或更新 BDD Issue，並在欄位填寫對應的 SDD / TDD Issue 編號
+    - 若需建立新 Issue，提供可直接貼上的 `title`，格式固定為 `[BDD] 模組／功能名稱 - 簡述`
 ---
 
 # bdd
@@ -79,4 +80,4 @@ outputs:
 
 ## Issue 操作提醒
 
-依 `_issue-ops-guide.md` 的「BDD」指引建立或更新 Issue：貼上 Gherkin、Scenario 對照表與開放問題，更新關聯的 SDD / TDD Issue（互相引用），並於評論標註待確認情境（🟡／🔴）。
+依 `_issue-ops-guide.md` 的「BDD」指引建立或更新 Issue：貼上 Gherkin、Scenario 對照表與開放問題，更新關聯的 SDD / TDD Issue（互相引用），並於評論標註待確認情境（🟡／🔴）；若需新建 Issue，標題務必使用 `[BDD] 模組／功能名稱 - 簡述`。
