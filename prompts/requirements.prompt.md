@@ -9,8 +9,10 @@ inputs:
 outputs:
   summary: 以使用者情境為主，整理可追蹤的需求摘要，準備交由 BDD 進一步展開（非技術實作細節）
   include:
-    - 輸出 EARS 清單（純以使用者情境與行為為主；絕對不得包含技術、API、資料模型或實作細節）
-    - 建議接手的 Prompt（預設 `bdd.prompt.md`）；若出現技術或 SDD 議題，請標註並轉給 `tech-stack.prompt.md` / `sdd.prompt.md`
+    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/ears.yaml` 的 Issue 草稿（標題採 `[EARS] <短標題>` 格式）
+    - 使用可用的 MCP / GitHub 工具直接建立 EARS Issue；若無權限才提供草稿
+    - 列出 EARS 清單（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
+    - 提供下一個建議 Prompt（預設 `bdd.prompt.md`；若出現技術或 SDD 議題，跳轉至 `tech-stack.prompt.md` / `sdd.prompt.md`）
 ---
 
 # 需求分析
@@ -67,9 +69,10 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. EARS 句法有固定句式，選擇不同的語句會產生不同的需求表達，應依場景選用合適模式以清晰呈現需求
-2. 根據對話以及文件，使用 `.github/ISSUE_TEMPLATE/ears.yaml` 建立 EARS Issue，Issue 標題格式：`[EARS] <短標題>`
-3. 並根據類型排列 EARS 列表
+1. 立即透過可用的 MCP / GitHub API 建立 EARS Issue（標題 `[EARS] <短標題>`；使用 `.github/ISSUE_TEMPLATE/ears.yaml`）
+2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
+3. 條列 EARS 句子並依類型分組，保持句式符合需求語法
+4. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
 #### EARS 範例與語法
 
