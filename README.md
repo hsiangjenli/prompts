@@ -2,6 +2,44 @@
 
 本目錄存放專案使用的各類 Prompt 與 Issue Template，協助 AI 與人類協作者在不同階段執行適當任務。說明預設採用繁體中文，並以 GitHub Issue 作為主要交付載體。
 
+## BDD？SDD？TDD？
+
+- BDD（Behavior-Driven Development，行為驅動開發）
+    - 定義：以業務行為與使用者能觀察到的「行為/情境」為中心，使用 Gherkin 等格式把需求轉成可驗收的情境（Scenario）。
+    - 核心關注：驗收標準、使用者意圖、端到端行為。
+    - 主要產出：Gherkin Scenario、驗收條件、驗收訊號（acceptance criteria）。
+- SDD（Specification/Service Design Document，或稱契約設計）
+    - 定義：將 BDD 的行為細化為系統邊界、介面契約、資料格式與 Mock 策略，形成可由開發與測試直接實作與模擬的契約。
+    - 核心關注：介面契約（Request/Response）、資料契約、Mock 策略、版本與相容性。
+    - 主要產出：契約對照表、Mock 規範、版本策略、樣本資料。
+- TDD（Test-Driven Development，測試驅動開發）
+    - 定義：由單元或整合測試驅動實作，先寫測試（Red），使測試通過（Green），再重構（Refactor）。TDD 著重程式內部行為的正確性與設計品質。
+    - 核心關注：可測試性、最小實作、回歸保護、內部設計。
+    - 主要產出：測試矩陣、失敗測試（Red）、最小實作與對應綠燈（Green）、重構提交。
+
+### 使用情境
+
+- 用 BDD 當你需要把需求轉成可驗收的行為並與非技術利害關係人（PM、產品、客服）對齊。適用於：新功能定義、驗收標準不清、跨團隊合約驗證。輸出直接作為 QA / acceptance 測試與 SDD 的輸入。
+- 用 SDD 當行為確定但系統間介面尚未契約化時。適用於：API 設計、資料交換、Mock 資料需求、版本管理與相容性風險。輸出是 TDD 與整合測試所依賴的契約與 Mock。
+- 用 TDD 當你要保證內部實作的品質與可回歸性，或要在 CI 中持續驗證小範圍的功能。適用於：演算法實作、邊界條件驗證、快速迭代需要高信賴的模組。
+
+### 為何採用 BDD → SDD → TDD 的順序？
+
+1. 從外到內、由行為到實作：BDD 強調「我們要系統做什麼（外部可觀察行為）」，先對使用者可見行為達成共識可避免下游開發做出與期待不符的實作。
+2. SDD 界定邊界：在行為已被驗收條件定義後，SDD 把行為轉換為明確的介面與資料契約，減少不同系統或不同團隊間的語意差異，為測試與實作提供明確的依據。
+3. 測試驅動的實作更可靠：有了明確行為（BDD）與契約（SDD）後，TDD 可以在更穩定的前提下聚焦於最小實作、邏輯正確性與設計品質；這樣能降低反覆返工與模糊需求造成的測試/實作浪費。
+
+> 總結一句話：BDD 定義「要驗收的行為」，SDD 定義「系統間如何一致地交換/實現這些行為」，TDD 則在此契約下驗證與實作內部邏輯。
+
+### 三個實務注意事項與回圈策略
+
+1. 可追溯性優先：所有 TDD 測試或 SDD 契約都應該追溯回對應的 BDD Scenario（在 Issue 或檔案中以 `#編號` 或 Scenario ID 標示）。當測試頻繁失敗或契約需變更時，優先確認是否為 BDD 層面的需求變動，避免單純修補測試導致規格漂移。
+2. 小步快走與最小變更：在 TDD 階段採用最小可行實作（minimum change）原則；若發現需求或行為不合理，先在 `tdd-checkpoint` 或 TDD Issue 記錄疑慮並回到 SDD（契約調整）或 BDD（行為/驗收條件調整），而非直接在實作層面做大改。
+3. 明確回圈觸發條件與標籤化流程：定義何時回圈以及由誰決策，例如：
+     - 若驗收條件（BDD）改動 → 直接回到 `requirements-change` / `bdd` 啟動變更流；
+     - 若介面或資料契約改動（SDD）但行為不變 → 回到 `sdd` 並同步 TDD Issue；
+     - 若單元/整合測試連續失敗（例如同一錯誤重複 3 次）→ 在 TDD Issue 留言並標註阻塞；連續 5 次則標籤 `human_required`（依本 Repo 規則）。
+
 ## Prompt 對照
 
 ### 核心流程
@@ -243,4 +281,5 @@ def run_pipeline(user_inputs: dict) -> None:
 
 ```shell
 cp -r ~/.codex/prompts/* "$HOME/Library/Application Support/Code/User/prompts/"
+cp -r ./prompts/* "$HOME/Library/Application Support/Code/User/prompts/"
 ```
