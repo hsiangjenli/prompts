@@ -41,4 +41,28 @@ body:
           - 預期: 顯示錯誤訊息「電子郵件格式錯誤」
           - 邊界條件: 電子郵件驗證規則
 
+  - type: textarea
+    id: test-data
+    attributes:
+      label: 測試資料
+      description: |
+        請說明此 TDD 所需的測試資料策略，包括資料來源、Mock vs 真實資料、資料準備方式等。
+      placeholder: |
+        - Mock 資料來源: 使用 Jest 的 Mock fixtures
+        - 真實資料: 需要測試資料庫的測試環境
+        - 資料準備: 使用 setup.js 進行初始化
+        - 邊界資料: 空值、超大值、特殊字元等
+
+  - type: textarea
+    id: expected-results
+    attributes:
+      label: 預期結果與通過條件
+      description: |
+        請列出每個測試場景的預期結果和通過條件，用 checkbox 語法標記實現進度。
+      placeholder: |
+        - [ ] 場景 1 通過條件：返回 HTTP 201 + 包含 user_id 的 JSON 回應
+        - [ ] 場景 2 通過條件：返回 HTTP 400 + 錯誤訊息「密碼長度至少 8 字符」
+        - [ ] 場景 3 通過條件：返回 HTTP 400 + 錯誤訊息「無效的電子郵件格式」
+        - [ ] 所有場景覆蓋率達 90% 以上
+
 
