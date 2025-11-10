@@ -1,4 +1,4 @@
-name: 📜 SDD 規範要求
+name: SDD 規範要求
 description: 用於提交與規範、標準、合規性有關的要求。
 labels: ["type: compliance", "domain: sdd"]
 assignees: []
@@ -7,21 +7,31 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 📜 SDD 規範要求表單
+        ## SDD 規範要求表單
         請填寫以下資訊，幫助開發團隊確保系統符合相關規範與標準。
+        > SDD 必須衍生自單一 BDD Issue，並回填對應的 BDD Scenario ID。
   - type: input
     id: compliance-id
     attributes:
-      label: 📌 規範 ID
+      label: 規範 ID
       description: 請輸入唯一的規範 ID (例如：COMPLIANCE-001)
       placeholder: "COMPLIANCE-001"
     validations:
       required: true
 
   - type: input
+    id: bdd-issue
+    attributes:
+      label: 對應 BDD Issue
+      description: 請輸入此 SDD 依據的 BDD Issue 編號（格式為 `#123`）。
+      placeholder: "#123"
+    validations:
+      required: true
+
+  - type: input
     id: standard
     attributes:
-      label: 📐 規範或標準名稱
+      label: 規範或標準名稱
       description: |
         請說明是哪一種規範或標準（例如：GDPR、PCI-DSS、WCAG 2.1、ISO 27001）
       placeholder: "GDPR"
@@ -31,7 +41,7 @@ body:
   - type: textarea
     id: requirement-description
     attributes:
-      label: 📝 要求描述
+      label: 要求描述
       description: |
         請詳細描述此規範的具體要求。
       placeholder: |
@@ -42,7 +52,7 @@ body:
   - type: textarea
     id: affected-components
     attributes:
-      label: 🧩 受影響的元件或功能
+      label: 受影響的元件或功能
       description: |
         請列出此規範要求會影響到的元件或功能。
         範例：使用者註冊、資料儲存、登入
@@ -53,7 +63,7 @@ body:
   - type: textarea
     id: verification-method
     attributes:
-      label: 🔍 驗證方式
+      label: 驗證方式
       description: |
         請說明如何驗證此規範是否已實現。
         可以是手動檢查、自動化測試、第三方驗證等。
@@ -62,18 +72,31 @@ body:
         - 使用工具驗證網站是否符合 WCAG 2.1
 
   - type: textarea
+    id: bdd-scenarios
+    attributes:
+      label: 對應 BDD Scenario
+      description: 列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要，若尚在確認請標註（待確認／已確認）。
+      placeholder: |
+        | BDD Scenario ID | 行為摘要 | 備註 |
+        | --- | --- | --- |
+        | BDD-001 | 使用者成功註冊 | |
+        | BDD-002 | Email 驗證失敗 | 待補 E2E 檢查 |
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
     id: related-issues
     attributes:
-      label: 🔗 相關 Issue 或任務
+      label: 其他相關 Issue 或任務
       description: |
-        如果此規範與其他 Issue 或任務有關，請列出它們的編號。
-        範例：#123, #456
-      placeholder: "#123, #456"
+        若此 SDD 與其他 Issue（如技術債、Bug）有關，請列出編號；BDD Issue 已在上方填寫。
+      placeholder: "#456, #789"
 
   - type: checkboxes
     id: checklist
     attributes:
-      label: ✅ 完成檢查清單
+      label: 完成檢查清單
       options:
         - label: 我已閱讀並理解專案的貢獻指南。
           required: true
