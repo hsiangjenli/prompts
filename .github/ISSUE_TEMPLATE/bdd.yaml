@@ -4,7 +4,6 @@ labels: ["type: feature", "domain: bdd"]
 assignees: []
 title: "BDD: [功能名稱]"
 body:
-
   - type: markdown
     attributes:
       value: |
