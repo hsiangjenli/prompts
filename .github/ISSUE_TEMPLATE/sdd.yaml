@@ -66,13 +66,13 @@ body:
     id: bdd-scenarios
     attributes:
       label: 對應 BDD Scenario
-      description: 列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要，若尚在確認請標註（待確認／已確認）。
+      description: |
+        列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要，ID 必須沿用 BDD Issue 的 `US<序號>-S<序號>` 命名，若尚在確認請標註（待確認／已確認）。
       placeholder: |
         | BDD Scenario ID | 行為摘要 | 備註 |
         | --- | --- | --- |
-        | Scenario 2.1 | 開發人員在 Copilot Chat 呼叫 SDD Prompt | |
-        | Scenario 2.1.1 | 使用者回答 SDD 設計問題 | |
-        | Scenario 2.1.2 | 系統建立 SDD Issue 並回寫 BDD | 參考自 Scenario 2.1 |
+        | US2-S1 | 開發人員呼叫 SDD Prompt 進行問答並建立 SDD Issue | 已確認 |
+        | US2-S2 | BDD 未批准時拒絕進行 SDD 問答 | 待確認 |
       render: markdown
     validations:
       required: true
