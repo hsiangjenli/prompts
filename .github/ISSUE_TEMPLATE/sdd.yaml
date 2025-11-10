@@ -11,15 +11,6 @@ body:
         請填寫以下資訊，幫助開發團隊確保系統符合相關規範與標準。
         > SDD 必須衍生自單一 BDD Issue，並回填對應的 BDD Scenario ID。
   - type: input
-    id: compliance-id
-    attributes:
-      label: 規範 ID
-      description: 請輸入唯一的規範 ID (例如：COMPLIANCE-001)
-      placeholder: "COMPLIANCE-001"
-    validations:
-      required: true
-
-  - type: input
     id: bdd-issue
     attributes:
       label: 對應 BDD Issue
@@ -92,13 +83,3 @@ body:
       description: |
         若此 SDD 與其他 Issue（如技術債、Bug）有關，請列出編號；BDD Issue 已在上方填寫。
       placeholder: "#456, #789"
-
-  - type: checkboxes
-    id: checklist
-    attributes:
-      label: 完成檢查清單
-      options:
-        - label: 我已閱讀並理解專案的貢獻指南。
-          required: true
-        - label: 此規範要求已與團隊討論過，並得到批准。
-          required: false
