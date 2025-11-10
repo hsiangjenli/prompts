@@ -5,7 +5,9 @@ inputs:
   summary: 使用 Prompt 透過互動式問答釐清系統設計
   required:
     - 直接對話進行釐清
-    - 提供 BDD Issue 編號（選填，若已有）、設計文件、架構圖、現有契約文件等相關資訊
+    - 提供 BDD Issue 編號（必填）、設計文件、架構圖、現有契約文件等相關資訊
+  optional:
+    - 參考舊 SDD Issue 編號（例如：#2, #5），作為設計參考（不會修改舊 Issue，僅供查閱）
 outputs:
   summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
   include:
@@ -77,7 +79,10 @@ outputs:
    - 若 BDD Issue 未被批准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
    - 若 BDD Issue 已被批准，繼續進行
 2. 閱讀使用者提供的文件（如：BDD Issue、設計文件、架構圖、現有契約等），了解業務需求與技術脈絡
-3. 檢查是否已有 SDD Issue。若有，請根據原本的 Issue 進行修改
+3. **參考舊 SDD Issue**（選填）：若使用者提供過去建立的 SDD Issue 編號作為參考（例如：#2, #5），讀取這些 SDD Issue 的內容以了解過去的設計決策
+   - **重要**：僅作為參考，**不修改舊的 SDD Issue**（用於追蹤歷史）
+   - 新的 SDD Issue 會是全新建立，編號遞增
+4. 檢查是否已有對應此 BDD 的 SDD Issue。若無，則建立新的
 
 ### Step 2：補齊設計
 
@@ -91,22 +96,28 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. 立即透過可用的 MCP / GitHub API 建立 SDD Issue（標題 `SDD: <規範名稱>`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
+1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `SDD: <功能/規範名稱>`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
+   - **重要**：每個 BDD 建立的 SDD Issue 都是全新的（編號遞增），即使參考了舊的 SDD Issue
+   - 在新 SDD Issue 中的「參考的舊 SDD Issue」欄位可列出參考的舊 SDD Issue 編號（例如：`參考自 #2, #5`）
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式
-3. **重要**：SDD Issue 建立完成後，由 AI Agent 回到原本的 BDD Issue，在「相關 SDD 與 TDD Issue」欄位中新增 SDD Issue 編號（例如：`SDD: #2`）
-4. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
+4. **重要**：SDD Issue 建立完成後，由 AI Agent 進行以下更新：
+   - 回到原本的 **BDD Issue**，在「相關 SDD Issue」欄位中新增此 SDD Issue 編號（例如：`#2`）
+   - **注意**：「相關 TDD Issue」欄位由 TDD Prompt 建立時填寫
+5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
 #### SDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
 - **對應 BDD Issue**：記錄此 SDD 依據的 BDD Issue 編號（格式為 `#123`）
-- **規範或標準名稱**：說明相關規範（例如：GDPR、WCAG 2.1、ISO 27001）
-- **要求描述**：詳細描述此規範的具體要求
+- **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
+- **要求描述**：詳細描述此設計的具體要求
 - **受影響的元件或功能**：列出會影響到的元件或功能
-- **驗證方式**：說明如何驗證此規範是否已實現
+- **驗證方式**：說明如何驗證此設計是否已實現
 - **對應 BDD Scenario**：列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要
-- **其他相關 Issue**：若此 SDD 與其他 Issue（如技術債、Bug）有關，請列出編號
+- **相關 TDD Issue**：列出基於此 SDD 設計而產生的 TDD Issue 編號（由 TDD Prompt 建立時填寫）
+- **參考的舊 SDD Issue**：若參考過去的設計決策，請列出舊 SDD Issue 編號（例如：`參考自 #2, #5`）
+- **其他相關 Issue**：列出相關的技術債、Bug、文件等
 
 ## 後續行動
 

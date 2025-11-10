@@ -89,15 +89,18 @@ outputs:
 ### Step 3：整理輸出
 
 1. 立即透過可用的 MCP / GitHub API 建立 TDD Issue（標題 `TDD: <測試名稱>`；使用 `.github/ISSUE_TEMPLATE/tdd.yaml`）
+   - 在 TDD Issue 中的「對應 SDD Issue」欄位記錄此 TDD 依據的 SDD Issue 編號（例如：`#2`），作為設計規範參考
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理測試場景、驗證方式、測試資料策略，確保符合 TDD 格式
-4. **重要**：TDD Issue 建立完成後，由 AI Agent 回到原本的 BDD/SDD Issue，在「相關 SDD 與 TDD Issue」欄位中新增 TDD Issue 編號（例如：`TDD: #3`）
+4. **重要**：TDD Issue 建立完成後，由 AI Agent 回到原本的 **BDD Issue**，在「相關 TDD Issue」欄位中新增此 TDD Issue 編號（例如：`#3`）
+   - **注意**：每個 User Story 對應一個 TDD Issue，BDD Issue 的「相關 TDD Issue」會是多個 Issue 編號
 5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
 #### TDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/tdd.yaml` 中的欄位定義與範例：
-- **對應 BDD Issue**：記錄此 TDD 依據的 BDD Issue 編號（格式為 `#123`）
+- **對應 BDD Issue**：記錄此 TDD 依據的 BDD Issue 編號（格式為 `#123`），通常對應一個 User Story
+- **對應 SDD Issue**：記錄此 TDD 參考的 SDD Issue 編號（格式為 `#123`），作為設計規範參考
 - **測試場景**：列出需要測試的場景與驗證方式
 - **測試資料**：說明測試所需的資料與準備方式
 - **預期結果**：描述每個測試場景的預期通過條件
