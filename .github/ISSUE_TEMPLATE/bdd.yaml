@@ -1,0 +1,83 @@
+name: 🧩 BDD 功能需求
+description: 用於提交基於用戶行為的功能需求，適用於 BDD。
+labels: ["type: feature", "domain: bdd"]
+assignees: []
+title: "BDD: [功能名稱]"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎯 BDD 功能需求表單
+        請填寫以下資訊，幫助開發團隊理解並實現你的功能需求。
+  - type: input
+    id: feature-id
+    attributes:
+      label: 📌 功能 ID
+      description: 請輸入唯一的功能 ID (例如：REQ-001)
+      placeholder: "REQ-001"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: 📖 用戶故事
+      description: |
+        請使用「作為...，我想要...，以便...」的格式來描述。
+        範例：作為使用者，我想要能夠登入系統，以便保護我的個人資料。
+      placeholder: |
+        作為[角色]，我想要[行為]，以便[好處]。
+      value: ""
+    validations:
+      required: true
+
+  - type: textarea
+    id: gherkin-scenarios
+    attributes:
+      label: 📜 Gherkin 劇本（行為測試）
+      description: |
+        請使用 Gherkin 語法（Given, When, Then）來描述主要的行為場景。
+        可以有多個場景（Scenario）。
+      placeholder: |
+        Feature: 註冊帳戶
+
+        Scenario: 成功註冊
+          Given 我在註冊頁面
+          When 我輸入有效的電子郵件和密碼，並點擊「註冊」
+          Then 我應該看到「註冊成功」訊息
+      render: gherkin
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: ✅ 接受標準
+      description: |
+        請列出此功能的接受標準（Acceptance Criteria），每個標準一行。
+      placeholder: |
+        - 使用者必須輸入有效的電子郵件格式
+        - 密碼必須至少 8 個字符，並包含字母與數字
+      value: ""
+    validations:
+      required: true
+
+  - type: textarea
+    id: related-issues
+    attributes:
+      label: 🔗 相關 Issue 或任務
+      description: |
+        如果此功能與其他 Issue 或任務有關，請列出它們的編號。
+        範例：#123, #456
+      placeholder: "#123, #456"
+      value: ""
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ 完成檢查清單
+      options:
+        - label: 我已閱讀並理解專案的貢獻指南。
+          required: true
+        - label: 此功能已與團隊討論過，並得到批准。
+          required: false
