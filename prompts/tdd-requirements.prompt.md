@@ -81,6 +81,7 @@ outputs:
 1. 發現測試需求的不一致、缺漏或技術可行性問題
 2. 藉由不斷提問，釐清測試需求：
    - 測試場景（成功路徑、失敗路徑、邊界情況）
+  - 每個測試場景都必須對應到 BDD 的 `US<序號>-S<序號>` Scenario ID，確保可追蹤性
    - 測試資料與 Mock 策略
    - 驗證方式與工具
    - 非功能需求（效能、安全、相容性等）
@@ -90,6 +91,7 @@ outputs:
 
 1. 立即透過可用的 MCP / GitHub API 建立 TDD Issue（標題 `TDD: <測試名稱>`；使用 `.github/ISSUE_TEMPLATE/tdd.yaml`）
    - 在 TDD Issue 中的「對應 SDD Issue」欄位記錄此 TDD 依據的 SDD Issue 編號（例如：`#2`），作為設計規範參考
+  - 在「測試場景」與「預期結果與通過條件」欄位中的 checkbox 項目，每一行都要帶上對應的 `US<序號>-S<序號>` Scenario ID，方便回填至 BDD Issue 的「相關 TDD Issue」表格
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理測試場景、驗證方式、測試資料策略，確保符合 TDD 格式
 4. **重要**：TDD Issue 建立完成後，由 AI Agent 回到原本的 **BDD Issue**，在「相關 TDD Issue」欄位中新增此 TDD Issue 編號（例如：`#3`）

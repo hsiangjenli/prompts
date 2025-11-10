@@ -92,7 +92,7 @@ outputs:
    - 資料模型（欄位、類型、驗證規則）
    - 規範要求（GDPR、WCAG、ISO 等）
    - Mock 資料策略
-3. **重要**：SDD 階段聚焦於技術規範與介面設計，不涉及具體實作細節（程式語言、框架選擇等留給 TDD）
+3. **重要**：SDD 階段聚焦於技術規範與介面設計，不涉及具體實作細節（程式語言、框架選擇等留給 TDD），並且每一個設計與驗證活動都要維持與 BDD `US<序號>-S<序號>` Scenario ID 的一對一對應。
 
 ### Step 3：整理輸出
 
@@ -100,7 +100,7 @@ outputs:
    - **重要**：每個 BDD 建立的 SDD Issue 都是全新的（編號遞增），即使參考了舊的 SDD Issue
    - 在新 SDD Issue 中的「參考的舊 SDD Issue」欄位可列出參考的舊 SDD Issue 編號（例如：`參考自 #2, #5`）
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
-3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式
+3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式，尤其在「對應 BDD Scenario」表格中使用與 BDD 完全一致的 `US<序號>-S<序號>` ID 與行為描述
 4. **重要**：SDD Issue 建立完成後，由 AI Agent 進行以下更新：
    - 回到原本的 **BDD Issue**，在「相關 SDD Issue」欄位中新增此 SDD Issue 編號（例如：`#2`）
    - **注意**：「相關 TDD Issue」欄位由 TDD Prompt 建立時填寫

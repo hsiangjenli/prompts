@@ -70,7 +70,7 @@ outputs:
 請參考 `.github/ISSUE_TEMPLATE/bdd.yaml` 中的欄位定義與範例：
 - **功能 ID**：唯一識別碼（例如：REQ-001）
 - **用戶故事與行為測試**：包含用戶故事（作為...，我想要...，以便...）和 Gherkin 場景（Given-When-Then）
-- **相關 SDD 與 TDD Issue**：記錄對應的 SDD 和 TDD Issue 編號
+- **相關 SDD 與 TDD Issue**：使用表格列出每個 `US<序號>-S<序號>` Scenario 對應的 SDD/TDD Issue 編號或「待建立」，確保場景與後續工作保持一對一追蹤
 
 ## 後續行動
 
