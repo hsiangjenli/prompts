@@ -1,0 +1,78 @@
+name: 🧪 TDD 測試驅動
+description: 用於提交基於測試驅動開發的測試需求。
+labels: ["type: test", "domain: tdd"]
+assignees: []
+title: "TDD: [測試名稱]"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🧪 TDD 測試驅動表單
+        請填寫以下資訊，幫助開發團隊先寫測試，再寫代碼。
+  - type: input
+    id: test-id
+    attributes:
+      label: 📌 測試 ID
+      description: 請輸入唯一的測試 ID (例如：TEST-001)
+      placeholder: "TEST-001"
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-description
+    attributes:
+      label: 📝 測試描述
+      description: |
+        請描述這個測試要驗證什麼功能或邏輯。
+      placeholder: |
+        驗證使用者註冊時密碼強度的檢查邏輯。
+      value: ""
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-code
+    attributes:
+      label: 🧑‍💻 測試代碼（可選）
+      description: |
+        如果已經有測試代碼，可以貼上來，幫助開發者理解測試需求。
+        建議使用與專案相同的語言（例如：JavaScript, Python, Java）。
+      render: python
+      placeholder: |
+        def test_password_strength():
+            assert validate_password("abc123") == False
+            assert validate_password("Abc123!") == True
+      value: ""
+
+  - type: textarea
+    id: test-scenarios
+    attributes:
+      label: 📋 測試場景
+      description: |
+        請列出需要測試的場景，包括正常情況、邊界條件和錯誤情況。
+      placeholder: |
+        - 輸入空的密碼
+        - 輸入太短的密碼
+        - 輸入包含特殊字符的密碼
+        - 輸入有效的密碼
+      value: ""
+
+  - type: textarea
+    id: related-feature
+    attributes:
+      label: 🔗 相關功能或需求
+      description: |
+        如果此測試與某個功能或需求有關，請列出該功能的 Issue 編號。
+        範例：#100 (BDD: 註冊帳戶)
+      placeholder: "#100"
+      value: ""
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: ✅ 完成檢查清單
+      options:
+        - label: 我已閱讀並理解專案的貢獻指南。
+          required: true
+        - label: 此測試已與團隊討論過，並得到批准。
+          required: false
