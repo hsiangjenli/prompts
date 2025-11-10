@@ -10,6 +10,15 @@ body:
         ## TDD 測試驅動表單
         請填寫以下資訊，幫助開發團隊先寫測試，再去寫程式碼
 
+  - type: input
+    id: bdd-issue
+    attributes:
+      label: 對應 BDD Issue
+      description: 請輸入此 TDD 對應的 BDD Issue 編號（格式為 #123）。
+      placeholder: "#123"
+    validations:
+      required: true
+
   - type: textarea
     id: test-scenarios
     attributes:
@@ -31,3 +40,5 @@ body:
           - 輸入: 無效格式的電子郵件
           - 預期: 顯示錯誤訊息「電子郵件格式錯誤」
           - 邊界條件: 電子郵件驗證規則
+
+
