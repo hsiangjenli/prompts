@@ -36,7 +36,6 @@ body:
         請詳細描述此規範的具體要求。
       placeholder: |
         使用者上傳的個人資料必須加密儲存，並在 7 天後自動刪除。
-      value: ""
     validations:
       required: true
 
@@ -50,7 +49,6 @@ body:
       placeholder: |
         - 使用者註冊
         - 會員資料儲存
-      value: ""
 
   - type: textarea
     id: verification-method
@@ -62,7 +60,6 @@ body:
       placeholder: |
         - 自動化測試檢查資料庫中密碼是否已加密
         - 使用工具驗證網站是否符合 WCAG 2.1
-      value: ""
 
   - type: textarea
     id: related-issues
@@ -72,7 +69,6 @@ body:
         如果此規範與其他 Issue 或任務有關，請列出它們的編號。
         範例：#123, #456
       placeholder: "#123, #456"
-      value: ""
 
   - type: checkboxes
     id: checklist

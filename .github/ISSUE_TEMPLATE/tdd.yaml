@@ -26,7 +26,6 @@ body:
         請描述這個測試要驗證什麼功能或邏輯。
       placeholder: |
         驗證使用者註冊時密碼強度的檢查邏輯。
-      value: ""
     validations:
       required: true
 
@@ -42,7 +41,6 @@ body:
         def test_password_strength():
             assert validate_password("abc123") == False
             assert validate_password("Abc123!") == True
-      value: ""
 
   - type: textarea
     id: test-scenarios
@@ -55,7 +53,6 @@ body:
         - 輸入太短的密碼
         - 輸入包含特殊字符的密碼
         - 輸入有效的密碼
-      value: ""
 
   - type: textarea
     id: related-feature
@@ -65,7 +62,6 @@ body:
         如果此測試與某個功能或需求有關，請列出該功能的 Issue 編號。
         範例：#100 (BDD: 註冊帳戶)
       placeholder: "#100"
-      value: ""
 
   - type: checkboxes
     id: checklist

@@ -27,7 +27,6 @@ body:
         範例：作為使用者，我想要能夠登入系統，以便保護我的個人資料。
       placeholder: |
         作為[角色]，我想要[行為]，以便[好處]。
-      value: ""
     validations:
       required: true
 
@@ -58,7 +57,6 @@ body:
       placeholder: |
         - 使用者必須輸入有效的電子郵件格式
         - 密碼必須至少 8 個字符，並包含字母與數字
-      value: ""
     validations:
       required: true
 
@@ -70,7 +68,6 @@ body:
         如果此功能與其他 Issue 或任務有關，請列出它們的編號。
         範例：#123, #456
       placeholder: "#123, #456"
-      value: ""
 
   - type: checkboxes
     id: checklist
