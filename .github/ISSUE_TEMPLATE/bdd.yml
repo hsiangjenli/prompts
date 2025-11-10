@@ -1,0 +1,124 @@
+name: BDD 驗收情境
+description: 將需求轉為 Gherkin 驗收案例，串接 SDD 與 TDD 流程
+title: "[BDD] 模組／功能名稱 - 簡述"
+labels:
+  - bdd
+body:
+  - type: markdown
+    attributes:
+      value: |
+        使用前請先完成需求彙整，並於填寫時引用對應的 `#Issue` 或文件連結；推測或待確認事項以 🟡／🔴 標註。
+  - type: textarea
+    id: background
+    attributes:
+      label: 1. 任務背景
+      description: 核心目標、不可變限制、需求來源、既有輸出與責任人；可列點說明並附來源 `#編號`。
+      placeholder: |
+        - 核心目標：
+        - 不可變限制：
+        - 需求來源與既有輸出（EARS／GWT 摘要、需求 Issue）：
+        - 相關 BDD Issue / Scenario 狀態：
+        - 重要時程 / Milestone / 責任人：
+    validations:
+      required: true
+  - type: checkboxes
+    id: subsystems
+    attributes:
+      label: 涉及子系統（至少勾選一項，若無請勾選「其他」並補充）
+      options:
+        - label: API
+        - label: 前端 / Client
+        - label: 後端 / Service
+        - label: 資料 / ETL
+        - label: AI / 模型
+        - label: Infra / DevOps
+        - label: 其他（請於下一段補充）
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: 2. 參考資料
+      description: 填入設計稿、文件、會議記錄、相關 Issue / PR 等；請附連結與 `#編號`。
+      placeholder: |
+        - 設計稿 / 文件：
+        - 會議記錄 / 對話：
+        - 其他關聯 Issue / PR：
+  - type: textarea
+    id: gherkin
+    attributes:
+      label: 3. Gherkin 驗收案例
+      description: 至少列出一個成功情境與一個例外情境；每個 Scenario 請給定唯一 `BDD-###`，待確認的行為以 🟡／🔴 標註。
+      render: gherkin
+      placeholder: |
+        Feature: 以一句話描述功能目標
+          Background:
+            Given 共用前置條件，若無可刪除
+
+          Scenario: BDD-001 Happy Path — 成功情境摘要
+            Given 
+            When 
+            Then 
+
+          Scenario: BDD-002 Exception — 例外情境摘要
+            Given 
+            When 
+            Then 
+
+          # 如有其他情境請續增 Scenario，並依序給定 BDD-003...
+    validations:
+      required: true
+  - type: textarea
+    id: signals
+    attributes:
+      label: 4. 驗收訊號與測試資料
+      description: 說明成功與失敗訊號、監控需求，以及所需測試資料或模型（含責任人與處理狀態）。
+      placeholder: |
+        - 成功訊號（UI/事件/回應碼/指標）：
+        - 失敗訊號與監控需求：
+        - 所需測試資料或模型（責任人 / 來源 / 處理狀態）：
+    validations:
+      required: true
+  - type: textarea
+    id: mapping
+    attributes:
+      label: 5. Scenario 對照表
+      description: 使用表格列出 Scenario 與需求、SDD、TDD 對應，待建立者請填入「待建立」。
+      placeholder: |
+        | Scenario ID | 需求 # | 對應 SDD Issue | 對應 TDD Issue | 備註 / 狀態 |
+        | --- | --- | --- | --- | --- |
+        | BDD-001 |  |  |  |  |
+        | BDD-002 |  |  |  |  |
+        |  |  |  |  |  |
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: scope_matrix
+    attributes:
+      label: 6. 任務幅度矩陣
+      description: 列出受影響的子系統與元件，說明影響面、責任人與備註。
+      placeholder: |
+        | 子系統 / 範圍 | 主要元件或流程 | 影響面 | 責任人 | 備註 |
+        | --- | --- | --- | --- | --- |
+        |  |  |  |  |  |
+        |  |  |  |  |  |
+      render: markdown
+  - type: textarea
+    id: next_steps
+    attributes:
+      label: 7. 開放問題與下一步
+      description: 列出待確認項目、風險（含 🟡／🔴 標記）與下一步建議，例如啟動 `sdd.prompt.md`。
+      placeholder: |
+        - 待確認項目 / 風險：
+        - 建議下一步：
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: 完成度確認
+      description: 請勾選已完成的後續動作。
+      options:
+        - label: 已依 `_issue-ops-guide.md` 建立或更新 BDD Issue，並同步關聯的 SDD / TDD Issue（互相引用）。
+        - label: 已通知相關負責人檢視本次更新。
+    validations:
+      required: true
