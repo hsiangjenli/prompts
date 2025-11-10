@@ -19,6 +19,15 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: sdd-issue
+    attributes:
+      label: 對應 SDD Issue
+      description: 請輸入此 TDD 依據的 SDD Issue 編號（格式為 #123），作為設計規範參考。
+      placeholder: "#123"
+    validations:
+      required: true
+
   - type: textarea
     id: test-scenarios
     attributes:

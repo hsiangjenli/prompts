@@ -70,16 +70,33 @@ body:
       placeholder: |
         | BDD Scenario ID | 行為摘要 | 備註 |
         | --- | --- | --- |
-        | BDD-001 | 使用者成功註冊 | |
-        | BDD-002 | Email 驗證失敗 | 待補 E2E 檢查 |
+        | Scenario 2.1 | 開發人員在 Copilot Chat 呼叫 SDD Prompt | |
+        | Scenario 2.1.1 | 使用者回答 SDD 設計問題 | |
+        | Scenario 2.1.2 | 系統建立 SDD Issue 並回寫 BDD | 參考自 Scenario 2.1 |
       render: markdown
     validations:
       required: true
 
   - type: textarea
-    id: related-issues
+    id: related-tdd
+    attributes:
+      label: 相關 TDD Issue
+      description: |
+        列出基於此 SDD 設計而產生的 TDD Issue 編號（例如：#3, #4, #5）。TDD Issue 會參考此 SDD 的設計規範進行測試。
+      placeholder: "#3, #4, #5"
+
+  - type: textarea
+    id: reference-sdd
+    attributes:
+      label: 參考的舊 SDD Issue
+      description: |
+        若此 SDD 參考過去的設計決策或規範，請列出舊 SDD Issue 編號並標注「參考自」（例如：參考自 #2, #5）。用於追蹤設計演進歷史。
+      placeholder: "參考自 #2, #5"
+
+  - type: textarea
+    id: other-related-issues
     attributes:
       label: 其他相關 Issue 或任務
       description: |
-        若此 SDD 與其他 Issue（如技術債、Bug）有關，請列出編號；BDD Issue 已在上方填寫。
+        若此 SDD 與其他 Issue（如技術債、Bug、文件）有關，請列出編號。
       placeholder: "#456, #789"

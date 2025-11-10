@@ -22,11 +22,11 @@ body:
   - type: textarea
     id: user-story-and-scenarios
     attributes:
-      label: 用戶故事與行為測試
+      label: User Story 與行為測試
       description: |
-        請描述一個或多個用戶故事（使用「作為...，我想要...，以便...」的格式），每個用戶故事後面接著對應的 Gherkin 語法（Given, When, Then）行為場景。可以有多個用戶故事和場景。
+        請描述一個或多個 User Story（使用「作為...，我想要...，以便...」的格式），每個 User Story 後面接著對應的 Gherkin 語法（Given, When, Then）行為場景。可以有多個 User Story 和場景。
       placeholder: |
-        **用戶故事 1：**
+        **User Story 1：**
         作為[角色]，我想要[行為]，以便[好處]。
 
         **行為測試場景 1：**
@@ -37,7 +37,7 @@ body:
           When 我輸入有效的電子郵件和密碼，並點擊「註冊」
           Then 我應該看到「註冊成功」訊息
 
-        **用戶故事 2：**
+        **User Story 2：**
         作為[角色]，我想要[行為]，以便[好處]。
 
         **行為測試場景 2：**
@@ -56,8 +56,8 @@ body:
     attributes:
       label: 相關 SDD 與 TDD Issue
       description: |
-        請列出每個用戶故事對應的 SDD（規範要求）和 TDD（測試驅動）Issue 編號。
-        格式：用戶故事 1 -> SDD: #123, TDD: #456
+        請列出每個 User Story 對應的 SDD（規範要求）和 TDD（測試驅動）Issue 編號。
+        格式：User Story 1 -> SDD: #123, TDD: #456
       placeholder: |
-        用戶故事 1 -> SDD: #123, TDD: #456
-        用戶故事 2 -> SDD: #789, TDD: #101
+        User Story 1 -> SDD: #123, TDD: #456
+        User Story 2 -> SDD: #789, TDD: #101
