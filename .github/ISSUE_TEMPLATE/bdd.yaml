@@ -24,26 +24,29 @@ body:
     attributes:
       label: User Story 與行為測試
       description: |
-        請描述一個或多個 User Story（使用「作為...，我想要...，以便...」的格式），每個 User Story 後面接著對應的 Gherkin 語法（Given, When, Then）行為場景。可以有多個 User Story 和場景。
+        請描述一個或多個 User Story（使用「作為...，我想要...，以便...」的格式），每個 User Story 後面接著對應的 Gherkin 語法（Given, When, Then）行為場景。
+        - 每個 User Story 請以 `User Story US<序號>` 開頭（例如：`User Story US1`）。
+        - 每個 Scenario 請在標題前加上 `Scenario US<序號>-S<序號>` 以建立唯一對應（例如：`Scenario US1-S1: 成功註冊`）。
+        - 可以有多個 User Story 和場景，並確保 ID 與下方的「相關 SDD 與 TDD Issue」對照表一致。
       placeholder: |
-        **User Story 1：**
+        **User Story US1：**
         作為[角色]，我想要[行為]，以便[好處]。
 
-        **行為測試場景 1：**
+        **行為測試場景 US1-S1：**
         Feature: 註冊帳戶
 
-        Scenario: 成功註冊
+        Scenario US1-S1: 成功註冊
           Given 我在註冊頁面
           When 我輸入有效的電子郵件和密碼，並點擊「註冊」
           Then 我應該看到「註冊成功」訊息
 
-        **User Story 2：**
+        **User Story US2：**
         作為[角色]，我想要[行為]，以便[好處]。
 
-        **行為測試場景 2：**
+        **行為測試場景 US2-S1：**
         Feature: 登入系統
 
-        Scenario: 成功登入
+        Scenario US2-S1: 成功登入
           Given 我在登入頁面
           When 我輸入正確的帳號和密碼，並點擊「登入」
           Then 我應該進入主頁面
@@ -56,8 +59,12 @@ body:
     attributes:
       label: 相關 SDD 與 TDD Issue
       description: |
-        請列出每個 User Story 對應的 SDD（規範要求）和 TDD（測試驅動）Issue 編號。
-        格式：User Story 1 -> SDD: #123, TDD: #456
+        請列出每個 Scenario 對應的 SDD（規範要求）和 TDD（測試驅動）Issue 編號，使用表格呈現。
+        - Scenario ID 必須與上方「User Story 與行為測試」中的 `US<序號>-S<序號>` 保持一致。
+        - 若尚未建立 Issue，請填寫 `待建立`，並可附上建議的 Issue 標題與標籤。
       placeholder: |
-        User Story 1 -> SDD: #123, TDD: #456
-        User Story 2 -> SDD: #789, TDD: #101
+        | Scenario ID | User Story | SDD Issue | TDD Issue | 備註 |
+        | --- | --- | --- | --- | --- |
+        | US1-S1 | User Story US1 | #123 | 待建立 | |
+        | US1-S2 | User Story US1 | 待建立 | 待建立 | 建議 SDD 標題：SDD: 註冊流程安全性 |
+        | US2-S1 | User Story US2 | #456 | #789 | |

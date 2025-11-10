@@ -16,7 +16,7 @@ outputs:
     - 至少一個成功情境與一個例外情境的 Gherkin 案例（引用來源附 `#編號`，對待確認的情境標註 🟡／🔴）
     - 成功／失敗訊號、監控需求與所需測試資料
     - 任務幅度矩陣與相關子系統說明
-    - Scenario ↔ SDD / TDD Issue 對照表（格式建議：`Scenario ID | SDD Issue | TDD Issue`，若尚未建立請填寫 `待建立` 並提供建議的 Issue 標題與標籤）
+  - Scenario ↔ SDD / TDD Issue 對照表（格式固定為：`Scenario ID | User Story | SDD Issue | TDD Issue | 備註/狀態`，若尚未建立請填寫 `待建立` 並提供建議的 Issue 標題與標籤）
     - 提醒將結果透過 MCP 建立或更新 BDD Issue，並在欄位填寫對應的 SDD / TDD Issue 編號
     - 若需建立新 Issue，提供可直接貼上的 `title`，格式固定為 `[BDD] 模組／功能名稱 - 簡述`
 ---
@@ -53,8 +53,8 @@ outputs:
 4. 若需要特別的測試資料或模型，僅標示需求與提供者，細節留給 SDD。
 
 ### Step 3：整理輸出
-1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少包含一個成功與一個例外情境，產生唯一 `BDD-###` ID。
-2. **Scenario 對照表**：以表格列 `Scenario ID | 需求 # | 對應 SDD Issue | 對應 TDD Issue | 備註/狀態`，在備註欄標記「沿用」「更新」「待建立」與 🟡／🔴。
+1. **撰寫 Gherkin**：依 `.github/ISSUE_TEMPLATE/bdd.md` 填寫 Feature / Background / Scenario，至少包含一個成功與一個例外情境，並為每個 User Story 指派 `US<序號>`，每個 Scenario 指派 `US<序號>-S<序號>` 的唯一 ID（例如：`Scenario US2-S1: 開發人員呼叫 SDD Prompt 進行問答`）。
+2. **Scenario 對照表**：以表格列 `Scenario ID | User Story | 對應 SDD Issue | 對應 TDD Issue | 備註/狀態`，在備註欄標記「沿用」「更新」「待建立」與 🟡／🔴。
 3. **驗收訊號與資料需求**：列出成功／失敗訊號、監控需求與資料準備責任人。
 4. **開放問題與下一步**：整理尚待確認項目、責任人、預計時間，並明確指出下一個建議 Prompt（預設 `sdd.prompt.md`）。
 5. **Issue 同步提醒**：依 `_issue-ops-guide.md` 建立或更新 BDD Issue，貼上 Gherkin、對照表與開放問題。
@@ -67,6 +67,7 @@ outputs:
 ## 產出要求
 
 - Markdown 區塊應可直接貼入 Issue，不得遺漏表格或勾選項目。
+- User Story 與 Scenario ID 必須採 `US<序號>`、`US<序號>-S<序號>` 格式並與對照表一致。
 - Scenario 與需求編號需建立對照表。
 - 若更新既有 Scenario，需標註原 Scenario ID 與對應 Issue `#編號`，並描述差異摘要。
 - 若有跨子系統情境，需清楚標示影響範圍與責任人。
