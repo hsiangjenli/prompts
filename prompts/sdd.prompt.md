@@ -100,13 +100,13 @@ outputs:
 #### SDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
-- **規範 ID**：唯一識別碼（例如：COMPLIANCE-001）
 - **對應 BDD Issue**：記錄此 SDD 依據的 BDD Issue 編號（格式為 `#123`）
 - **規範或標準名稱**：說明相關規範（例如：GDPR、WCAG 2.1、ISO 27001）
 - **要求描述**：詳細描述此規範的具體要求
 - **受影響的元件或功能**：列出會影響到的元件或功能
 - **驗證方式**：說明如何驗證此規範是否已實現
 - **對應 BDD Scenario**：列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要
+- **其他相關 Issue**：若此 SDD 與其他 Issue（如技術債、Bug）有關，請列出編號
 
 ## 後續行動
 
