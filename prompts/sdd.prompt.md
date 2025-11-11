@@ -75,15 +75,22 @@ outputs:
 
 ### Step 1：確認狀態
 
-1. **檢查 BDD Issue 批准狀態與功能 ID**：確認對應的 BDD Issue 是否已被加上 `approved` label，並記錄其功能 ID
+1. **檢查 Sub-Issue 關係與功能 ID**：確認當前 SDD Issue 是否已被設為某個 BDD Issue 的 Sub-Issue，並提取「功能 ID」
+   - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
+   - 從 BDD Issue 的標題中提取「功能 ID」（例如 `[REQ-001] - 功能名稱` → 功能 ID 為 REQ-001）
+   - **重要**：後續建立的 SDD Issue 必須使用相同的功能 ID 在 Title 中（例如 `S-REQ-001-US1 - 設計領域`），確保追蹤鏈完整
+
+2. **檢查 BDD Issue 批准狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label
    - 若 BDD Issue 未被批准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
-   - 若 BDD Issue 已被批准，讀取 BDD Issue 中的「功能 ID」欄位值（例如 REQ-001）
-   - 後續建立的 SDD Issue 必須在 Title 和「功能 ID」欄位中使用相同的功能 ID，確保三層 Issue 的功能 ID 一致
-2. 閱讀使用者提供的文件（如：BDD Issue、設計文件、架構圖、現有契約等），了解業務需求與技術脈絡
-3. **參考舊 SDD Issue**（選填）：若使用者提供過去建立的 SDD Issue 編號作為參考（例如：#2, #5），讀取這些 SDD Issue 的內容以了解過去的設計決策
+   - 若 BDD Issue 已被批准，繼續進行
+
+3. 閱讀使用者提供的文件（如：BDD Issue、設計文件、架構圖、現有契約等），了解業務需求與技術脈絡
+
+4. **參考舊 SDD Issue**（選填）：若使用者提供過去建立的 SDD Issue 編號作為參考（例如：#2, #5），讀取這些 SDD Issue 的內容以了解過去的設計決策
    - **重要**：僅作為參考，**不修改舊的 SDD Issue**（用於追蹤歷史）
    - 新的 SDD Issue 會是全新建立，編號遞增
-4. 檢查是否已有對應此 BDD 的 SDD Issue。若無，則建立新的
+
+5. 檢查是否已有對應此 BDD 的 SDD Issue。若無，則建立新的
 
 ### Step 2：補齊設計
 
