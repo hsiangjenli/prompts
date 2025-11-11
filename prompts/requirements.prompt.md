@@ -9,7 +9,7 @@ inputs:
 outputs:
   summary: 以使用者情境為主，整理可追蹤的需求摘要，準備交由 SDD/TDD 進一步展開（非技術實作細節）
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/bdd.yaml` 的 Issue 草稿（標題採 `[功能ID]: [功能名稱]` 格式）
+    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/bdd.yaml` 的 Issue 草稿（標題採 `[功能ID] - [功能名稱]` 格式）
     - 使用可用的 MCP / GitHub 工具直接建立 BDD Issue；若無權限才提供草稿
     - 列出用戶故事與 Gherkin 場景（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
     - 提供下一個建議 Prompt（預設 `sdd.prompt.md` 或 `tdd.prompt.md`；若出現技術議題，跳轉至 `tech-stack.prompt.md`）
@@ -74,7 +74,7 @@ outputs:
 
 3. **填入 BDD Issue**：
    - 在建立 BDD Issue 時，務必填入「功能 ID」欄位
-   - Title 格式：`[功能ID]: [功能名稱]`（例如 `REQ-001: 使用者登入`）
+   - Title 格式：`[功能ID] - [功能名稱]`（例如 `REQ-001 - 使用者登入`）
 
 ### Step 3：整理輸出
 
@@ -86,6 +86,7 @@ outputs:
 #### BDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/bdd.yaml` 中的欄位定義與範例：
+- **標題格式**：`[功能ID] - [功能名稱]`（例如 `REQ-001 - 使用者登入`）
 - **功能 ID**：唯一識別碼（例如：REQ-001）
 - **用戶故事與行為測試**：包含用戶故事（作為...，我想要...，以便...）和 Gherkin 場景（Given-When-Then）
 - **相關 SDD 與 TDD Issue**：使用表格列出每個 `US<序號>-S<序號>` Scenario 對應的 SDD/TDD Issue 編號或「待建立」，確保場景與後續工作保持一對一追蹤

@@ -11,7 +11,7 @@ inputs:
 outputs:
   summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `[功能ID]-US[序號] - [設計領域]` 格式，例如 `REQ-001-US1 - BDD Intake Issue 建立`、`REQ-002-US2 - SDD 問答流程`）
+    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `S-[功能ID]-US[序號] - [設計領域]` 格式，例如 `S-REQ-001-US1 - BDD Intake Issue 建立`、`S-REQ-002-US2 - SDD 問答流程`）
     - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
     - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
     - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
@@ -122,7 +122,8 @@ outputs:
 #### SDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
-- **標題格式**：`[功能ID]-US[序號] - [設計領域]`（例如：`REQ-001-US1 - BDD Intake Issue 建立`、`REQ-002-US2 - SDD 問答流程`）
+- **標題格式**：`S-[功能ID]-US[序號] - [設計領域]`（例如：`S-REQ-001-US1 - BDD Intake Issue 建立`、`S-REQ-002-US2 - SDD 問答流程`）
+  - `S-` 前綴表示此 Issue 為 SDD（System Design Document）
   - `[功能ID]` 必須與 BDD Issue 相同（例如 REQ-001）
   - `US[序號]` 對應 BDD Issue 中的 User Story 編號（例如 US1、US2）
   - `[設計領域]` 說明此 SDD 涵蓋的技術設計主題
