@@ -11,7 +11,7 @@ inputs:
 outputs:
   summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `SDD: <規範名稱>` 格式）
+    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `SDD: [領域] - [設計主題]` 格式，例如 `SDD: BDD Intake - Issue 自動建立`）
     - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
     - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
     - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
@@ -109,6 +109,7 @@ outputs:
 #### SDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
+- **標題格式**：`SDD: [領域] - [設計主題]`（例如：`SDD: BDD Intake - Issue 自動建立`、`SDD: SDD Flow - 問答與關聯`）
 - **對應 BDD Issue**：記錄此 SDD 依據的 BDD Issue 編號（格式為 `#123`）
 - **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
 - **要求描述**：詳細描述此設計的具體要求

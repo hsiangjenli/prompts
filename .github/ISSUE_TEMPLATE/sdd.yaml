@@ -2,7 +2,7 @@ name: SDD 規範要求
 description: 用於提交與規範、標準、合規性有關的要求。
 labels: ["type: compliance", "domain: sdd"]
 assignees: []
-title: "SDD: [規範名稱]"
+title: "SDD: [領域] - [設計主題]"
 body:
   - type: markdown
     attributes:
@@ -35,8 +35,13 @@ body:
       label: 要求描述
       description: |
         請詳細描述此規範的具體要求。
+        必須涵蓋本 SDD 對應的各個 BDD Scenario（見「對應 BDD Scenario」欄位），說明每個 Scenario 的具體設計規格。
       placeholder: |
         使用者上傳的個人資料必須加密儲存，並在 7 天後自動刪除。
+        
+        對應 Scenario：
+        - US2-S1：當 BDD Issue 已批准時，系統應自動檢查批准狀態，若通過則進入 SDD 問答流程...
+        - US2-S2：當 BDD Issue 未批准時，系統應拒絕進行 SDD 問答並提示相應訊息...
     validations:
       required: true
 
@@ -67,12 +72,14 @@ body:
     attributes:
       label: 對應 BDD Scenario
       description: |
-        列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要，ID 必須沿用 BDD Issue 的 `US<序號>-S<序號>` 命名，若尚在確認請標註（待確認／已確認）。
+        列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要（每個 SDD Issue 必須涵蓋至少一個 BDD Scenario）。
+        ID 必須沿用 BDD Issue 的 `US<序號>-S<序號>` 命名格式。
+        「要求描述」應逐一說明各 Scenario 的具體設計規格。
       placeholder: |
         | BDD Scenario ID | 行為摘要 | 備註 |
         | --- | --- | --- |
         | US2-S1 | 開發人員呼叫 SDD Prompt 進行問答並建立 SDD Issue | 已確認 |
-        | US2-S2 | BDD 未批准時拒絕進行 SDD 問答 | 待確認 |
+        | US2-S2 | BDD 未批准時拒絕進行 SDD 問答 | 已確認 |
       render: markdown
     validations:
       required: true
