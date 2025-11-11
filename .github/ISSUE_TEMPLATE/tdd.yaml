@@ -33,17 +33,23 @@ body:
     attributes:
       label: 測試矩陣
       description: |
-        建立測試矩陣表格，每行代表一個測試案例，含 Test ID、Scenario ID (BDD)、測試類型、優先順序、資料準備方式、預期結果等。
+        建立測試矩陣表格，每行代表一個測試案例，含 Test ID、Scenario ID (BDD)、測試類型、優先順序、資料準備方式、預期結果及狀態欄位。
+        狀態欄位初始為 `⏳`，執行對應 Prompt 時更新狀態並附上 Comment 連結。
         使用 checkbox (- [ ]) 來標記實現進度。
       placeholder: |
-        | Test ID | Scenario ID (BDD) | 測試類型 | 優先順序 | 資料/Mock | 預期結果 | Red | Green | Refactor | 備註 |
-        | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-        | T-101 | US1-S1 | E2E | P0 | 真實環境 | 系統成功響應 | ⏳ | ⏳ | ⏳ | 成功路徑 |
-        | T-102 | US1-S1 | E2E | P0 | Mock 失敗 | 系統返回錯誤訊息 | ⏳ | ⏳ | ⏳ | 失敗路徑 |
-        | T-103 | US1-S1 | Unit | P1 | 單元測試資料 | 驗證邏輯正確 | ⏳ | ⏳ | ⏳ | 邊界情況 |
+        | Test ID | Scenario ID (BDD) | 測試類型 | 優先順序 | 資料/Mock | 預期結果 | 狀態 | 備註 |
+        | --- | --- | --- | --- | --- | --- | --- | --- |
+        | T-101 | US1-S1 | E2E | P0 | 真實環境 | 系統成功響應 | ⏳ | 成功路徑 |
+        | T-102 | US1-S1 | E2E | P0 | Mock 失敗 | 系統返回錯誤訊息 | 🔴 [查看](#comment-1234) | 失敗路徑 |
+        | T-103 | US1-S1 | Unit | P1 | 單元測試資料 | 驗證邏輯正確 | ⏳ | 邊界情況 |
         
         **測試狀態說明**：
-        - `⏳` = 未開始 | `🔴` = Red（測試失敗） | `🟢` = Green（測試通過） | `♻️` = Refactor（已優化）
+        - `⏳` = 未開始
+        - `🔴` = Red（測試失敗）- 首次執行 tdd-red 時建立對應 Test 的 Comment，後續重試追加到同一 Comment
+        - `🟢` = Green（測試通過）- 執行 tdd-green 時在同一 Comment 中追加結果
+        - `♻️` = Refactor（已優化）- 執行 tdd-refactor 時在同一 Comment 中追加優化說明
+        
+        **Comment 連結格式**：`狀態符號 [查看](#comment-XXXX)`，點擊連結可查看該 Test 的完整生命週期紀錄
 
   - type: textarea
     id: test-scenarios
