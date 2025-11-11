@@ -149,14 +149,27 @@ outputs:
 
 #### Phase 3：更新 BDD Issue 的相關 SDD 與 TDD Issue 欄位
 
-1. 回到對應的 **BDD Issue**
-2. 在「相關 SDD 與 TDD Issue」表格中：
-   - 找到對應的 Scenario ID 行
-   - 檢查「SDD Issue」欄位是否已填（應該在前階段由 sdd.prompt.md 建立）
-     - 若未填，請根據此 Scenario 對應的 SDD 補充編號
-     - 若已填，保持不變
-   - 將「TDD Issue」欄位從「待建立」更新為此次建立的 TDD Issue 編號（例如 `#4`）
-3. 建立雙向關聯，確保可追蹤性
+**重要提醒：此步驟是必須的，避免遺漏。請按順序完成以下更新：**
+
+1. **更新 BDD Issue**
+   - 回到對應的 **BDD Issue**
+   - 在「相關 SDD 與 TDD Issue」表格中：
+     - 找到對應的 Scenario ID 行
+     - 檢查「SDD Issue」欄位是否已填（應該在前階段由 sdd.prompt.md 建立）
+       - 若未填，請根據此 Scenario 對應的 SDD 補充編號
+       - 若已填，保持不變
+     - 將「TDD Issue」欄位從「待建立」更新為此次建立的 TDD Issue 編號（例如 `#4`）
+   - 建立雙向關聯，確保可追蹤性
+
+2. **更新新建立的 TDD Issue**
+   - 返回剛建立的 **TDD Issue**
+   - 確認「對應 BDD Issue」與「對應 SDD Issue」欄位已正確填寫
+   - 若未填，請補充編號（例如 `BDD: #1`, `SDD: #3`）
+
+3. **驗證雙向鏈接**
+   - BDD Issue → TDD Issue 的連結是否正確
+   - TDD Issue → BDD Issue 及 → SDD Issue 的連結是否正確
+   - 確保三個 Issue 之間可相互追蹤
 
 #### Phase 4：輸出整理
 
@@ -169,9 +182,18 @@ outputs:
 
 2. 指出下一步應執行 `tdd-red.prompt.md`，並提醒攜帶測試矩陣以及新 TDD Issue 編號
 
+3. **更新完成清單（必須完成）**：
+   - ☐ TDD Issue 已建立並帶有編號
+   - ☐ BDD Issue 表格已更新：對應 Scenario 的 TDD Issue 欄位已填入新編號
+   - ☐ BDD Issue 的 SDD Issue 欄位已確認（若無則補充）
+   - ☐ TDD Issue 內「對應 BDD Issue」與「對應 SDD Issue」欄位已正確填寫
+   - ☐ 三個 Issue（BDD → SDD → TDD）之間的鏈接已建立並可相互追蹤
+
 #### TDD Issue 內容範例
 
 ## 後續行動
 
+- **在執行 `tdd-red.prompt.md` 前，務必確認 Phase 3 與 Phase 4 的更新完成清單已全數完成**
 - 下一個預計執行的 Prompt：`tdd-red.prompt.md`（開始設計失敗測試）
 - 若設計或測試過程中發現需求問題，建議回到 `sdd.prompt.md` 或 `requirements.prompt.md` 更新相應 Issue
+- **重要提醒**：BDD ↔ SDD ↔ TDD 三向鏈接建立後，才能確保整個工作流的可追蹤性
