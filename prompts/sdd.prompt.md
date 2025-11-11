@@ -99,14 +99,23 @@ outputs:
 
 1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `SDD: US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
    - **重要**：每個 BDD User Story 建立對應的 SDD Issue（編號遞增），即使參考了舊的 SDD Issue
-   - 在新 SDD Issue 中的「參考的舊 SDD Issue」欄位可列出參考的舊 SDD Issue 編號（例如：`參考自 #2, #5`）
+
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
+
 3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式，尤其在「對應 BDD Scenario」表格中使用與 BDD 完全一致的 `US<序號>-S<序號>` ID 與行為描述
-4. **重要**：SDD Issue 建立完成後，由 AI Agent 進行以下更新：
-   - 回到原本的 **BDD Issue**，在「相關 SDD 與 TDD Issue」表格中：
-     - 找到對應的 Scenario ID 行（例如 US1-S1）
-     - 更新「SDD Issue」欄位為新建立的 SDD Issue 編號（例如 `#2`）
-   - **注意**：「TDD Issue」欄位由 TDD Prompt 建立時填寫
+
+4. **重要 - Sub-Issue 關聯**：SDD Issue 建立完成後，由 AI Agent 透過 MCP 建立 Sub-Issue 關係：
+   - 使用 `mcp_github_sub_issue_write` 工具
+   - 參數設定：
+     ```
+     method: add
+     owner: hsiangjenli
+     repo: prompts
+     issue_number: <對應的 BDD Issue 編號>
+     sub_issue_id: <新建立的 SDD Issue ID (node_id)>
+     ```
+   - 確認關聯成功：BDD Issue 的 GitHub 介面上會自動顯示此 SDD Issue 為 Sub-Issue
+
 5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
 #### SDD Issue 格式參考
@@ -115,9 +124,9 @@ outputs:
 - **標題格式**：`SDD: US[序號] - [設計領域]`（例如：`SDD: US1 - BDD Intake Issue 建立`、`SDD: US2 - SDD 問答流程`）
   - `US[序號]` 對應 BDD Issue 中的 User Story 編號（例如 US1、US2）
   - `[設計領域]` 說明此 SDD 涵蓋的技術設計主題
-- **對應 BDD Issue**：記錄此 SDD 依據的 BDD Issue 編號（格式為 `#123`）
 - **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
 - **要求描述**：詳細描述此設計的具體要求
+- **對應 BDD Scenario**：列出本 SDD 涵蓋的所有 BDD Scenario ID
 - **受影響的元件或功能**：列出會影響到的元件或功能
 - **驗證方式**：說明如何驗證此設計是否已實現
 - **對應 BDD Scenario**：列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要
