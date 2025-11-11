@@ -52,6 +52,10 @@ outputs:
 - 將 Green 欄位從 `⏳` (未開始) 或 `🔴` (已失敗) 更新為 `🟢 [查看](#comment-XXXX)` (已通過 + Comment 連結)
 - 連結應指向同一個 Comment（由 tdd-red 建立）
 
+## Comment Markdown 格式規範
+
+更新 Comment 時，請遵循 `.github/ISSUE_TEMPLATE/comment-template.md` 中定義的 Markdown 格式標準。
+
 ## 產出格式
 
 - **修改摘要表**：檔案名稱 | 修改重點 | 測試命令 | 結果

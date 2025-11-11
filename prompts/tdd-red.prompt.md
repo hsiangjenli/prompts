@@ -76,6 +76,10 @@ outputs:
 
 4. 指出下一步執行 `tdd-green.prompt.md`
 
+## Comment Markdown 格式規範
+
+建立 Comment 時，請遵循 `.github/ISSUE_TEMPLATE/comment-template.md` 中定義的 Markdown 格式標準。
+
 ## 產出格式建議
 
 - **測試摘要表**：Test ID、測試檔路徑、Scenario ID、失敗原因摘要（限 120 字）、狀態
@@ -86,3 +90,4 @@ outputs:
 
 - 完成 Red 後立即執行 `tdd-green.prompt.md` 進行實作
 - 若測試無法失敗（說明實作已存在），需調整測試或檢查是否有需求差異
+- **記得在建立 Comment 前檢查 Markdown 格式**，參考上述「Comment Markdown 格式規範」確保正確渲染
