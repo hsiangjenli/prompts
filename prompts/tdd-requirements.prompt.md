@@ -9,8 +9,8 @@ inputs:
 outputs:
   summary: 以測試驗證為主，建立完整測試矩陣與 TDD Issue，準備進入 Red-Green-Refactor 循環
   include:
-    - 建立「測試矩陣」（Test ID、Scenario ID、測試類型、優先順序、資料準備等）
-    - 直接建立 TDD Issue（`.github/ISSUE_TEMPLATE/tdd.yaml`），標題採 `TDD: <測試名稱>` 格式
+    - 建立「測試矩陣」（Test ID、Scenario ID、測試類型、優先順序、資料準備等），其中 Test ID 格式為 `{功能ID}-T-{序號}`（例如 `REQ-001-T-101`）
+    - 直接建立 TDD Issue（`.github/ISSUE_TEMPLATE/tdd.yaml`），標題採 `T-<功能ID>-US<序號>` 格式
     - 更新 BDD Issue 的「相關 TDD Issue」表格，建立雙向關聯
     - 列出測試場景、驗證方式、測試資料準備方式
     - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）
@@ -71,8 +71,10 @@ outputs:
 
 ### Step 1：確認狀態
 
-1. **檢查 BDD 與 SDD 完成狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
+1. **檢查 BDD 與 SDD 完成狀態與功能 ID**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
    - 若 BDD Issue 未被批准或 SDD Issue 未建立，拒絕進行 TDD 問答，並提醒使用者「請先完成 BDD 批准與 SDD 建立後再呼叫本 Prompt」
+   - 若兩者都已完成，讀取 BDD Issue 與 SDD Issue 中的「功能 ID」欄位值（例如 REQ-001）
+   - **重要**：後續建立的 TDD Issue 必須在 Title 和「功能 ID」欄位中使用相同的功能 ID
    - 若兩者都已完成，繼續進行
 2. 閱讀使用者提供的文件（如：BDD Issue、SDD Issue、測試文件、現有測試案例等），了解業務需求與設計規範
 3. 檢查是否已有 TDD Issue。若有，請根據原本的 Issue 進行修改
@@ -92,12 +94,13 @@ outputs:
 
 #### Phase 1：建立測試矩陣
 
-1. 根據 Step 2 的對話結果，為每個測試場景建立「Test ID」
-   - 格式：`T-<序號>`（例如 T-101、T-102）
+1. 根據 Step 2 的對話結果與 BDD Issue 中的功能 ID，為每個測試場景建立「Test ID」
+   - 格式：`{功能ID}-T-{序號}`（例如 REQ-001-T-101、REQ-001-T-102）
+   - 這樣可以確保每個功能的測試編號唯一，避免跨功能重複
    - 對應 BDD 的 `US<序號>-S<序號>` Scenario ID
 
 2. 整理成「測試矩陣」表格，欄位包含：
-   - `Test ID`：測試唯一識別碼
+   - `Test ID`：測試唯一識別碼（格式：`{功能ID}-T-{序號}`）
    - `Scenario ID (BDD-###)`：對應的 BDD Scenario
    - `測試類型`：單元 / 整合 / E2E
    - `優先順序`：P0 / P1 / P2（根據對話決定）
@@ -111,13 +114,14 @@ outputs:
 #### Phase 2：建立 TDD Issue
 
 1. 立即透過 MCP / GitHub API 建立 **TDD Issue**
-   - 標題格式：`TDD: <測試名稱>` （例如 `TDD: US1-S1 - BDD Intake Issue 端到端測試`）
+   - 標題格式：`T-<功能ID>-US<序號>` （例如 `T-REQ-001-US1`）
    - 使用 `.github/ISSUE_TEMPLATE/tdd.yaml` 模板
 
 2. 在 TDD Issue 的各欄位填入：
+   - **功能 ID**：填入與 BDD Issue 相同的功能 ID（例如 `REQ-001`）
    - **對應 BDD Issue**：記錄此 TDD 依據的 BDD Issue 編號（例如 `#1`）
    - **對應 SDD Issue**：記錄此 TDD 參考的 SDD Issue 編號（例如 `#3`）
-   - **測試矩陣**：貼入完整的測試矩陣表格
+   - **測試矩陣**：貼入完整的測試矩陣表格，Test ID 使用 `{功能ID}-T-{序號}` 格式
    - **測試場景**：列出所有測試場景與驗證方式，每行帶上 `US<序號>-S<序號>` Scenario ID
    - **測試資料**：說明資料準備方式、Mock 策略、環境要求
    - **預期結果**：描述各場景的預期通過條件
@@ -130,7 +134,7 @@ outputs:
 
 - **初始狀態**：所有測試項目初始設為 `⏳` (未開始)
 - **Red 階段**：
-  - 首次執行 `tdd-red.prompt.md` 時，為該 Test ID 建立獨立 Comment，記錄失敗訊息
+  - 首次執行 `tdd-red.prompt.md` 時，為該 Test ID（例如 REQ-001-T-101）建立獨立 Comment，記錄失敗訊息
   - 將測試矩陣狀態欄位改為 `🔴 [查看](#comment-XXXX)` (測試失敗 + Comment 連結)
   - 若重試同一 Test，則在同一 Comment 中追加新的執行紀錄與重試次數
 - **Green 階段**：

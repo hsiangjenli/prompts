@@ -15,6 +15,7 @@ outputs:
     - 新增測試檔案的摘要（檔名、情境、預期失敗訊息）
     - 測試執行結果與錯誤詳情
     - 失敗原因分析與阻塞清單
+    - 更新 TDD Issue 測試矩陣，將對應的 Test ID 狀態更新為 `🔴 [查看](#comment-XXXX)`，並在 Comment 中記錄失敗細節
     - 下一步指向 `tdd-green.prompt.md`
 ---
 
@@ -29,12 +30,15 @@ outputs:
 ### Step 1：確認測試矩陣與準備
 
 1. 檢查 TDD Issue 中的測試矩陣，確認「測試框架」「Mock 策略」「資料準備」等都已就位
-2. 從測試矩陣選定此次要處理的 Test ID（通常按優先順序 P0 → P1 → P2）
-3. 確認測試框架與執行指令可用（例如 `pnpm test --filter ...`）
+2. **重要**：確認 TDD Issue 的功能 ID，確保後續所有 Test ID 使用正確的功能 ID 前綴（例如 REQ-001）
+3. 從測試矩陣選定此次要處理的 Test ID（通常按優先順序 P0 → P1 → P2）
+   - 確認 Test ID 格式為 `{功能ID}-T-{序號}`（例如 REQ-001-T-101）
+   - 這確保測試編號全局唯一，不會跨功能重複
+4. 確認測試框架與執行指令可用（例如 `pnpm test --filter ...`）
 
 ### Step 2：撰寫一定會失敗的測試
 
-1. 根據 Scenario ID（`US<序號>-S<序號>`）和 SDD 契約細節，新增測試檔案
+1. 根據 Scenario ID（`US<序號>-S<序號>`）、Test ID 與 SDD 契約細節，新增測試檔案
 2. **重要**：設計測試使其「一定失敗」，測試預期行為但實現還不存在
    - 使用註解說明「預期行為是什麼」
    - 斷言應指向尚未實現的功能
@@ -54,9 +58,9 @@ outputs:
 2. **為該 Test ID 建立或追加 Comment**：
    
    **首次執行 tdd-red 時（建立新 Comment）**：
-   - 在 TDD Issue 中建立新 Comment，標題為「`## Test: [Test ID] - [Scenario ID]`」
+   - 在 TDD Issue 中建立新 Comment，標題為「`## Test: [Test ID] - [Scenario ID]`」（例如 `## Test: REQ-001-T-101 - US1-S1`）
    - 記錄以下 6 項必要資訊：
-     - Test ID + Scenario ID（例如 T-101 + US1-S1）
+     - Test ID + Scenario ID（例如 REQ-001-T-101 + US1-S1，強調功能 ID 前綴確保全局唯一）
      - 測試檔案路徑
      - Red 階段時戳與失敗狀態（🔴）
      - 失敗原因簡述（錯誤訊息前 120 字）
@@ -69,9 +73,9 @@ outputs:
    - 使用「### Red 階段 - [時戳]」格式，保持紀錄清晰
    - 累計重試次數，方便後續判斷是否需要人工介入
 
-3. **更新 TDD Issue 測試矩陣的 Red 欄位**：
-   - 找到對應的 Test ID 行
-   - 將 Red 欄位從 `⏳` (未開始) 更新為 `🔴 [查看](#comment-XXXX)` (已失敗 + Comment 連結)
+3. **更新 TDD Issue 測試矩陣的狀態欄位**：
+   - 找到對應的 Test ID 行（例如 REQ-001-T-101）
+   - 將狀態欄位從 `⏳` (未開始) 更新為 `🔴 [查看](#comment-XXXX)` (已失敗 + Comment 連結)
    - 連結應指向剛建立或更新的 Comment
 
 4. 指出下一步執行 `tdd-green.prompt.md`

@@ -25,7 +25,8 @@ outputs:
 
 ### Step 1：確認目標
 - 回顧 Red 階段的失敗測試清單與錯誤訊息
-- 確認要轉綠的測試項目與預期實作位置
+- 確認要轉綠的測試項目（Test ID 格式為 `{功能ID}-T-{序號}`）與預期實作位置
+- **重要**：確認 Test ID 的功能 ID 前綴，確保實作與測試的對應關係正確
 
 ### Step 2：最小實作
 - 一次專注一個失敗測試，依最小可行原則修改程式碼
@@ -38,18 +39,19 @@ outputs:
 - 整理實作修改摘要、測試結果與檢查結果
 
 **在 tdd-red 建立的同一 Comment 中追加 Green 階段結果**：
-- 找到該 Test ID 對應的 Comment（由 tdd-red 首次建立）
+- 找到該 Test ID 對應的 Comment（由 tdd-red 首次建立，例如 `## Test: REQ-001-T-101 - US1-S1`）
 - 在 Comment 中追加新的區段，格式為「### Green 階段 - [時戳]」
 - 記錄以下內容：
   - Green 階段時戳與通過狀態（🟢）
   - 實作修改重點（檔案、改動摘要）
   - 測試通過的完整證據（測試輸出或截圖）
   - 品質檢查結果（Lint、Type Check 等）
+  - 功能 ID 與 Test ID 的對應確認（例如 `功能 ID: REQ-001, Test ID: REQ-001-T-101`）
 - 參考 Issue #5 的「追加更新格式」
 
-**更新 TDD Issue 測試矩陣的 Green 欄位**：
-- 找到對應的 Test ID 行
-- 將 Green 欄位從 `⏳` (未開始) 或 `🔴` (已失敗) 更新為 `🟢 [查看](#comment-XXXX)` (已通過 + Comment 連結)
+**更新 TDD Issue 測試矩陣的狀態欄位**：
+- 找到對應的 Test ID 行（例如 REQ-001-T-101）
+- 將狀態欄位從 `⏳` (未開始) 或 `🔴` (已失敗) 更新為 `🟢 [查看](#comment-XXXX)` (已通過 + Comment 連結)
 - 連結應指向同一個 Comment（由 tdd-red 建立）
 
 ## Comment Markdown 格式規範

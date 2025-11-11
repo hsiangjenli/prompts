@@ -58,9 +58,27 @@ outputs:
 2. 藉由不斷提問，釐清使用者的需求
 3. **重要**：BDD 階段僅聚焦於使用者行為與業務需求，不應包含任何技術細節（API、資料模型、架構設計等）
 
+### Step 2.5：分配功能 ID
+
+**重要**：每個 BDD Issue 都必須被指派一個唯一的功能 ID，以便後續 SDD 和 TDD 進行追蹤。
+
+1. **功能 ID 命名規範**：
+   - 格式：`REQ-{序號}`（例如：`REQ-001`、`REQ-002`、`REQ-003`...）
+   - 序號依據項目建立順序遞增
+   - 功能 ID 在整個專案中全局唯一，不可重複
+
+2. **避免重複的策略**：
+   - 檢查已有的 BDD Issue，確認功能 ID 序號
+   - 新 Issue 使用下一個未使用的序號
+   - 若已刪除某個功能（例如 REQ-005），其序號不再使用（空缺不填補）
+
+3. **填入 BDD Issue**：
+   - 在建立 BDD Issue 時，務必填入「功能 ID」欄位
+   - Title 格式：`BDD: [功能ID] [功能名稱]`（例如 `BDD: REQ-001 使用者登入`）
+
 ### Step 3：整理輸出
 
-1. 立即透過可用的 MCP / GitHub API 建立 BDD Issue（標題 `BDD: <功能名稱>`；使用 `.github/ISSUE_TEMPLATE/bdd.yaml`）
+1. 立即透過可用的 MCP / GitHub API 建立 BDD Issue（標題 `[功能ID]: [功能名稱]`；使用 `.github/ISSUE_TEMPLATE/bdd.yaml`）
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理用戶故事與 Gherkin 場景，確保符合 BDD 語法
 4. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt

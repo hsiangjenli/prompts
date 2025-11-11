@@ -11,7 +11,7 @@ inputs:
 outputs:
   summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `SDD: US[序號] - [設計領域]` 格式，例如 `SDD: US1 - BDD Intake Issue 建立`、`SDD: US2 - SDD 問答流程`）
+    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `[功能ID]-US[序號] - [設計領域]` 格式，例如 `REQ-001-US1 - BDD Intake Issue 建立`、`REQ-002-US2 - SDD 問答流程`）
     - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
     - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
     - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
@@ -75,9 +75,10 @@ outputs:
 
 ### Step 1：確認狀態
 
-1. **檢查 BDD Issue 批准狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label
+1. **檢查 BDD Issue 批准狀態與功能 ID**：確認對應的 BDD Issue 是否已被加上 `approved` label，並記錄其功能 ID
    - 若 BDD Issue 未被批准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
-   - 若 BDD Issue 已被批准，繼續進行
+   - 若 BDD Issue 已被批准，讀取 BDD Issue 中的「功能 ID」欄位值（例如 REQ-001）
+   - 後續建立的 SDD Issue 必須在 Title 和「功能 ID」欄位中使用相同的功能 ID，確保三層 Issue 的功能 ID 一致
 2. 閱讀使用者提供的文件（如：BDD Issue、設計文件、架構圖、現有契約等），了解業務需求與技術脈絡
 3. **參考舊 SDD Issue**（選填）：若使用者提供過去建立的 SDD Issue 編號作為參考（例如：#2, #5），讀取這些 SDD Issue 的內容以了解過去的設計決策
    - **重要**：僅作為參考，**不修改舊的 SDD Issue**（用於追蹤歷史）
