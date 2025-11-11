@@ -103,8 +103,10 @@ outputs:
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式，尤其在「對應 BDD Scenario」表格中使用與 BDD 完全一致的 `US<序號>-S<序號>` ID 與行為描述
 4. **重要**：SDD Issue 建立完成後，由 AI Agent 進行以下更新：
-   - 回到原本的 **BDD Issue**，在「相關 SDD Issue」欄位中新增此 SDD Issue 編號（例如：`#2`）
-   - **注意**：「相關 TDD Issue」欄位由 TDD Prompt 建立時填寫
+   - 回到原本的 **BDD Issue**，在「相關 SDD 與 TDD Issue」表格中：
+     - 找到對應的 Scenario ID 行（例如 US1-S1）
+     - 更新「SDD Issue」欄位為新建立的 SDD Issue 編號（例如 `#2`）
+   - **注意**：「TDD Issue」欄位由 TDD Prompt 建立時填寫
 5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
 #### SDD Issue 格式參考
