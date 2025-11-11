@@ -98,7 +98,7 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `SDD: US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
+1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `[功能ID]-US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
    - **重要**：每個 BDD User Story 建立對應的 SDD Issue（編號遞增），即使參考了舊的 SDD Issue
 
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
@@ -122,12 +122,14 @@ outputs:
 #### SDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
-- **標題格式**：`SDD: US[序號] - [設計領域]`（例如：`SDD: US1 - BDD Intake Issue 建立`、`SDD: US2 - SDD 問答流程`）
+- **標題格式**：`[功能ID]-US[序號] - [設計領域]`（例如：`REQ-001-US1 - BDD Intake Issue 建立`、`REQ-002-US2 - SDD 問答流程`）
+  - `[功能ID]` 必須與 BDD Issue 相同（例如 REQ-001）
   - `US[序號]` 對應 BDD Issue 中的 User Story 編號（例如 US1、US2）
   - `[設計領域]` 說明此 SDD 涵蓋的技術設計主題
 - **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
 - **要求描述**：詳細描述此設計的具體要求
 - **對應 BDD Scenario**：列出本 SDD 涵蓋的所有 BDD Scenario ID
+````
 - **受影響的元件或功能**：列出會影響到的元件或功能
 - **驗證方式**：說明如何驗證此設計是否已實現
 - **對應 BDD Scenario**：列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要
