@@ -11,7 +11,7 @@ inputs:
 outputs:
   summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `SDD: [領域] - [設計主題]` 格式，例如 `SDD: BDD Intake - Issue 自動建立`）
+    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `SDD: US[序號] - [設計領域]` 格式，例如 `SDD: US1 - BDD Intake Issue 建立`、`SDD: US2 - SDD 問答流程`）
     - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
     - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
     - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
@@ -96,8 +96,8 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `SDD: <功能/規範名稱>`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
-   - **重要**：每個 BDD 建立的 SDD Issue 都是全新的（編號遞增），即使參考了舊的 SDD Issue
+1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `SDD: US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
+   - **重要**：每個 BDD User Story 建立對應的 SDD Issue（編號遞增），即使參考了舊的 SDD Issue
    - 在新 SDD Issue 中的「參考的舊 SDD Issue」欄位可列出參考的舊 SDD Issue 編號（例如：`參考自 #2, #5`）
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式，尤其在「對應 BDD Scenario」表格中使用與 BDD 完全一致的 `US<序號>-S<序號>` ID 與行為描述
@@ -109,7 +109,9 @@ outputs:
 #### SDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
-- **標題格式**：`SDD: [領域] - [設計主題]`（例如：`SDD: BDD Intake - Issue 自動建立`、`SDD: SDD Flow - 問答與關聯`）
+- **標題格式**：`SDD: US[序號] - [設計領域]`（例如：`SDD: US1 - BDD Intake Issue 建立`、`SDD: US2 - SDD 問答流程`）
+  - `US[序號]` 對應 BDD Issue 中的 User Story 編號（例如 US1、US2）
+  - `[設計領域]` 說明此 SDD 涵蓋的技術設計主題
 - **對應 BDD Issue**：記錄此 SDD 依據的 BDD Issue 編號（格式為 `#123`）
 - **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
 - **要求描述**：詳細描述此設計的具體要求
