@@ -2,7 +2,7 @@ name: SDD 規範要求
 description: 用於提交與規範、標準、合規性有關的要求。
 labels: ["type: compliance", "domain: sdd"]
 assignees: []
-title: "SDD: [領域] - [設計主題]"
+title: "SDD: US[序號] - [設計領域]"
 body:
   - type: markdown
     attributes:
@@ -36,12 +36,23 @@ body:
       description: |
         請詳細描述此規範的具體要求。
         必須涵蓋本 SDD 對應的各個 BDD Scenario（見「對應 BDD Scenario」欄位），說明每個 Scenario 的具體設計規格。
+        如涉及錯誤處理的情況，請使用 table 格式清晰呈現。
       placeholder: |
-        使用者上傳的個人資料必須加密儲存，並在 7 天後自動刪除。
+        ### 核心流程
         
-        對應 Scenario：
-        - US2-S1：當 BDD Issue 已批准時，系統應自動檢查批准狀態，若通過則進入 SDD 問答流程...
-        - US2-S2：當 BDD Issue 未批准時，系統應拒絕進行 SDD 問答並提示相應訊息...
+        **US2-S1：BDD 已批准時的 SDD 問答流程**
+        - 用戶在 Copilot Chat 中呼叫 `sdd.prompt.md`
+        - AI Agent 檢查對應 BDD Issue 是否被加上 `approved` label
+        - 若已批准，透過多輪問答蒐集系統設計資訊...
+        
+        ### 錯誤處理
+        
+        | 場景 | 處理方式 |
+        | --- | --- |
+        | 完整性判定失敗 | 若對話中欄位缺漏，系統提示用戶「請說明 [缺漏項目]」，不呼叫 GitHub API |
+        | API 403（權限不足） | 回傳完整 Markdown 草稿供手動建立 |
+        | API 429（速率限制） | 提示「已達 API 限制，請稍後重試」 |
+        | API 5xx（伺服器錯誤） | 提示「GitHub 暫時故障，請稍後重試」並記錄 |
     validations:
       required: true
 
