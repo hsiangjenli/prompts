@@ -71,13 +71,18 @@ outputs:
 
 ### Step 1：確認狀態
 
-1. **檢查 BDD 與 SDD 完成狀態與功能 ID**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
+1. **檢查 Sub-Issue 關係與功能 ID**：確認當前 TDD Issue 是否已被設為某個 BDD Issue 的 Sub-Issue（可能透過 SDD Issue 間接關聯），並提取「功能 ID」
+   - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
+   - 從 BDD Issue 的標題中提取「功能 ID」（例如 `[REQ-001] - 功能名稱` → 功能 ID 為 REQ-001）
+   - **重要**：後續建立的 TDD Issue 必須使用相同的功能 ID 在 Title 中（例如 `T-REQ-001-US1`），確保追蹤鏈完整
+
+2. **檢查 BDD 與 SDD 完成狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
    - 若 BDD Issue 未被批准或 SDD Issue 未建立，拒絕進行 TDD 問答，並提醒使用者「請先完成 BDD 批准與 SDD 建立後再呼叫本 Prompt」
-   - 若兩者都已完成，讀取 BDD Issue 與 SDD Issue 中的「功能 ID」欄位值（例如 REQ-001）
-   - **重要**：後續建立的 TDD Issue 必須在 Title 和「功能 ID」欄位中使用相同的功能 ID
    - 若兩者都已完成，繼續進行
-2. 閱讀使用者提供的文件（如：BDD Issue、SDD Issue、測試文件、現有測試案例等），了解業務需求與設計規範
-3. 檢查是否已有 TDD Issue。若有，請根據原本的 Issue 進行修改
+
+3. 閱讀使用者提供的文件（如：BDD Issue、SDD Issue、測試文件、現有測試案例等），了解業務需求與設計規範
+
+4. 檢查是否已有 TDD Issue。若有，請根據原本的 Issue 進行修改
 
 ### Step 2：補齊需求
 
