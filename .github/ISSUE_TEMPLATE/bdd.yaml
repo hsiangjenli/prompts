@@ -2,7 +2,7 @@ name: BDD 功能需求
 description: 用於提交基於用戶行為的功能需求
 labels: ["type: feature", "domain: bdd"]
 assignees: []
-title: "[功能ID]: [功能名稱]"
+title: "[功能ID] - [功能名稱]"
 body:
   - type: markdown
     attributes:

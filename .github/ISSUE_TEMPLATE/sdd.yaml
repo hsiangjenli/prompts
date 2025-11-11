@@ -2,7 +2,7 @@ name: SDD 規範要求
 description: 用於提交與規範、標準、合規性有關的要求。
 labels: ["type: compliance", "domain: sdd"]
 assignees: []
-title: "[功能ID]-US[序號] - [設計領域]"
+title: "S-[功能ID]-US[序號] - [設計領域]"
 body:
   - type: markdown
     attributes:
