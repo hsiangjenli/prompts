@@ -7,12 +7,13 @@ inputs:
     - 直接對話進行釐清
     - 提供 BDD Issue 編號、SDD Issue 編號（選填，若已有）、測試文件、現有測試案例等相關資訊
 outputs:
-  summary: 以測試驗證為主，整理可追蹤的測試需求摘要，準備交由 TDD 測試案例進一步展開
+  summary: 以測試驗證為主，建立完整測試矩陣與 TDD Issue，準備進入 Red-Green-Refactor 循環
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/tdd.yaml` 的 Issue 草稿（標題採 `TDD: <測試名稱>` 格式）
-    - 使用可用的 MCP / GitHub 工具直接建立 TDD Issue；若無權限才提供草稿
-    - 列出測試場景、驗證方式、測試資料需求
-    - 提供下一個建議 Prompt（預設 `tdd-testcases.prompt.md`）
+    - 建立「測試矩陣」（Test ID、Scenario ID、測試類型、優先順序、資料準備等）
+    - 直接建立 TDD Issue（`.github/ISSUE_TEMPLATE/tdd.yaml`），標題採 `TDD: <測試名稱>` 格式
+    - 更新 BDD Issue 的「相關 TDD Issue」表格，建立雙向關聯
+    - 列出測試場景、驗證方式、測試資料準備方式
+    - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）
 ---
 
 # 測試需求分析（TDD 導向）
@@ -87,27 +88,90 @@ outputs:
    - 非功能需求（效能、安全、相容性等）
 3. **重要**：TDD 階段聚焦於測試驗證策略，具體測試案例由後續 Prompt 撰寫
 
-### Step 3：整理輸出
+### Step 3：建立測試矩陣與 TDD Issue
 
-1. 立即透過可用的 MCP / GitHub API 建立 TDD Issue（標題 `TDD: <測試名稱>`；使用 `.github/ISSUE_TEMPLATE/tdd.yaml`）
-   - 在 TDD Issue 中的「對應 SDD Issue」欄位記錄此 TDD 依據的 SDD Issue 編號（例如：`#2`），作為設計規範參考
-  - 在「測試場景」與「預期結果與通過條件」欄位中的 checkbox 項目，每一行都要帶上對應的 `US<序號>-S<序號>` Scenario ID，方便回填至 BDD Issue 的「相關 TDD Issue」表格
-2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
-3. 整理測試場景、驗證方式、測試資料策略，確保符合 TDD 格式
-4. **重要**：TDD Issue 建立完成後，由 AI Agent 回到原本的 **BDD Issue**，在「相關 TDD Issue」欄位中新增此 TDD Issue 編號（例如：`#3`）
-   - **注意**：每個 User Story 對應一個 TDD Issue，BDD Issue 的「相關 TDD Issue」會是多個 Issue 編號
-5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
+#### Phase 1：建立測試矩陣
 
-#### TDD Issue 格式參考
+1. 根據 Step 2 的對話結果，為每個測試場景建立「Test ID」
+   - 格式：`T-<序號>`（例如 T-101、T-102）
+   - 對應 BDD 的 `US<序號>-S<序號>` Scenario ID
 
-請參考 `.github/ISSUE_TEMPLATE/tdd.yaml` 中的欄位定義與範例：
-- **對應 BDD Issue**：記錄此 TDD 依據的 BDD Issue 編號（格式為 `#123`），通常對應一個 User Story
-- **對應 SDD Issue**：記錄此 TDD 參考的 SDD Issue 編號（格式為 `#123`），作為設計規範參考
-- **測試場景**：列出需要測試的場景與驗證方式
-- **測試資料**：說明測試所需的資料與準備方式
-- **預期結果**：描述每個測試場景的預期通過條件
+2. 整理成「測試矩陣」表格，欄位包含：
+   - `Test ID`：測試唯一識別碼
+   - `Scenario ID (BDD-###)`：對應的 BDD Scenario
+   - `測試類型`：單元 / 整合 / E2E
+   - `優先順序`：P0 / P1 / P2（根據對話決定）
+   - `資料/Mock`：測試資料準備方式
+   - `預期結果`：測試通過條件
+   - `狀態`：單一狀態欄位追蹤測試進度（見下方狀態說明）
+   - `備註`：額外說明
+
+3. 確認測試資料、Mock 或外部依賴準備清單，標記負責人與完成時間
+
+#### Phase 2：建立 TDD Issue
+
+1. 立即透過 MCP / GitHub API 建立 **TDD Issue**
+   - 標題格式：`TDD: <測試名稱>` （例如 `TDD: US1-S1 - BDD Intake Issue 端到端測試`）
+   - 使用 `.github/ISSUE_TEMPLATE/tdd.yaml` 模板
+
+2. 在 TDD Issue 的各欄位填入：
+   - **對應 BDD Issue**：記錄此 TDD 依據的 BDD Issue 編號（例如 `#1`）
+   - **對應 SDD Issue**：記錄此 TDD 參考的 SDD Issue 編號（例如 `#3`）
+   - **測試矩陣**：貼入完整的測試矩陣表格
+   - **測試場景**：列出所有測試場景與驗證方式，每行帶上 `US<序號>-S<序號>` Scenario ID
+   - **測試資料**：說明資料準備方式、Mock 策略、環境要求
+   - **預期結果**：描述各場景的預期通過條件
+
+3. 若因權限受限無法建立 Issue，則輸出完整 Markdown 草稿供手動貼上
+
+#### 測試狀態追蹤說明
+
+建立的 TDD Issue 中，測試矩陣應包含單一「狀態」欄位，並配合 Comment 管理完整的測試生命週期：
+
+- **初始狀態**：所有測試項目初始設為 `⏳` (未開始)
+- **Red 階段**：
+  - 首次執行 `tdd-red.prompt.md` 時，為該 Test ID 建立獨立 Comment，記錄失敗訊息
+  - 將測試矩陣狀態欄位改為 `🔴 [查看](#comment-XXXX)` (測試失敗 + Comment 連結)
+  - 若重試同一 Test，則在同一 Comment 中追加新的執行紀錄與重試次數
+- **Green 階段**：
+  - 執行 `tdd-green.prompt.md` 時，在 tdd-red 建立的同一 Comment 中追加 Green 階段結果
+  - 將測試矩陣狀態欄位改為 `🟢 [查看](#comment-XXXX)` (測試通過 + 連結至同一 Comment)
+  - 記錄實作修改摘要、測試通過證據、品質檢查結果
+- **Refactor 階段**（可選）：
+  - 執行 `tdd-refactor.prompt.md` 時，在同一 Comment 中追加 Refactor 階段結果
+  - 將測試矩陣狀態欄位改為 `♻️ [查看](#comment-XXXX)` (已優化 + 連結至同一 Comment)
+  - 記錄重構改善項目、測試驗證結果、品質檢查
+
+**Comment 結構規範**（詳見 SDD Issue #5）：
+- 每個 Test ID 維持一個獨立 Comment Thread（避免 Issue 評論區混亂）
+- Comment 記錄 6 項必要資訊：Test ID、Scenario ID、測試檔路徑、各階段時戳與結果、失敗原因、重試累計、CI 連結
+- Comment 格式統一，便於追蹤完整的測試生命週期
+
+#### Phase 3：更新 BDD Issue 的相關 SDD 與 TDD Issue 欄位
+
+1. 回到對應的 **BDD Issue**
+2. 在「相關 SDD 與 TDD Issue」表格中：
+   - 找到對應的 Scenario ID 行
+   - 檢查「SDD Issue」欄位是否已填（應該在前階段由 sdd.prompt.md 建立）
+     - 若未填，請根據此 Scenario 對應的 SDD 補充編號
+     - 若已填，保持不變
+   - 將「TDD Issue」欄位從「待建立」更新為此次建立的 TDD Issue 編號（例如 `#4`）
+3. 建立雙向關聯，確保可追蹤性
+
+#### Phase 4：輸出整理
+
+1. 在輸出中附上：
+   - 建立的 TDD Issue 連結
+   - 完整的測試矩陣（供後續 `tdd-red.prompt.md` 使用）
+   - 測試資料準備清單與負責人
+   - 待補資料或阻塞清單（如有）
+   - 測試狀態追蹤說明（Red/Green/Refactor 狀態更新方式）
+
+2. 指出下一步應執行 `tdd-red.prompt.md`，並提醒攜帶測試矩陣以及新 TDD Issue 編號
+
+#### TDD Issue 內容範例
 
 ## 後續行動
 
-- 下一個預計執行的 Prompt（預設 `tdd-testcases.prompt.md`，準備撰寫具體測試案例）
+- 下一個預計執行的 Prompt：`tdd-red.prompt.md`（開始設計失敗測試）
 - 若設計或測試過程中發現需求問題，建議回到 `sdd.prompt.md` 或 `requirements.prompt.md` 更新相應 Issue
