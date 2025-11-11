@@ -10,24 +10,6 @@ body:
         ## TDD 測試計畫表單
         請填寫以下資訊，建立完整的測試矩陣與驗證策略
 
-  - type: input
-    id: bdd-issue
-    attributes:
-      label: 對應 BDD Issue
-      description: 請輸入此 TDD 對應的 BDD Issue 編號（格式為 #123）。
-      placeholder: "#123"
-    validations:
-      required: true
-
-  - type: input
-    id: sdd-issue
-    attributes:
-      label: 對應 SDD Issue
-      description: 請輸入此 TDD 參考的 SDD Issue 編號（格式為 #123），作為設計規範。
-      placeholder: "#123"
-    validations:
-      required: true
-
   - type: textarea
     id: test-matrix
     attributes:

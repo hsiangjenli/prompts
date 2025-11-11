@@ -9,15 +9,6 @@ body:
       value: |
         ## SDD 規範要求表單
         請填寫以下資訊，幫助開發團隊確保系統符合相關規範與標準。
-        > SDD 必須衍生自單一 BDD Issue，並回填對應的 BDD Scenario ID。
-  - type: input
-    id: bdd-issue
-    attributes:
-      label: 對應 BDD Issue
-      description: 請輸入此 SDD 依據的 BDD Issue 編號（格式為 `#123`）。
-      placeholder: "#123"
-    validations:
-      required: true
 
   - type: input
     id: standard
@@ -94,27 +85,3 @@ body:
       render: markdown
     validations:
       required: true
-
-  - type: textarea
-    id: related-tdd
-    attributes:
-      label: 相關 TDD Issue
-      description: |
-        列出基於此 SDD 設計而產生的 TDD Issue 編號（例如：#3, #4, #5）。TDD Issue 會參考此 SDD 的設計規範進行測試。
-      placeholder: "#3, #4, #5"
-
-  - type: textarea
-    id: reference-sdd
-    attributes:
-      label: 參考的舊 SDD Issue
-      description: |
-        若此 SDD 參考過去的設計決策或規範，請列出舊 SDD Issue 編號並標注「參考自」（例如：參考自 #2, #5）。用於追蹤設計演進歷史。
-      placeholder: "參考自 #2, #5"
-
-  - type: textarea
-    id: other-related-issues
-    attributes:
-      label: 其他相關 Issue 或任務
-      description: |
-        若此 SDD 與其他 Issue（如技術債、Bug、文件）有關，請列出編號。
-      placeholder: "#456, #789"
