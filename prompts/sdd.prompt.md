@@ -93,6 +93,7 @@ outputs:
    - 規範要求（GDPR、WCAG、ISO 等）
    - Mock 資料策略
 3. **重要**：SDD 階段聚焦於技術規範與介面設計，不涉及具體實作細節（程式語言、框架選擇等留給 TDD），並且每一個設計與驗證活動都要維持與 BDD `US<序號>-S<序號>` Scenario ID 的一對一對應。
+   - **多 Scenario 情況**：若同一個 User Story 有多個 Scenario（如 US1-S1、US1-S2、US1-S3），通常首個 SDD Issue 會詳細設計首個主要 Scenario（如 US1-S1），其他 Scenario 的測試可參考此 SDD Issue 的設計方式進行測試設計。
 
 ### Step 3：整理輸出
 
