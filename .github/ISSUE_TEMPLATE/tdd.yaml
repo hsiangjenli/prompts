@@ -1,14 +1,14 @@
 name: TDD 測試驅動
-description: 用於提交基於測試驅動開發的測試需求。
-labels: ["type: test", "domain: tdd"]
+description: 用於提交測試驅動開發的測試計畫，包含測試矩陣與場景驗證。
+labels: ["type: testing", "domain: tdd"]
 assignees: []
 title: "TDD: [測試名稱]"
 body:
   - type: markdown
     attributes:
       value: |
-        ## TDD 測試驅動表單
-        請填寫以下資訊，幫助開發團隊先寫測試，再去寫程式碼
+        ## TDD 測試計畫表單
+        請填寫以下資訊，建立完整的測試矩陣與驗證策略
 
   - type: input
     id: bdd-issue
@@ -23,55 +23,66 @@ body:
     id: sdd-issue
     attributes:
       label: 對應 SDD Issue
-      description: 請輸入此 TDD 依據的 SDD Issue 編號（格式為 #123），作為設計規範參考。
+      description: 請輸入此 TDD 參考的 SDD Issue 編號（格式為 #123），作為設計規範。
       placeholder: "#123"
     validations:
       required: true
+
+  - type: textarea
+    id: test-matrix
+    attributes:
+      label: 測試矩陣
+      description: |
+        建立測試矩陣表格，每行代表一個測試案例，含 Test ID、Scenario ID (BDD)、測試類型、優先順序、資料準備方式、預期結果等。
+        使用 checkbox (- [ ]) 來標記實現進度。
+      placeholder: |
+        | Test ID | Scenario ID (BDD) | 測試類型 | 優先順序 | 資料/Mock | 預期結果 | Red | Green | Refactor | 備註 |
+        | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+        | T-101 | US1-S1 | E2E | P0 | 真實環境 | 系統成功響應 | ⏳ | ⏳ | ⏳ | 成功路徑 |
+        | T-102 | US1-S1 | E2E | P0 | Mock 失敗 | 系統返回錯誤訊息 | ⏳ | ⏳ | ⏳ | 失敗路徑 |
+        | T-103 | US1-S1 | Unit | P1 | 單元測試資料 | 驗證邏輯正確 | ⏳ | ⏳ | ⏳ | 邊界情況 |
+        
+        **測試狀態說明**：
+        - `⏳` = 未開始 | `🔴` = Red（測試失敗） | `🟢` = Green（測試通過） | `♻️` = Refactor（已優化）
 
   - type: textarea
     id: test-scenarios
     attributes:
       label: 測試場景
       description: |
-        請列出多組測試場景，每組包括場景名稱、輸入條件、預期行為和邊界條件。使用 checkbox 語法 (- [ ]) 來標記每個場景，實現完成後打勾。
+        列出各個測試場景的詳細說明，包括場景名稱、輸入、預期結果。每項使用 checkbox (- [ ]) 標記完成進度。
       placeholder: |
-        - [ ] **場景 1: 成功註冊**
-          - 輸入: 有效的電子郵件和密碼
-          - 預期: 顯示「註冊成功」訊息
-          - 邊界條件: 密碼至少 8 字符
+        - [ ] **T-101: 成功建立 Issue**
+          - Scenario ID: US1-S1
+          - 輸入：完整表單資料
+          - 預期：Issue 建立成功，返回編號
 
-        - [ ] **場景 2: 密碼太短**
-          - 輸入: 有效的電子郵件，密碼少於 8 字符
-          - 預期: 顯示錯誤訊息「密碼太短」
-          - 邊界條件: 密碼長度檢查
-
-        - [ ] **場景 3: 無效電子郵件**
-          - 輸入: 無效格式的電子郵件
-          - 預期: 顯示錯誤訊息「電子郵件格式錯誤」
-          - 邊界條件: 電子郵件驗證規則
+        - [ ] **T-102: 欄位驗證失敗**
+          - Scenario ID: US1-S1
+          - 輸入：缺漏必填欄位
+          - 預期：系統提示補充，驗證通過後建立
 
   - type: textarea
     id: test-data
     attributes:
-      label: 測試資料
+      label: 測試資料準備
       description: |
-        請說明此 TDD 所需的測試資料策略，包括資料來源、Mock vs 真實資料、資料準備方式等。
+        說明測試資料策略、Mock 資料來源、真實資料準備方式、邊界資料等。
       placeholder: |
-        - Mock 資料來源: 使用 Jest 的 Mock fixtures
-        - 真實資料: 需要測試資料庫的測試環境
-        - 資料準備: 使用 setup.js 進行初始化
-        - 邊界資料: 空值、超大值、特殊字元等
+        - **Mock 資料**：使用 Jest Mock fixtures 模擬 API 回應
+        - **真實資料**：使用測試資料庫中的預設資料集
+        - **邊界資料**：空值、極限值、特殊字元等
+        - **資料準備**：於 setup.js 中初始化，teardown.js 中清理
 
   - type: textarea
     id: expected-results
     attributes:
       label: 預期結果與通過條件
       description: |
-        請列出每個測試場景的預期結果和通過條件，用 checkbox 語法標記實現進度。
+        定義各測試場景的通過條件，使用 checkbox (- [ ]) 標記驗收進度。
       placeholder: |
-        - [ ] 場景 1 通過條件：返回 HTTP 201 + 包含 user_id 的 JSON 回應
-        - [ ] 場景 2 通過條件：返回 HTTP 400 + 錯誤訊息「密碼長度至少 8 字符」
-        - [ ] 場景 3 通過條件：返回 HTTP 400 + 錯誤訊息「無效的電子郵件格式」
-        - [ ] 所有場景覆蓋率達 90% 以上
+        - [ ] **T-101 通過條件**：Issue 建立成功，標籤與欄位正確
+        - [ ] **T-102 通過條件**：驗證邏輯正確，提示訊息清楚
+        - [ ] **整體通過條件**：所有測試場景通過，覆蓋率 ≥ 80%
 
 
