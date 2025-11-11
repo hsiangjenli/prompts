@@ -2,7 +2,7 @@ name: TDD 測試驅動
 description: 用於提交測試驅動開發的測試計畫，包含測試矩陣與場景驗證。
 labels: ["type: testing", "domain: tdd"]
 assignees: []
-title: "TDD: [測試名稱]"
+title: "T-[功能ID]-US[序號]"
 body:
   - type: markdown
     attributes:
@@ -16,14 +16,15 @@ body:
       label: 測試矩陣
       description: |
         建立測試矩陣表格，每行代表一個測試案例，含 Test ID、Scenario ID (BDD)、測試類型、優先順序、資料準備方式、預期結果及狀態欄位。
+        **Test ID 命名格式**：`{功能ID}-T-{序號}`（例如 `REQ-001-T-101`），這樣可以確保每個功能的測試編號唯一，避免跨功能重複。
         狀態欄位初始為 `⏳`，執行對應 Prompt 時更新狀態並附上 Comment 連結。
         使用 checkbox (- [ ]) 來標記實現進度。
       placeholder: |
         | Test ID | Scenario ID (BDD) | 測試類型 | 優先順序 | 資料/Mock | 預期結果 | 狀態 | 備註 |
         | --- | --- | --- | --- | --- | --- | --- | --- |
-        | T-101 | US1-S1 | E2E | P0 | 真實環境 | 系統成功響應 | ⏳ | 成功路徑 |
-        | T-102 | US1-S1 | E2E | P0 | Mock 失敗 | 系統返回錯誤訊息 | 🔴 [查看](#comment-1234) | 失敗路徑 |
-        | T-103 | US1-S1 | Unit | P1 | 單元測試資料 | 驗證邏輯正確 | ⏳ | 邊界情況 |
+        | REQ-001-T-101 | US1-S1 | E2E | P0 | 真實環境 | 系統成功響應 | ⏳ | 成功路徑 |
+        | REQ-001-T-102 | US1-S1 | E2E | P0 | Mock 失敗 | 系統返回錯誤訊息 | 🔴 [查看](#comment-1234) | 失敗路徑 |
+        | REQ-001-T-103 | US1-S1 | Unit | P1 | 單元測試資料 | 驗證邏輯正確 | ⏳ | 邊界情況 |
         
         **測試狀態說明**：
         - `⏳` = 未開始
