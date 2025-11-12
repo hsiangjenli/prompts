@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: 先理解需求並整理成 BDD 用戶故事與 Gherkin 場景，為後續 SDD --> TDD Prompt 提供完整輸入
+description: 先理解需求並整理成 BDD 使用者故事與 Gherkin 情境，為後續 SDD --> TDD Prompt 提供完整輸入
 inputs:
   summary: 使用 Prompt 釐清使用者需求
   required:
@@ -11,7 +11,7 @@ outputs:
   include:
     - 產出可直接貼入 `.github/ISSUE_TEMPLATE/bdd.yaml` 的 Issue 草稿（標題採 `[功能ID] - [功能名稱]` 格式）
     - 使用可用的 MCP / GitHub 工具直接建立 BDD Issue；若無權限才提供草稿
-    - 列出用戶故事與 Gherkin 場景（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
+  - 列出使用者故事與 Gherkin 情境（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
     - 提供下一個建議 Prompt（預設 `sdd.prompt.md` 或 `tdd.prompt.md`；若出現技術議題，跳轉至 `tech-stack.prompt.md`）
 ---
 
@@ -19,7 +19,7 @@ outputs:
 
 ## 目的
 
-以不斷提問的方式去釐清需求，並使用 BDD 用戶故事（User Story）與 Gherkin 語法整理需求，方便後續對齊 SDD --> TDD 的實作流程
+以不斷提問的方式去釐清需求，並使用 BDD 使用者故事（User Story）與 Gherkin 語法整理需求，方便後續對齊 SDD --> TDD 的實作流程
 
 ## 提問原則
 
@@ -80,7 +80,7 @@ outputs:
 
 1. 立即透過可用的 MCP / GitHub API 建立 BDD Issue（標題 `[功能ID]: [功能名稱]`；使用 `.github/ISSUE_TEMPLATE/bdd.yaml`）
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
-3. 整理用戶故事與 Gherkin 場景，確保符合 BDD 語法
+3. 整理使用者故事與 Gherkin 場景，確保符合 BDD 語法
 4. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
 #### BDD Issue 格式參考
@@ -88,7 +88,7 @@ outputs:
 請參考 `.github/ISSUE_TEMPLATE/bdd.yaml` 中的欄位定義與範例：
 - **標題格式**：`[功能ID] - [功能名稱]`（例如 `REQ-001 - 使用者登入`）
 - **功能 ID**：唯一識別碼（例如：REQ-001）
-- **用戶故事與行為測試**：包含用戶故事（作為...，我想要...，以便...）和 Gherkin 場景（Given-When-Then）
+- **使用者故事與行為測試**：包含使用者故事（作為...，我想要...，以便...）和 Gherkin 場景（Given-When-Then）
 - **相關 SDD 與 TDD Issue**：使用表格列出每個 `US<序號>-S<序號>` Scenario 對應的 SDD/TDD Issue 編號或「待建立」，確保場景與後續工作保持一對一追蹤
 
 ## 後續行動

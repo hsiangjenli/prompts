@@ -77,7 +77,7 @@ outputs:
    - **重要**：後續建立的 TDD Issue 必須使用相同的功能 ID 在 Title 中（例如 `T-REQ-001-US1`），確保追蹤鏈完整
 
 2. **檢查 BDD 與 SDD 完成狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
-   - 若 BDD Issue 未被批准或 SDD Issue 未建立，拒絕進行 TDD 問答，並提醒使用者「請先完成 BDD 批准與 SDD 建立後再呼叫本 Prompt」
+  - 若 BDD Issue 未被核准或 SDD Issue 未建立，拒絕進行 TDD 問答，並提醒使用者「請先完成 BDD 核准與 SDD 建立後再呼叫本 Prompt」
    - 若兩者都已完成，繼續進行
 
 3. 閱讀使用者提供的文件（如：BDD Issue、SDD Issue、測試文件、現有測試案例等），了解業務需求與設計規範

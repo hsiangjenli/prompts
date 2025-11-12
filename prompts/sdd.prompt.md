@@ -25,7 +25,7 @@ outputs:
 
 ## 前置條件
 
-- **重要**：對應的 BDD Issue 必須已被加上 `approved` label。若 BDD Issue 尚未批准，請拒絕進行 SDD 問答，並建議使用者先完成 BDD 審核
+- **重要**：對應的 BDD Issue 必須已被加上 `approved` label。若 BDD Issue 尚未核准，請拒絕進行 SDD 問答，並建議使用者先完成 BDD 審核
 - 建議先完成 BDD Issue（或至少有明確的使用者故事），若無則透過問答補齊
 - 若需求有變動，應先回到 BDD 更新後再進行 SDD
 
@@ -80,9 +80,9 @@ outputs:
    - 從 BDD Issue 的標題中提取「功能 ID」（例如 `[REQ-001] - 功能名稱` → 功能 ID 為 REQ-001）
    - **重要**：後續建立的 SDD Issue 必須使用相同的功能 ID 在 Title 中（例如 `S-REQ-001-US1 - 設計領域`），確保追蹤鏈完整
 
-2. **檢查 BDD Issue 批准狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label
-   - 若 BDD Issue 未被批准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
-   - 若 BDD Issue 已被批准，繼續進行
+2. **檢查 BDD Issue 核准狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label
+  - 若 BDD Issue 未被核准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
+  - 若 BDD Issue 已被核准，繼續進行
 
 3. 閱讀使用者提供的文件（如：BDD Issue、設計文件、架構圖、現有契約等），了解業務需求與技術脈絡
 
