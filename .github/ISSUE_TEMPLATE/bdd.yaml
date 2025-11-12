@@ -1,5 +1,5 @@
 name: BDD 功能需求
-description: 用於提交基於用戶行為的功能需求
+description: 用於提交基於使用者行為的功能需求
 labels: ["type: feature", "domain: bdd"]
 assignees: []
 title: "[功能ID] - [功能名稱]"
@@ -24,16 +24,16 @@ body:
     attributes:
       label: User Story 與行為測試
       description: |
-        請描述一個或多個 User Story（使用「作為...，我想要...，以便...」的格式），每個 User Story 後面接著對應的 Gherkin 語法（Given, When, Then）行為場景。
+        請描述一個或多個 User Story（使用「作為...，我想要...，以便...」的格式），每個 User Story 後面接著對應的 Gherkin 語法（Given, When, Then）行為情境。
         - 每個 User Story 請以 `User Story US<序號>` 開頭（例如：`User Story US1`）。
         - 每個 Scenario 請在標題前加上 `Scenario US<序號>-S<序號>` 以建立唯一對應（例如：`Scenario US1-S1: 成功註冊`）。
-        - 可以有多個 User Story 和場景，並確保 ID 與下方的「相關 SDD 與 TDD Issue」對照表一致。
+        - 可以有多個 User Story 和情境，並確保 ID 與下方的「相關 SDD 與 TDD Issue」對照表一致。
       placeholder: |
         **User Story US1：**
         作為[角色]，我想要[行為]，以便[好處]。
 
-        **行為測試場景 US1-S1：**
-        Feature: 註冊帳戶
+        **行為測試情境 US1-S1：**
+        Feature: 註冊帳號
 
         Scenario US1-S1: 成功註冊
           Given 我在註冊頁面
@@ -43,7 +43,7 @@ body:
         **User Story US2：**
         作為[角色]，我想要[行為]，以便[好處]。
 
-        **行為測試場景 US2-S1：**
+        **行為測試情境 US2-S1：**
         Feature: 登入系統
 
         Scenario US2-S1: 成功登入

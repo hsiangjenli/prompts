@@ -31,16 +31,16 @@ body:
       placeholder: |
         ### 核心流程
         
-        **US2-S1：BDD 已批准時的 SDD 問答流程**
-        - 用戶在 Copilot Chat 中呼叫 `sdd.prompt.md`
+        **US2-S1：BDD 已核准時的 SDD 問答流程**
+        - 使用者在 Copilot Chat 中呼叫 `sdd.prompt.md`
         - AI Agent 檢查對應 BDD Issue 是否被加上 `approved` label
-        - 若已批准，透過多輪問答蒐集系統設計資訊...
+        - 若已核准，透過多輪問答蒐集系統設計資訊...
         
         ### 錯誤處理
         
         | 場景 | 處理方式 |
         | --- | --- |
-        | 完整性判定失敗 | 若對話中欄位缺漏，系統提示用戶「請說明 [缺漏項目]」，不呼叫 GitHub API |
+        | 完整性判定失敗 | 若對話中欄位缺漏，系統提示使用者「請說明 [缺漏項目]」，不呼叫 GitHub API |
         | API 403（權限不足） | 回傳完整 Markdown 草稿供手動建立 |
         | API 429（速率限制） | 提示「已達 API 限制，請稍後重試」 |
         | API 5xx（伺服器錯誤） | 提示「GitHub 暫時故障，請稍後重試」並記錄 |
@@ -81,7 +81,7 @@ body:
         | BDD Scenario ID | 行為摘要 | 備註 |
         | --- | --- | --- |
         | US2-S1 | 開發人員呼叫 SDD Prompt 進行問答並建立 SDD Issue | 已確認 |
-        | US2-S2 | BDD 未批准時拒絕進行 SDD 問答 | 已確認 |
+        | US2-S2 | BDD 未核准時拒絕進行 SDD 問答 | 已確認 |
       render: markdown
     validations:
       required: true
