@@ -1,12 +1,12 @@
 # GitHub Prompt 導覽
 
-本目錄存放專案使用的各類 Prompt 與 Issue Template，協助 AI Agent 與開發人員在不同階段協作完成需求 → 設計 → 測試 → 實作的完整工作流。所有成果以 **GitHub Issue** 為主要交付載體，文件與程式碼 PR 為輔助。
+本目錄存放專案使用的各類 Prompt 與 Issue Template，協助 AI Agent 與開發人員在不同階段協作完成需求 → 規格 → 測試 → 實作的完整工作流。所有成果以 **GitHub Issue** 為主要交付載體，文件與程式碼 PR 為輔助。
 
-## 核心工作流概覽
+## 流程
 
 ```mermaid
 flowchart TD
-    A["需求收集"] --> B["BDD Issue 建立/更新"]
+    A["需求蒐集"] --> B["BDD Issue 建立/更新"]
   B --> C{"BDD 核准?"}
     C -->|否| B
     C -->|是| D["SDD 提問與建立<br/>Sub-Issue 形式"]
@@ -30,7 +30,7 @@ flowchart TD
 **核心機制**：
 - 每個功能有唯一的「功能 ID」（例如 `REQ-001`）
 - BDD Issue 為根源，SDD/TDD Issue 透過 Sub-Issue 自動關聯
-- 所有層級共享相同的功能 ID，便於自動追蹤
+- 所有層級共享相同的功能 ID，方便日後自動追蹤
 
 ---
 
@@ -65,7 +65,7 @@ flowchart TD
 
 | Prompt 檔名 | 觸發條件 | 主要任務 | 產出物 |
 | --- | --- | --- | --- |
-| `requirements.prompt.md` | 新需求或需求分析階段 | 與開發人員討論需求，收集背景資訊 | 準備進入 BDD 的需求摘要 |
+| `requirements.prompt.md` | 新需求或需求分析階段 | 討論需求，蒐集背景資訊 | 結構化需求 |
 | `bdd-change.prompt.md` | 需求在 BDD/SDD/TDD 中途發現變更 | 評估變更影響範圍，逐層更新 BDD/SDD/TDD Issue | 完整的變更鏈與確認表 |
 | `sdd.prompt.md` | BDD Issue 已核准，需進行設計提問 | 透過提問釐清系統設計、介面契約、資料模型 | 建立 SDD Issue（自動成為 BDD 的 Sub-Issue） |
 | `tdd-requirements.prompt.md` | BDD 已核准 + SDD 已建立，開始測試規劃 | 透過提問定義測試場景、資料準備、優先順序 | 建立 TDD Issue（自動成為 SDD 的 Sub-Issue） + 測試矩陣 |
@@ -75,54 +75,53 @@ flowchart TD
 
 ---
 
-## 典型工作流示例
+## 工作流程範例
 
 ### 場景 1：從零開始建立新功能（US1-S1）
 
-1. **開發人員**在 Copilot Chat 提供需求描述
-2. **AI Agent**（執行 `requirements.prompt.md`）提問並記錄背景
-3. **AI Agent**（執行 `bdd.prompt.md`）建立 BDD Issue #1
+1. **開發人員**在 Copilot Chat 執行 `requirements.prompt.md` 並提供需求描述
+2. **AI Agent** 提問、記錄、建立 BDD Issue
    - 標題：`[REQ-001] - 使用者登入`
    - 內容：User Story + Gherkin Scenario（US1-S1、US1-S2 等）
    - 初始標籤：`type: feature, domain: bdd`（無 `approved` label）
 
-4. **PM/Reviewer** 審核並加上 `approved` label
-5. **開發人員**在 Copilot Chat 呼叫 `sdd.prompt.md`
-6. **AI Agent** 建立 SDD Issue #2
+3. **PM/Reviewer** 審核並加上 `approved` label
+4. **開發人員**在 Copilot Chat 執行 `sdd.prompt.md`
+5. **AI Agent** 提問、記錄、建立 SDD Issue
   - 標題：`S-REQ-001-US1 - API 介面設計`
-   - 自動設為 BDD Issue #1 的 Sub-Issue
+   - 自動設為 BDD Issue 的 Sub-Issue
    - 內容：API 端點、請求/回應格式、驗證規則
 
-7. **開發人員**在 Copilot Chat 呼叫 `tdd-requirements.prompt.md`
-8. **AI Agent** 建立 TDD Issue #3
+6. **開發人員**在 Copilot Chat 執行 `tdd-requirements.prompt.md`
+7. **AI Agent** 提問、記錄、建立 TDD Issue
    - 標題：`T-REQ-001-US1`
-   - 自動設為 SDD Issue #2 的 Sub-Issue
+   - 自動設為 SDD Issue 的 Sub-Issue
    - 內容：測試矩陣，包含 T-REQ-001-T-101、T-REQ-001-T-102 等 Test ID
 
-9. **開發人員**執行 `tdd-red.prompt.md`
+8. **開發人員**執行 `tdd-red.prompt.md`
    - AI Agent 建立 Test Comment 記錄失敗（🔴）
    - 測試矩陣中 T-REQ-001-T-101 狀態改為 `🔴 [查看](#comment-123)`
 
-10. **開發人員**執行 `tdd-green.prompt.md`
+9.  **開發人員**執行 `tdd-green.prompt.md`
     - AI Agent 在同一 Comment 追加綠燈結果（🟢）
     - 測試矩陣中狀態改為 `🟢 [查看](#comment-123)`
 
-11. **開發人員**（可選）執行 `tdd-refactor.prompt.md`
+10. **開發人員**（可選）執行 `tdd-refactor.prompt.md`
     - AI Agent 在同一 Comment 追加優化結果（♻️）
     - 測試矩陣中狀態改為 `♻️ [查看](#comment-123)`
 
-12. **開發人員**提交 PR，自動連結到 TDD Issue
+11. **開發人員**提交 PR，自動連結到 TDD Issue
 
 ### 場景 2：中途發現需求變更（US5-S2：SDD 層發現設計缺漏）
 
 1. **開發人員**在 SDD 階段工作中發現設計缺漏
-2. **開發人員**在 Copilot Chat 呼叫 `bdd-change.prompt.md`
+2. **開發人員**在 Copilot Chat 執行 `bdd-change.prompt.md`
 3. **AI Agent** 評估影響範圍：
    - 判定：變更來自 SDD 層 → 需先回溯 BDD 驗證
    - 更新順序：BDD → SDD（→ 可能的 TDD）
 
 4. **AI Agent** 逐層確認更新：
-   - 先更新 BDD Issue #1，補充或修改 Scenario
+   - 先更新 BDD Issue，補充或修改 Scenario
    - **要求確認**：「BDD Issue #1 的變更是否正確？」
    - 待確認後，再更新 SDD Issue #2
    - **要求確認**：「SDD Issue #2 的變更是否正確？」
@@ -146,14 +145,14 @@ flowchart TD
 
 ## 重要機制說明
 
-### 1. 功能 ID 追蹤（Per Issue #1）
+### 1. 功能 ID 追蹤
 
 - **BDD Issue** 在建立時自動指派唯一功能 ID（例如 REQ-001、REQ-002...）
 - **SDD/TDD Issue** 透過 **Sub-Issue 關聯**自動繼承功能 ID
 - **MCP 工具**可透過 `mcp_github_issue_read` 查詢 Parent Issue 的標題並提取功能 ID
 - **優勢**：無需在 SDD/TDD 模板中手動填寫功能 ID，避免手動修改導致的追蹤錯誤
 
-### 2. Sub-Issue 自動關聯（Per Issue #1）
+### 2. Sub-Issue 自動關聯
 
 **建立流程**：
 - 執行 `sdd.prompt.md` 建立 SDD Issue 時，**自動**透過 `mcp_github_sub_issue_write` 將其設為 BDD Issue 的 Sub-Issue
@@ -256,57 +255,14 @@ TDD Issue 存在？
 
 ---
 
-## Prompt 使用時機速查表
-
-| Prompt 檔名 | 前置條件 | 何時用 | 期望輸出 |
-| --- | --- | --- | --- |
-| `requirements.prompt.md` | 無特殊要求 | 新需求尚無明確描述 | 需求摘要、背景資訊 |
-| `bdd-change.prompt.md` | 至少有 1 個 BDD Issue | 中途發現需要變更 | 評估報告 + 逐層更新確認 |
-| `sdd.prompt.md` | BDD Issue 已核准 | 準備設計系統介面 | SDD Issue（Sub-Issue）+ 設計規格 |
-| `tdd-requirements.prompt.md` | BDD 已核准 + SDD 已建立 | 準備測試規劃 | TDD Issue（Sub-Issue）+ 測試矩陣 |
-| `tdd-red.prompt.md` | TDD Issue 已建立 | 開始撰寫失敗測試 | 失敗測試程式碼 + Comment 記錄 |
-| `tdd-green.prompt.md` | Red 測試已建立 | 實作程式碼使測試通過 | 實作程式碼 + Comment 追加記錄 |
-| `tdd-refactor.prompt.md` | Green 測試已通過 | 優化程式碼品質（可選） | 重構程式碼 + Comment 追加記錄 |
-
----
-
-## 相關文件位置
-
-- **Prompt 檔案**：`./prompts/` 目錄
-- **Issue Template**：`./.github/ISSUE_TEMPLATE/` 目錄
-- **Comment Markdown 格式規格**：`./.github/ISSUE_TEMPLATE/comment-template.md`
-- **BDD Issue 建立範例**：GitHub Issue #1
-- **SDD Issue 建立範例**：GitHub Issue #2、#3（查看 Issue #1 的 Sub-Issues）
-- **TDD Issue 建立範例**：GitHub Issue #4（查看 Issue #2 的 Sub-Issues）
-
----
-
 ## 快速開始
 
-1. **第一次使用？** 查看 Issue #1 了解完整流程
+1. **第一次使用？** 查看 [Issue #1](https://github.com/hsiangjenli/prompts/issues/1) 了解完整流程
 2. **需要建立新功能？** 呼叫 `requirements.prompt.md` 或直接建立 BDD Issue
 3. **BDD 已核准？** 呼叫 `sdd.prompt.md` 進行設計提問
 4. **設計已完成？** 呼叫 `tdd-requirements.prompt.md` 開始測試規劃
 5. **開始實作？** 按順序呼叫 `tdd-red.prompt.md` → `tdd-green.prompt.md` → `tdd-refactor.prompt.md`
 6. **中途需要改需求？** 呼叫 `bdd-change.prompt.md` 進行評估和同步更新
-
----
-
-## 常見問題
-
-### Q: 為什麼不用手動填寫 SDD/TDD 的功能 ID？
-**A**: 因為 SDD/TDD 是 BDD 的 Sub-Issue，AI Agent 可透過 MCP 工具自動從 Parent Issue（BDD）的標題提取功能 ID，避免手動修改導致的追蹤錯誤。
-
-### Q: 如果 Red 測試失敗多次怎麼辦？
-**A**: Comment 會記錄每次重試，同時在 TDD Issue 中標記測試狀態。若遇到系統性問題，呼叫 `bdd-change.prompt.md` 評估是否需要回溯 BDD/SDD。
-
-### Q: 中途發現需求有誤怎麼處理？
-**A**: 呼叫 `bdd-change.prompt.md`，AI Agent 會自動評估影響範圍，然後**逐層確認**更新 BDD → SDD → TDD 各層 Issue。每層都需要人工確認，確保無誤。
-
-### Q: Sub-Issue 層級關係在哪裡看？
-**A**: 在 GitHub Issue 頁面的「Links」或「Related」區塊可以看到。建立 SDD/TDD Issue 時自動建立，無需手動操作。
-
----
 
 ## 技術棧與工具
 
@@ -314,16 +270,6 @@ TDD Issue 存在？
 - **自動化工具**：MCP（Model Context Protocol）
 - **MCP 操作**：`mcp_github_issue_read`、`mcp_github_issue_write`、`mcp_github_sub_issue_write`
 - **儲存位置**：所有 Prompt 自動複製到 `$HOME/Library/Application Support/Code/User/prompts/`
-
----
-
-## 維護與更新
-
-- 新增 Prompt 或 Issue Template 時，請更新本 README
-- 各 Prompt 末尾會建議下一步操作，形成清晰的導覽
-- 若 Issue 範本或流程有重大變更，請更新 Issue #1 的 User Story 以保持同步
-
----
 
 ## 更新測試 Prompt 至 GitHub Copilot
 
