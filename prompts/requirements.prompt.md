@@ -78,7 +78,7 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. 立即透過可用的 MCP / GitHub API 建立 BDD Issue（標題 `[功能ID]: [功能名稱]`；使用 `.github/ISSUE_TEMPLATE/bdd.yaml`）
+1. 立即透過可用的 MCP / GitHub API 建立 BDD Issue（標題 `[功能ID] - [功能名稱]`；使用 `.github/ISSUE_TEMPLATE/bdd.yaml`）
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 3. 整理使用者故事與 Gherkin 場景，確保符合 BDD 語法
 4. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
