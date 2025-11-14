@@ -40,33 +40,6 @@ flowchart TD
 
 ---
 
-## BDD、SDD、TDD 是什麼？
-
-### BDD（Behavior-Driven Development，行為驅動開發）
-- **目的**：將需求轉換為可驗收的使用者行為場景
-- **核心關注**：使用者能觀察到的行為、驗收標準、Gherkin 情境
-- **產出物**：BDD Issue（標題格式 `[REQ-001] - 功能名稱`）
-  - User Story：「作為... 我想要... 以便...」
-  - Gherkin Scenario：`Given-When-Then` 格式
-  - 相關 SDD/TDD Issue 對照表
-
-- **目的**：將 BDD 的行為轉化為具體的系統設計、介面契約、資料模型
-- **前置條件**：BDD Issue 已被加上 `approved` label
-- **核心關注**：API 介面、資料欄位、驗證規則、Mock 資料策略、規格合規性
-- **產出物**：SDD Issue（標題格式 `S-REQ-001-US1 - 設計領域`）
-  - 作為 BDD Issue 的 Sub-Issue 自動出現
-  - 包含設計規格、資料模型、驗證方式、Mock 資料準備
-
-- **目的**：透過測試驅動程式碼實作，確保品質與可回歸性
-- **前置條件**：BDD Issue 已核准 + SDD Issue 已建立
-- **核心關注**：測試矩陣、Red-Green-Refactor 循環、測試生命週期追蹤
-- **產出物**：TDD Issue（標題格式 `T-REQ-001-US1`）
-  - 作為 SDD Issue 的 Sub-Issue 自動出現
-  - 包含測試矩陣、各 Test ID 的狀態追蹤（⏳ → 🔴 → 🟢 → ♻️）
-  - 每個 Test 有獨立 Comment 記錄 Red/Green/Refactor 的完整生命週期
-
----
-
 ## Prompt 對照表
 
 | Prompt 檔名 | 觸發條件 | 主要任務 | 產出物 |
