@@ -10,7 +10,7 @@ outputs:
   summary: 以測試驗證為主，建立完整測試矩陣與 TDD Issue，準備進入 Red-Green-Refactor 循環
   include:
     - 建立「測試矩陣」（Test ID、Scenario ID、測試類型、優先順序、資料準備等），其中 Test ID 格式為 `{功能ID}-T-{序號}`（例如 `REQ-001-T-101`）
-    - 直接建立 TDD Issue（`.github/ISSUE_TEMPLATE/tdd.yaml`），標題採 `T-<功能ID>-US<序號>` 格式
+    - 直接建立 TDD Issue（`.github/ISSUE_TEMPLATE/tdd.yaml`），標題採 `T-[功能ID]-US[序號]` 格式
     - 更新 BDD Issue 的「相關 TDD Issue」表格，建立雙向關聯
     - 列出測試場景、驗證方式、測試資料準備方式
     - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）
@@ -119,7 +119,7 @@ outputs:
 #### Phase 2：建立 TDD Issue
 
 1. 立即透過 MCP / GitHub API 建立 **TDD Issue**
-   - 標題格式：`T-<功能ID>-US<序號>` （例如 `T-REQ-001-US1`）
+   - 標題格式：`T-[功能ID]-US[序號]` （例如 `T-REQ-001-US1`）
    - 使用 `.github/ISSUE_TEMPLATE/tdd.yaml` 模板
 
 2. 在 TDD Issue 的各欄位填入：
