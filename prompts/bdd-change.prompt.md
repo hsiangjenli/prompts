@@ -149,7 +149,7 @@ outputs:
    - 建議下一步 Prompt（例如：若 BDD 調整，需執行 `requirements.prompt.md` 再回到此流程）
 
 2. **提醒同步通知**
-   - 在各相關 Issue 的 Comment 中互相引用，確保团队成員可追蹤完整脈絡
+   - 在各相關 Issue 的 Comment 中互相引用，確保團隊成員可追蹤完整脈絡
 
 ## 注意事項
 
