@@ -34,7 +34,7 @@ flowchart TD
 ```
 
 **核心機制**：
-- 每個功能有唯一的「功能 ID」（例如 `REQ-001`）
+- 每個需求有唯一的 BDD ID（例如 `REQ-001`）
 - BDD Issue 為根源，SDD/TDD Issue 透過 Sub-Issue 自動關聯
 - 所有層級共享相同的功能 ID，方便日後自動追蹤
 
@@ -45,7 +45,7 @@ flowchart TD
 | Prompt 檔名 | 觸發條件 | 主要任務 | 產出物 |
 | --- | --- | --- | --- |
 | `requirements.prompt.md` | 新需求或需求分析階段 | 討論需求，蒐集背景資訊 | 結構化需求 |
-| `bdd-change.prompt.md` | 需求在 BDD/SDD/TDD 中途發現變更 | 評估變更影響範圍，逐層更新 BDD/SDD/TDD Issue | 完整的變更鏈與確認表 |
+| `requirements-change.prompt.md` | 需求在 BDD/SDD/TDD 中途發現變更 | 評估變更影響範圍，逐層更新 BDD/SDD/TDD Issue | 完整的變更鏈與確認表 |
 | `sdd.prompt.md` | BDD Issue 已核准，需進行設計提問 | 透過提問釐清系統設計、介面契約、資料模型 | 建立 SDD Issue（自動成為 BDD 的 Sub-Issue） |
 | `tdd-requirements.prompt.md` | BDD 已核准 + SDD 已建立，開始測試規劃 | 透過提問定義測試場景、資料準備、優先順序 | 建立 TDD Issue（自動成為 SDD 的 Sub-Issue） + 測試矩陣 |
 | `tdd-red.prompt.md` | TDD Issue 已建立，開始 Red 階段 | 撰寫一定會失敗的測試，記錄失敗詳情 | 測試矩陣中對應 Test 狀態改為 🔴 + 獨立 Comment 記錄失敗 |
@@ -94,7 +94,7 @@ flowchart TD
 ### 場景 2：中途發現需求變更（US5-S2：SDD 層發現設計缺漏）
 
 1. **開發人員**在 SDD 階段工作中發現設計缺漏
-2. **開發人員**在 Copilot Chat 執行 `bdd-change.prompt.md`
+2. **開發人員**在 Copilot Chat 執行 `requirements-change.prompt.md`
 3. **AI Agent** 評估影響範圍：
    - 判定：變更來自 SDD 層 → 需先回溯 BDD 驗證
    - 更新順序：BDD → SDD（→ 可能的 TDD）
@@ -116,7 +116,7 @@ flowchart TD
 
 | Issue 類型 | 標題格式 | 範例 |
 | --- | --- | --- |
-| BDD Issue | `[功能ID] - [功能名稱]` | `[REQ-001] - 使用者登入` |
+| BDD Issue | `[功能ID] - [功能名稱]` | `REQ-001 - 使用者登入` |
 | SDD Issue | `S-[功能ID]-US[序號] - [設計領域]` | `S-REQ-001-US1 - API 介面設計` |
 | TDD Issue | `T-[功能ID]-US[序號]` | `T-REQ-001-US1` |
 
@@ -161,7 +161,7 @@ flowchart TD
 - 重試累計次數
 - CI/CD 執行連結
 
-### 4. 需求變更管理（Per Issue #1 US5 + `bdd-change.prompt.md`）
+### 4. 需求變更管理（Per Issue #1 US5 + `requirements-change.prompt.md`）
 
 **何時觸發**：開發過程中的任一階段（BDD/SDD/TDD）發現需要修改需求
 
@@ -209,7 +209,7 @@ BDD Issue 存在？
   └─ 是、已核准 → 進行下一步
 
 中途發現需要變更？
-  ├─ 是 → 呼叫 bdd-change.prompt.md
+  ├─ 是 → 呼叫 requirements-change.prompt.md
   │      逐層評估 + 更新 + 人工確認
   │
   └─ 否 → 繼續
@@ -241,7 +241,7 @@ TDD Issue 存在？
 3. **BDD 已核准？** 呼叫 `sdd.prompt.md` 進行設計提問
 4. **設計已完成？** 呼叫 `tdd-requirements.prompt.md` 開始測試規劃
 5. **開始實作？** 按順序呼叫 `tdd-red.prompt.md` → `tdd-green.prompt.md` → `tdd-refactor.prompt.md`
-6. **中途需要改需求？** 呼叫 `bdd-change.prompt.md` 進行評估和同步更新
+6. **中途需要改需求？** 呼叫 `requirements-change.prompt.md` 進行評估和同步更新
 
 ## 技術棧與工具
 
