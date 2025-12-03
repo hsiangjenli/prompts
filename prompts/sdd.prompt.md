@@ -1,151 +1,175 @@
 ---
 mode: agent
-description: 透過問答方式釐清系統設計與契約需求，將 BDD 使用者故事轉為具體的技術規範與介面設計
+description: 將單一 BDD 任務轉換為技術規格，一次只處理一個任務
 inputs:
-  summary: 使用 Prompt 透過互動式問答釐清系統設計
+  summary: 針對單一 BDD Issue 進行技術設計
   required:
-    - 直接對話進行釐清
-    - 提供 BDD Issue 編號（必填）、設計文件、架構圖、現有契約文件等相關資訊
-  optional:
-    - 參考舊 SDD Issue 編號（例如：#2, #5），作為設計參考（不會修改舊 Issue，僅供查閱）
+    - BDD Issue 編號（必填）
+    - 任務 ID（例如 TASK-001）
 outputs:
-  summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
+  summary: 產出該任務的技術規格與「下一步指令」
   include:
-    - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `S-[功能ID]-US[序號] - [設計領域]` 格式，例如 `S-REQ-001-US1 - BDD Intake Issue 建立`、`S-REQ-002-US2 - SDD 問答流程`）
-    - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
-    - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
-    - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
+    - 單一 SDD Issue（對應該 BDD Issue）
+    - 明確的「下一步指令」
 ---
 
-# 系統設計分析（SDD 導向）
+# 系統設計（SDD 導向）
+
+## 核心原則
+
+> **一次只為一個 BDD Issue 建立對應的 SDD，並明確告訴使用者「下一步做什麼」**
 
 ## 目的
 
-以不斷提問的方式釐清系統設計需求，並將 BDD 使用者故事轉換為具體的技術規範、介面契約與資料模型，方便後續 TDD 實作。
+將 BDD 的使用者故事轉換為具體的技術規格，但保持「單一任務」的專注度。
 
-## 前置條件
+---
 
-- **重要**：對應的 BDD Issue 必須已被加上 `approved` label。若 BDD Issue 尚未核准，請拒絕進行 SDD 問答，並建議使用者先完成 BDD 審核
-- 建議先完成 BDD Issue（或至少有明確的使用者故事），若無則透過問答補齊
-- 若需求有變動，應先回到 BDD 更新後再進行 SDD
+## Phase 1：讀取 BDD Issue
 
-## 提問原則
+### Step 1.1：取得 BDD 內容
 
-- 採「單一問題 + 選項 + 自訂輸入」格式，便於使用者快速回覆
-- 每題最多 4 個選項，預留「⑤ 其他／自行輸入」
+1. 透過 MCP 讀取指定的 BDD Issue
+2. 確認 BDD Issue 已被 approve（有 `approved` label）
+3. 提取關鍵資訊：
+   - 任務 ID
+   - 使用者故事
+   - 驗收條件（Gherkin Scenarios）
 
-### 常用問題題庫
+### Step 1.2：檢查前置條件
 
 ```
-- 這個功能涉及哪些子系統或元件？
-  ① API 介面  ② 資料庫  ③ 前端 UI  ④ 其他（請說明）
-  
-- 這個功能需要什麼類型的介面契約？
-  ① REST API  ② GraphQL  ③ 事件訊息（Event）  ④ 其他（請說明）
-  
-- API 的輸入參數有哪些？
-  （請列出參數名稱、類型、是否必填、驗證規則）
-  
-- API 的回應格式是什麼？
-  （請說明成功回應的欄位與格式，包含狀態碼）
-  
-- 如果 API 呼叫失敗，應該回傳什麼錯誤訊息？
-  ① 標準錯誤碼 + 訊息  ② 自訂錯誤格式  ③ 沿用現有格式  ④ 其他（請說明）
-  
-- 這個功能需要哪些資料欄位？
-  （請列出欄位名稱、類型、長度限制、預設值）
-  
-- 資料需要什麼驗證規則？
-  ① 格式驗證（Email、電話等）  ② 範圍驗證（最小/最大值）  ③ 必填檢查  ④ 其他（請說明）
-  
-- 是否需要 Mock 資料進行測試？
-  ① 需要（請說明 Mock 資料情境）  ② 不需要  ③ 使用現有測試資料  ④ 其他（請說明）
-  
-- 這個設計需要符合哪些規範或標準？
-  ① GDPR  ② WCAG 2.1  ③ ISO 27001  ④ 其他（請說明）
-  
-- 受影響的元件或功能有哪些？
-  （例如：使用者註冊、會員資料儲存、權限檢查）
-  
-- 如何驗證這個設計是否正確實作？
-  ① 自動化測試  ② 手動檢查  ③ 第三方驗證工具  ④ 其他（請說明）
+⚠️ 若 BDD Issue 未被 approve，停止並提醒：
+「請先將 BDD Issue #XX 加上 `approved` label 後再繼續」
 ```
 
-## 操作流程
+---
 
-### Step 1：確認狀態
+## Phase 2：技術設計（精簡版）
 
-1. **檢查 Sub-Issue 關係與功能 ID**：確認當前 SDD Issue 是否已被設為某個 BDD Issue 的 Sub-Issue，並提取「功能 ID」
-   - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
-   - 從 BDD Issue 的標題中提取「功能 ID」（例如 `[REQ-001] - 功能名稱` → 功能 ID 為 REQ-001）
-   - **重要**：後續建立的 SDD Issue 必須使用相同的功能 ID 在 Title 中（例如 `S-REQ-001-US1 - 設計領域`），確保追蹤鏈完整
+### Step 2.1：快速技術提問
 
-2. **檢查 BDD Issue 核准狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label
-  - 若 BDD Issue 未被核准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
-  - 若 BDD Issue 已被核准，繼續進行
+只問**必要**的技術問題（最多 3-5 題）：
 
-3. 閱讀使用者提供的文件（如：BDD Issue、設計文件、架構圖、現有契約等），了解業務需求與技術脈絡
+```
+① 這個功能的主要技術介面是什麼？
+   A) REST API
+   B) GraphQL
+   C) 事件驅動 (Event)
+   D) 函數呼叫 (Library)
 
-4. **參考舊 SDD Issue**（選填）：若使用者提供過去建立的 SDD Issue 編號作為參考（例如：#2, #5），讀取這些 SDD Issue 的內容以了解過去的設計決策
-   - **重要**：僅作為參考，**不修改舊的 SDD Issue**（用於追蹤歷史）
-   - 新的 SDD Issue 會是全新建立，編號遞增
+② 需要持久化資料嗎？
+   A) 是，需要資料庫
+   B) 否，僅記憶體/快取
+   C) 使用現有資料表
 
-5. 檢查是否已有對應此 BDD 的 SDD Issue。若無，則建立新的
+③ 有外部依賴嗎？
+   A) 無
+   B) 有，第三方 API
+   C) 有，內部微服務
+```
 
-### Step 2：補齊設計
+### Step 2.2：產出精簡 SDD
 
-1. 發現設計的不一致、缺漏或技術可行性問題
-2. 藉由不斷提問，釐清系統設計需求：
-   - 介面契約（API、事件、資料格式）
-   - 資料模型（欄位、類型、驗證規則）
-   - 規範要求（GDPR、WCAG、ISO 等）
-   - Mock 資料策略
-3. **重要**：SDD 階段聚焦於技術規範與介面設計，不涉及具體實作細節（程式語言、框架選擇等留給 TDD），並且每一個設計與驗證活動都要維持與 BDD `US<序號>-S<序號>` Scenario ID 的一對一對應。
-   - **多 Scenario 情況**：若同一個 User Story 有多個 Scenario（如 US1-S1、US1-S2、US1-S3），通常首個 SDD Issue 會詳細設計首個主要 Scenario（如 US1-S1），其他 Scenario 的測試可參考此 SDD Issue 的設計方式進行測試設計。
+**SDD Issue 格式（精簡版）：**
 
-### Step 3：整理輸出
+```markdown
+## Issue 標題
+`SDD-TASK-001 - [技術設計主題]`
 
-1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `[功能ID]-US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
-   - **重要**：每個 BDD User Story 建立對應的 SDD Issue（編號遞增），即使參考了舊的 SDD Issue
+## 對應 BDD Issue
+- BDD Issue: #XX
+- 任務 ID: TASK-001
 
-2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
+## 技術規格
 
-3. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式，尤其在「對應 BDD Scenario」表格中使用與 BDD 完全一致的 `US<序號>-S<序號>` ID 與行為描述
+### 介面設計
+- 類型：[REST API / GraphQL / Event / Function]
+- 端點/方法：[具體描述]
 
-4. **重要 - Sub-Issue 關聯**：SDD Issue 建立完成後，由 AI Agent 透過 MCP 建立 Sub-Issue 關係：
-   - 使用 `mcp_github_sub_issue_write` 工具
-   - 參數設定：
-     ```
-     method: add
-     owner: hsiangjenli
-     repo: prompts
-     issue_number: <對應的 BDD Issue 編號>
-     sub_issue_id: <新建立的 SDD Issue ID (node_id)>
-     ```
-   - 確認關聯成功：BDD Issue 的 GitHub 介面上會自動顯示此 SDD Issue 為 Sub-Issue
+### 輸入/輸出
+| 欄位 | 類型 | 必填 | 說明 |
+|------|------|------|------|
+| ... | ... | ... | ... |
 
-5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
+### 錯誤處理
+| 錯誤碼 | 情境 | 回應 |
+|--------|------|------|
+| ... | ... | ... |
 
-#### SDD Issue 格式參考
+### 驗證方式
+- [ ] 單元測試覆蓋主要邏輯
+- [ ] 整合測試覆蓋 API 端點
 
-請參考 `.github/ISSUE_TEMPLATE/sdd.yaml` 中的欄位定義與範例：
-- **標題格式**：`S-[功能ID]-US[序號] - [設計領域]`（例如：`S-REQ-001-US1 - BDD Intake Issue 建立`、`S-REQ-002-US2 - SDD 問答流程`）
-  - `S-` 前綴表示此 Issue 為 SDD（System Design Document）
-  - `[功能ID]` 必須與 BDD Issue 相同（例如 REQ-001）
-  - `US[序號]` 對應 BDD Issue 中的 User Story 編號（例如 US1、US2）
-  - `[設計領域]` 說明此 SDD 涵蓋的技術設計主題
-- **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
-- **要求描述**：詳細描述此設計的具體要求
-- **對應 BDD Scenario**：列出本 SDD 涵蓋的所有 BDD Scenario ID
-````
-- **受影響的元件或功能**：列出會影響到的元件或功能
-- **驗證方式**：說明如何驗證此設計是否已實現
-- **對應 BDD Scenario**：列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要
-- **相關 TDD Issue**：列出基於此 SDD 設計而產生的 TDD Issue 編號（由 TDD Prompt 建立時填寫）
-- **參考的舊 SDD Issue**：若參考過去的設計決策，請列出舊 SDD Issue 編號（例如：`參考自 #2, #5`）
-- **其他相關 Issue**：列出相關的技術債、Bug、文件等
+## 完成定義
+- [ ] 介面設計已確認
+- [ ] 測試策略已定義
+```
 
-## 後續行動
+---
 
-- 下一個預計執行的 Prompt（預設 `tdd-requirements.prompt.md`，準備進入測試階段）
-- 若設計過程中發現需求問題，建議回到 `requirements.prompt.md` 更新 BDD Issue
+## Phase 3：建立 SDD Issue 與關聯
+
+### Step 3.1：建立 Issue
+
+1. 透過 MCP / GitHub API 建立 SDD Issue
+2. 將 SDD Issue 設為 BDD Issue 的 Sub-Issue
+
+### Step 3.2：更新任務狀態
+
+更新任務清單中該任務的狀態：
+
+| 任務 ID | BDD Issue | SDD Issue | 狀態 |
+|---------|-----------|-----------|------|
+| TASK-001 | #XX | #YY | 🚀 SDD 完成，進入 TDD |
+
+---
+
+## Phase 4：明確的下一步指令
+
+### 輸出模板
+
+每次回覆結尾**必須**包含：
+
+```markdown
+---
+
+## ✅ 本次完成
+- 建立了 SDD Issue: `SDD-TASK-001 - [主題]` (#Issue編號)
+- 已關聯至 BDD Issue #XX
+
+## 🎯 下一步
+執行 `@workspace /tdd-requirements.prompt.md` 並提供：
+- BDD Issue 編號：#XX
+- SDD Issue 編號：#YY
+- 任務 ID：TASK-001
+
+## 📋 目前任務狀態
+| 任務 ID | BDD | SDD | TDD | 狀態 |
+|---------|-----|-----|-----|------|
+| TASK-001 | #XX | #YY | - | 🚀 準備進入 TDD |
+| TASK-002 | - | - | - | ⏸️ 等待 TASK-001 |
+
+---
+```
+
+---
+
+## 禁止事項
+
+❌ **禁止**一次處理多個 BDD Issue
+❌ **禁止**在沒有 approved BDD Issue 的情況下開始設計
+❌ **禁止**沒有明確「下一步」就結束回覆
+❌ **禁止**產出過於複雜的技術規格（保持精簡）
+
+---
+
+## 狀態追蹤
+
+完成 SDD 後，任務狀態應更新為：
+
+| 階段 | 狀態符號 | 說明 |
+|------|----------|------|
+| BDD 完成 | ✅ BDD | BDD Issue 已建立並 approve |
+| SDD 進行中 | 🚀 SDD | 正在進行技術設計 |
+| SDD 完成 | ✅ SDD | SDD Issue 已建立 |
