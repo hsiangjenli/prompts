@@ -13,6 +13,7 @@ outputs:
     - 直接建立 TDD Issue（`.github/ISSUE_TEMPLATE/tdd.yaml`），標題採 `T-[功能ID]-US[序號]` 格式
     - 更新 BDD Issue 的「相關 TDD Issue」表格，建立雙向關聯
     - 列出測試場景、驗證方式、測試資料準備方式
+    - 依測試矩陣製作「測試執行任務板」，標註 `Test ID`、Scenario ID、`優先順序 (P0/P1/P2)`、預計執行階段（Red/Green/Refactor）與依賴
     - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）
 ---
 
@@ -20,7 +21,7 @@ outputs:
 
 ## 目的
 
-以不斷提問的方式釐清測試需求，並將 SDD 技術規範轉換為具體的測試計畫、驗證策略與測試資料，方便後續 TDD 實作。
+以不斷提問的方式釐清測試需求，並將 SDD 技術規範轉換為具體的測試計畫、驗證策略與測試資料，方便後續 TDD 實作，同時輸出可直接執行的測試任務板以安排 Red/Green/Refactor 流程。
 
 ## 前置條件
 
@@ -195,11 +196,19 @@ outputs:
    - ☐ 完整層級結構已建立：BDD Issue → SDD Issue → TDD Issue
    - ☐ 三個 Issue 之間的 Sub-Issue 鏈接已建立並可相互追蹤
 
+#### Phase 4.5：測試執行任務板
+
+1. 從測試矩陣擷取 `P0` 與 `P1` 測試項目，建立任務表格（建議欄位：`Task ID`、`Test ID`、`Scenario ID`、`Red/Green/Refactor 階段`、`優先順序`、`前置條件`、`協作角色`、`預計完成時程`），Task ID 格式建議：`T-{功能ID}-US{序號}-TASK-{流水號}`
+2. 任務內容需對應到實際操作（例如：「撰寫 REQ-001-T-101 Red 測試」或「配置 Mock Service 以供 Green 驗證」），避免僅描述產出文件
+3. 針對需要跨團隊支援的任務，明確標註依賴對象與準備物，降低後續溝通成本
+4. 將任務板隨輸出一併附上，並在 TDD Issue 內同步列出，確保後續 `tdd-red.prompt.md` 能直接引用 `Task ID`
+
 #### TDD Issue 內容範例
 
 ## 後續行動
 
 - **在執行 `tdd-red.prompt.md` 前，務必確認 Phase 3 的 Sub-Issue 關聯已建立完成**
+- 根據測試執行任務板的 `P0` 項目，先完成需要的 Red 測試與前置作業
 - 下一個預計執行的 Prompt：`tdd-red.prompt.md`（開始設計失敗測試）
 - 若設計或測試過程中發現需求問題，建議回到 `sdd.prompt.md` 或 `requirements.prompt.md` 更新相應 Issue
 - **重要提醒**：BDD ↔ SDD ↔ TDD 三層 Sub-Issue 關聯建立後，才能確保整個工作流的可追蹤性

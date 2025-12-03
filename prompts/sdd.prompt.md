@@ -14,6 +14,7 @@ outputs:
     - 產出可直接貼入 `.github/ISSUE_TEMPLATE/sdd.yaml` 的 Issue 草稿（標題採 `S-[功能ID]-US[序號] - [設計領域]` 格式，例如 `S-REQ-001-US1 - BDD Intake Issue 建立`、`S-REQ-002-US2 - SDD 問答流程`）
     - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
     - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
+    - 依照 BDD Scenario 製作「設計任務板」，列出可立即執行的技術任務（至少 3 項），標註 `Scenario ID`、`優先順序 (P0/P1/P2)` 與需要的前置輸入
     - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
 ---
 
@@ -21,7 +22,7 @@ outputs:
 
 ## 目的
 
-以不斷提問的方式釐清系統設計需求，並將 BDD 使用者故事轉換為具體的技術規範、介面契約與資料模型，方便後續 TDD 實作。
+以不斷提問的方式釐清系統設計需求，並將 BDD 使用者故事轉換為具體的技術規範、介面契約與資料模型，方便後續 TDD 實作，同時產出帶有優先序的設計任務板以指引工程啟動。
 
 ## 前置條件
 
@@ -105,7 +106,7 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `[功能ID]-US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
+1. 立即透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題 `S-[功能ID]-US[序號] - [設計領域]`；使用 `.github/ISSUE_TEMPLATE/sdd.yaml`）
    - **重要**：每個 BDD User Story 建立對應的 SDD Issue（編號遞增），即使參考了舊的 SDD Issue
 
 2. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
@@ -125,6 +126,15 @@ outputs:
    - 確認關聯成功：BDD Issue 的 GitHub 介面上會自動顯示此 SDD Issue 為 Sub-Issue
 
 5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
+
+### Step 3.5：設計任務板
+
+1. 以 SDD Issue 涵蓋的 Scenario 為列（`US<序號>-S<序號>`），製作任務表格（建議欄位：`Task ID`、`Scenario`、`內容`、`優先順序`、`前置輸入`、`預計輸出`），Task ID 格式建議：`S-{功能ID}-US{序號}-TASK-{流水號}`
+2. 任務描述需具體到可啟動的工程活動，例如「產出 API 合約草稿」或「定義資料庫欄位驗證規則」
+3. 為每個任務標註 `P0/P1/P2`，其中 `P0` 任務應在進入 TDD 前完成，並附註所需資源、共用文件或依賴
+4. 指定每個任務的預期交付物與同步對象，確保跨團隊協作時不遺漏資訊
+
+> 完整任務板需與輸出的 SDD Issue 連動，確保後續 TDD Prompt 能直接引用任務編號與 Scenario。
 
 #### SDD Issue 格式參考
 
@@ -147,5 +157,6 @@ outputs:
 
 ## 後續行動
 
+- 依設計任務板中的 `P0` 任務安排優先投入的工程工作，並更新 Sub-Issue 關聯狀態
 - 下一個預計執行的 Prompt（預設 `tdd-requirements.prompt.md`，準備進入測試階段）
 - 若設計過程中發現需求問題，建議回到 `requirements.prompt.md` 更新 BDD Issue

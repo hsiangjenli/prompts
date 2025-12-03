@@ -55,6 +55,23 @@ body:
       required: true
 
   - type: textarea
+    id: sdd-bridge-plan
+    attributes:
+      label: SDD 對接路線圖
+      description: |
+        根據上述 User Story 與 Scenario，整理預計交給 `sdd.prompt.md` 的焦點清單。
+        - 每列需對應一個 `US<序號>-S<序號>` Scenario。
+        - 請提供建議的 SDD Issue 標題（`S-[功能ID]-US[序號] - [設計領域]`）。
+        - 說明此 Scenario 要聚焦的設計議題、所需參與角色、前置輸入，以及建議的下一步 Prompt。
+      placeholder: |
+        | Scenario ID | 建議 SDD Issue 標題 | 設計焦點 | 優先順序 | 所需參與角色 | 前置輸入 | 建議下一步 Prompt |
+        | --- | --- | --- | --- | --- | --- | --- |
+        | US1-S1 | S-REQ-001-US1 - API 契約整理 | REST 介面欄位、錯誤碼 | P0 | 後端工程師、Domain SME | 現有 API 文件、錯誤碼清單 | sdd.prompt.md |
+        | US1-S2 | S-REQ-001-US1 - 權限驗證規範 | 權限矩陣、例外處理 | P1 | 安全專家、後端工程師 | 角色權限圖、審計需求 | sdd.prompt.md |
+    validations:
+      required: true
+
+  - type: textarea
     id: related-issues
     attributes:
       label: 相關 SDD 與 TDD Issue

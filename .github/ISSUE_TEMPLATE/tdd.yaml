@@ -74,4 +74,22 @@ body:
         - [ ] **T-102 通過條件**：驗證邏輯正確，提示訊息清楚
         - [ ] **整體通過條件**：所有測試場景通過，覆蓋率 ≥ 80%
 
+  - type: textarea
+    id: execution-task-board
+    attributes:
+      label: 測試執行任務板
+      description: |
+        依測試矩陣擷取 `P0`、`P1` 項目，規劃 Red / Green / Refactor 的執行任務。
+        - Task ID 命名格式：`T-{功能ID}-US{序號}-TASK-{流水號}`。
+        - 每項任務需包含對應的 Test ID、場景、預計階段、前置條件與協作對象。
+        - 用於指引用於 `tdd-red` / `tdd-green` / `tdd-refactor` 的工作順序。
+      placeholder: |
+        | Task ID | Test ID | Scenario ID | 階段 (R/G/Rf) | 優先順序 | 前置條件 | 協作角色 | 預計完成時程 |
+        | --- | --- | --- | --- | --- | --- | --- | --- |
+        | T-REQ-001-US1-TASK-01 | REQ-001-T-101 | US1-S1 | R | P0 | Mock Service 部署完成 | 後端工程師 | 2025-12-10 |
+        | T-REQ-001-US1-TASK-02 | REQ-001-T-101 | US1-S1 | G | P0 | Task-01 已完成 | 後端工程師 | 2025-12-11 |
+        | T-REQ-001-US1-TASK-03 | REQ-001-T-101 | US1-S1 | Rf | P1 | 測試保持綠燈 | 後端工程師、QA | 2025-12-12 |
+    validations:
+      required: true
+
 

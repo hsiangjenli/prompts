@@ -85,3 +85,20 @@ body:
       render: markdown
     validations:
       required: true
+
+  - type: textarea
+    id: design-task-board
+    attributes:
+      label: 設計任務板
+      description: |
+        列出依 Scenario 規劃的設計任務，協助後續工程快速啟動。
+        - Task ID 命名格式：`S-{功能ID}-US{序號}-TASK-{流水號}`。
+        - 描述需明確到可啟動的工程活動，並標示優先順序 (`P0/P1/P2`)。
+        - 指出所需的前置輸入、預期輸出與需協作的角色。
+      placeholder: |
+        | Task ID | Scenario | 內容 | 優先順序 | 前置輸入 | 預計輸出 | 協作角色 |
+        | --- | --- | --- | --- | --- | --- | --- |
+        | S-REQ-001-US1-TASK-01 | US1-S1 | 撰寫 API 合約草稿（路由、欄位、錯誤碼） | P0 | 現有系統 API 文件 | OpenAPI 草稿 | 後端工程師、Domain SME |
+        | S-REQ-001-US1-TASK-02 | US1-S1 | 梳理權限邊界條件與驗證規則 | P1 | 角色權限矩陣 | 權限驗證表 | 安全專家 |
+    validations:
+      required: true

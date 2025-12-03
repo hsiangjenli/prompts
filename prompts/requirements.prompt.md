@@ -11,7 +11,8 @@ outputs:
   include:
     - 產出可直接貼入 `.github/ISSUE_TEMPLATE/bdd.yaml` 的 Issue 草稿（標題採 `[功能ID] - [功能名稱]` 格式）
     - 使用可用的 MCP / GitHub 工具直接建立 BDD Issue；若無權限才提供草稿
-  - 列出使用者故事與 Gherkin 情境（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
+    - 列出使用者故事與 Gherkin 情境（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
+    - 依據使用者故事建立「SDD 對接路線圖」，整理每個 `US<序號>-S<序號>` 在進入 SDD 時需要聚焦的設計領域、預估的 SDD Issue 標題與優先順序
     - 提供下一個建議 Prompt（預設 `sdd.prompt.md` 或 `tdd.prompt.md`；若出現技術議題，跳轉至 `tech-stack.prompt.md`）
 ---
 
@@ -19,7 +20,7 @@ outputs:
 
 ## 目的
 
-以不斷提問的方式去釐清需求，並使用 BDD 使用者故事（User Story）與 Gherkin 語法整理需求，方便後續對齊 SDD --> TDD 的實作流程
+以不斷提問的方式去釐清需求，並使用 BDD 使用者故事（User Story）與 Gherkin 語法整理需求，方便後續對齊 SDD --> TDD 的實作流程，同時輸出與 SDD 對接的優先序路線圖協助快速啟動
 
 ## 提問原則
 
@@ -83,6 +84,15 @@ outputs:
 3. 整理使用者故事與 Gherkin 場景，確保符合 BDD 語法
 4. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
 
+### Step 3.5：SDD 對接路線圖
+
+1. 將所有使用者故事依 `US<序號>` 彙整，為每個故事挑選最關鍵且應優先進入 SDD 的 Scenario（例如 `US1-S1`）。
+2. 針對每個 Scenario，推導預計要建立的 SDD Issue 標題（格式：`S-[功能ID]-US[序號] - [設計領域]`），並簡述預期要討論的設計議題（例如：介面契約、資料模型、錯誤處理）。
+3. 標註每個 Scenario 進入 SDD 的優先順序（`P0/P1/P2`），說明優先的理由與預期需要到場的角色（例如：Domain SME、後端工程師、DevOps）。
+4. 為每個 Scenario 準備 SDD 問答前的必要輸入（既有規格、外部文件、待確認問題），讓後續執行 `sdd.prompt.md` 時可直接引用。
+
+> 產出時以表格呈現對接資訊（欄位建議：`Scenario ID`、`建議 SDD Issue 標題`、`設計焦點`、`優先順序`、`所需參與角色`、`前置輸入`、`建議下一步 Prompt`），確保 SDD Prompt 能無縫接續。
+
 #### BDD Issue 格式參考
 
 請參考 `.github/ISSUE_TEMPLATE/bdd.yaml` 中的欄位定義與範例：
@@ -93,4 +103,5 @@ outputs:
 
 ## 後續行動
 
+- 依 SDD 對接路線圖中的 `P0` 項目安排下一步作業，並同步更新關聯 Issue
 - 下一個預計執行的 Prompt（預設 `sdd.prompt.md` 或 `tdd.prompt.md`，視需求類型決定）
