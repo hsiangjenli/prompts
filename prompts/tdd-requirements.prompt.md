@@ -9,11 +9,11 @@ inputs:
 outputs:
   summary: 以測試驗證為主，建立完整測試矩陣與 TDD Issue，準備進入 Red-Green-Refactor 循環
   include:
-    - 建立「測試矩陣」（Test ID、Scenario ID、測試類型、優先順序、資料準備等），其中 Test ID 格式為 `{功能ID}-T-{序號}`（例如 `REQ-001-T-101`）
-    - 直接建立符合目前 TDD Issue 模板格式的 Issue，標題格式由 MCP 提供的當前 BDD 規範決定
+    - 依據最新的 TDD Issue 模板說明（透過 `markdown-template` 取得）建立測試矩陣與相關欄位
+    - 直接建立符合目前 TDD Issue 模板格式的 Issue，標題與內容以模板為準
     - 更新 BDD Issue 的「相關 TDD Issue」表格，建立雙向關聯
     - 列出測試場景、驗證方式、測試資料準備方式
-    - 依測試矩陣製作「測試執行任務板」，標註 `Test ID`、Scenario ID、`優先順序 (P0/P1/P2)`、預計執行階段（Red/Green/Refactor）與依賴
+    - 依測試矩陣製作「測試執行任務板」，欄位與命名規則遵循模板或專案現行準則
     - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）
 ---
 
@@ -74,8 +74,8 @@ outputs:
 
 1. **檢查 Sub-Issue 關係與功能 ID**：確認當前 TDD Issue 是否已被設為某個 BDD Issue 的 Sub-Issue（可能透過 SDD Issue 間接關聯），並提取「功能 ID」
    - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
-   - 從 BDD Issue 的標題中提取「功能 ID」（例如 `[REQ-001] - 功能名稱` → 功能 ID 為 REQ-001）
-   - **重要**：後續建立的 TDD Issue 必須使用相同的功能 ID 在 Title 中（標題格式由 MCP 提供的當前 BDD 規範決定），確保追蹤鏈完整
+  - 依目前模板提供的說明取得功能 ID 或其他必要識別碼，並確保以相同方式套用於後續的 TDD Issue
+  - **重要**：後續建立的 TDD Issue 必須遵循模板要求的命名與欄位規範，以維持追蹤鏈完整
 
 2. **檢查 BDD 與 SDD 完成狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
   - 若 BDD Issue 未被核准或 SDD Issue 未建立，拒絕進行 TDD 問答，並提醒使用者「請先完成 BDD 核准與 SDD 建立後再呼叫本 Prompt」
@@ -100,42 +100,24 @@ outputs:
 
 #### Phase 1：建立測試矩陣
 
-1. 根據 Step 2 的對話結果與 BDD Issue 中的功能 ID，為每個測試場景建立「Test ID」
-   - 格式：`{功能ID}-T-{序號}`（例如 REQ-001-T-101、REQ-001-T-102）
-   - 這樣可以確保每個功能的測試編號唯一，避免跨功能重複
-  - 對應 BDD 的 Scenario ID（格式以當前 BDD 規範為準，透過 MCP 取得）
-
-2. 整理成「測試矩陣」表格，欄位包含：
-   - `Test ID`：測試唯一識別碼（格式：`{功能ID}-T-{序號}`）
-   - `Scenario ID (BDD-###)`：對應的 BDD Scenario
-   - `測試類型`：單元 / 整合 / E2E
-   - `優先順序`：P0 / P1 / P2（根據對話決定）
-   - `資料/Mock`：測試資料準備方式
-   - `預期結果`：測試通過條件
-   - `狀態`：單一狀態欄位追蹤測試進度（見下方狀態說明）
-   - `備註`：額外說明
-
-3. 確認測試資料、Mock 或外部依賴準備清單，標記負責人與完成時間
+1. 根據 Step 2 的對話結果與 BDD Issue 中取得的功能 ID（或模板要求的其他識別資訊），為每個測試場景建立測試項目。命名方式、欄位內容與欄位順序以 `markdown-template` 回傳的 TDD Issue 模板說明為準。
+2. 蒐集並填入模板要求的欄位，例如對應的 Scenario ID、測試類型、優先順序或資料準備方式；如模板新增欄位，應回溯詢問使用者以補齊資訊。
+3. 若模板定義了狀態欄位或標記方式，請依其規範初始化（例如未開始狀態或預設符號），避免在 Prompt 中自訂符號。
+4. 確認測試資料、Mock 或外部依賴準備清單，標記負責人與完成時間；如模板提供對應欄位則填入，否則可在備註中補充。
 
 #### Phase 2：建立 TDD Issue
 
 1. **使用 MCP 工具格式化 Issue 內容**：
    - 呼叫 `markdown-template` 工具，從內部挑選合適的 TDD 模板
-   - 傳入收集到的欄位值（測試矩陣、測試場景、測試資料、預期結果、測試執行任務板等）
-   - 工具會根據模板自動生成格式化的 Issue 內容
-   - 確保所有必填欄位都已正確填入
+  - 傳入收集到的欄位值（測試矩陣、測試場景、測試資料、預期結果、測試執行任務板等），並以模板指定的欄位名稱與結構為準
+  - 若模板出現新欄位或調整命名，應立即依照模板更新資料，避免沿用舊結構
 
 2. 透過 MCP / GitHub API 建立 **TDD Issue**
    - 使用 `mcp_github_issue_write` 工具建立 Issue，body 內容為步驟 1 格式化後的結果
 
 3. 在 TDD Issue 的各欄位填入：
-   - **功能 ID**：填入與 BDD Issue 相同的功能 ID（例如 `REQ-001`）
-   - **對應 BDD Issue**：記錄此 TDD 依據的 BDD Issue 編號（例如 `#1`）
-   - **對應 SDD Issue**：記錄此 TDD 參考的 SDD Issue 編號（例如 `#3`）
-   - **測試矩陣**：貼入完整的測試矩陣表格，Test ID 使用 `{功能ID}-T-{序號}` 格式
-  - **測試場景**：列出所有測試場景與驗證方式，每行帶上 BDD Scenario ID（格式以當前 BDD 規範為準，透過 MCP 取得）
-   - **測試資料**：說明資料準備方式、Mock 策略、環境要求
-   - **預期結果**：描述各場景的預期通過條件
+  - 依最新模板提供的欄位名稱與填寫說明輸入資料（例如功能 ID、對應的 BDD/SDD Issue、測試矩陣、測試資料、預期結果等）。
+  - 若模板要求特定格式或命名（包含 Test ID、Scenario ID 呈現方式），應以模板為準；如發現與既有規範不同，需主動告知使用者並更新資料。
 
 4. 若因權限受限無法建立 Issue，則輸出完整 Markdown 草稿供手動貼上
 
@@ -143,19 +125,18 @@ outputs:
 
 建立的 TDD Issue 中，測試矩陣應包含單一「狀態」欄位，並配合 Comment 管理完整的測試生命週期：
 
-- **初始狀態**：所有測試項目初始設為 `⏳` (未開始)
+- **初始狀態**：依模板定義的預設值初始化（例如特定文字或符號）。
 - **Red 階段**：
-  - 首次執行 `tdd-red.prompt.md` 時，為該 Test ID（例如 REQ-001-T-101）建立獨立 Comment，記錄失敗訊息
-  - 將測試矩陣狀態欄位改為 `🔴 [查看](#comment-XXXX)` (測試失敗 + Comment 連結)
+  - 首次執行 `tdd-red.prompt.md` 時，為該 Test ID 建立獨立 Comment，記錄失敗訊息
+  - 依模板或專案慣例更新狀態欄位（例如改為失敗符號並加入 Comment 連結）
   - 若重試同一 Test，則在同一 Comment 中追加新的執行紀錄與重試次數
 - **Green 階段**：
   - 執行 `tdd-green.prompt.md` 時，在 tdd-red 建立的同一 Comment 中追加 Green 階段結果
-  - 將測試矩陣狀態欄位改為 `🟢 [查看](#comment-XXXX)` (測試通過 + 連結至同一 Comment)
+  - 將狀態欄位更新為通過狀態，並保留 Comment 連結
   - 記錄實作修改摘要、測試通過證據、品質檢查結果
 - **Refactor 階段**（可選）：
   - 執行 `tdd-refactor.prompt.md` 時，在同一 Comment 中追加 Refactor 階段結果
-  - 將測試矩陣狀態欄位改為 `♻️ [查看](#comment-XXXX)` (已優化 + 連結至同一 Comment)
-  - 記錄重構改善項目、測試驗證結果、品質檢查
+  - 將狀態欄位更新為重構完成狀態，並記錄重構改善項目、測試驗證結果、品質檢查
 
 **Comment 結構規範**（詳見 SDD Issue #5）：
 - 每個 Test ID 維持一個獨立 Comment Thread（避免 Issue 評論區混亂）
@@ -203,12 +184,10 @@ outputs:
 
 #### Phase 4.5：測試執行任務板
 
-1. 從測試矩陣擷取 `P0` 與 `P1` 測試項目，建立任務表格（建議欄位：`Task ID`、`Test ID`、`Scenario ID`、`Red/Green/Refactor 階段`、`優先順序`、`前置條件`、`協作角色`、`預計完成時程`），Task ID 格式建議：`T-{功能ID}-{BDD Scenario ID}-TASK-{流水號}`（Scenario ID 依當前 BDD 規範，透過 MCP 取得）
-2. 任務內容需對應到實際操作（例如：「撰寫 REQ-001-T-101 Red 測試」或「配置 Mock Service 以供 Green 驗證」），避免僅描述產出文件
-3. 針對需要跨團隊支援的任務，明確標註依賴對象與準備物，降低後續溝通成本
-4. 將任務板隨輸出一併附上，並在 TDD Issue 內同步列出，確保後續 `tdd-red.prompt.md` 能直接引用 `Task ID`
-
-#### TDD Issue 內容範例
+1. 從測試矩陣擷取 `P0` 與 `P1` 測試項目，建立任務表格（建議欄位：`Task ID`、`Test ID`、`Scenario ID`、`Red/Green/Refactor 階段`、`優先順序`、`前置條件`、`協作角色`、`預計完成時程`）。任務命名與欄位內容應以模板或專案既有準則為準。
+2. 任務內容需對應到實際操作（例如撰寫對應的 Red 測試或配置必要的 Mock Service），避免僅描述產出文件。
+3. 針對需要跨團隊支援的任務，明確標註依賴對象與準備物，降低後續溝通成本。
+4. 將任務板隨輸出一併附上，並在 TDD Issue 內同步列出，確保後續 `tdd-red.prompt.md` 能直接引用 `Task ID`。
 
 ## 後續行動
 

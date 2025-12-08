@@ -9,11 +9,8 @@ inputs:
 outputs:
   summary: 以使用者情境為主，整理可追蹤的需求摘要，準備交由 SDD/TDD 進一步展開（非技術實作細節）
   include:
-    - 產出符合目前 BDD Issue 模板格式的草稿（標題採 `[功能ID] - [功能名稱]` 格式）
-    - 使用可用的 MCP / GitHub 工具直接建立 BDD Issue；若無權限才提供草稿
+    - 依據最新的 BDD Issue 模板說明（透過 `markdown-template` 取得）生成草稿或直接建立 Issue
     - 列出使用者故事與 Gherkin 情境（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
-    - 依據使用者故事建立「SDD 對接路線圖」，整理每個 Scenario（Scenario ID 格式依當前 BDD 規範，透過 MCP 取得）在進入 SDD 時需要聚焦的設計領域、預估的 SDD Issue 標題與優先順序
-    - 提供下一個建議 Prompt（預設 `sdd.prompt.md` 或 `tdd.prompt.md`；若出現技術議題，跳轉至 `tech-stack.prompt.md`）
 ---
 
 # 需求分析（BDD 導向）
@@ -59,32 +56,21 @@ outputs:
 2. 藉由不斷提問，釐清使用者的需求
 3. **重要**：BDD 階段僅聚焦於使用者行為與業務需求，不應包含任何技術細節（API、資料模型、架構設計等）
 
-### Step 2.5：分配功能 ID
+### Step 2.5：確認模板需求
 
-**重要**：每個 BDD Issue 都必須被指派一個唯一的功能 ID，以便後續 SDD 和 TDD 進行追蹤。
+**重要**：所有欄位與命名規則都以最新的 BDD Issue 模板說明為準，避免在 Prompt 中複製舊格式。
 
-1. **功能 ID 命名規範**：
-   - 格式：`REQ-{序號}`（例如：`REQ-001`、`REQ-002`、`REQ-003`...）
-   - 序號依據項目建立順序遞增
-   - 功能 ID 在整個專案中全局唯一，不可重複
-
-2. **避免重複的策略**：
-   - 檢查已有的 BDD Issue，確認功能 ID 序號
-   - 新 Issue 使用下一個未使用的序號
-   - 若已刪除某個功能（例如 REQ-005），其序號不再使用（空缺不填補）
-
-3. **填入 BDD Issue**：
-   - 在建立 BDD Issue 時，務必填入「功能 ID」欄位
-   - Title 格式：`[功能ID] - [功能名稱]`（例如 `REQ-001 - 使用者登入`）
+1. 呼叫 `markdown-template` 取得目前的 BDD Issue 模板與其欄位說明。
+2. 根據模板要求蒐集必要的欄位資訊（例如功能 ID、優先順序等）。
+3. 若模板要求使用功能 ID 或其他識別碼，請先以 `mcp_github_issue_read` 查詢現有 Issue，確保新識別碼仍然唯一，並遵循模板給出的命名規則。
 
 ### Step 3：整理輸出
 
 1. 整理使用者故事與 Gherkin 場景，確保符合 BDD 語法
 2. **使用 MCP 工具格式化 Issue 內容**：
-   - 呼叫 `markdown-template` 工具，從內部挑選合適的 BDD 模板
-   - 傳入收集到的欄位值（功能 ID、User Story、Gherkin 場景、SDD 對接路線圖等）
-   - 工具會根據模板自動生成格式化的 Issue 內容
-   - 確保所有必填欄位都已正確填入
+  - 呼叫 `markdown-template` 工具，從內部挑選合適的 BDD 模板
+  - 傳入收集到的欄位值，並以模板提供的欄位名稱與格式為準
+  - 若模板提示有新的欄位或命名規則，應立即回收資訊並重新詢問使用者補齊資料
 3. 使用 `mcp_github_issue_write` 工具建立 Issue，body 內容為步驟 2 格式化後的結果
 4. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
 5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
@@ -97,14 +83,6 @@ outputs:
 4. 為每個 Scenario 準備 SDD 問答前的必要輸入（既有規格、外部文件、待確認問題），讓後續執行 `sdd.prompt.md` 時可直接引用。
 
 > 產出時以表格呈現對接資訊（欄位建議：`Scenario ID`、`建議 SDD Issue 標題`、`設計焦點`、`優先順序`、`所需參與角色`、`前置輸入`、`建議下一步 Prompt`），確保 SDD Prompt 能無縫接續。
-
-#### BDD Issue 格式參考
-
-請參考目前 BDD Issue 模板的欄位定義與範例：
-- **標題格式**：`[功能ID] - [功能名稱]`（例如 `REQ-001 - 使用者登入`）
-- **功能 ID**：唯一識別碼（例如：REQ-001）
-- **使用者故事與行為測試**：包含使用者故事（作為...，我想要...，以便...）和 Gherkin 場景（Given-When-Then）
-- **相關 SDD 與 TDD Issue**：使用表格列出每個 Scenario（Scenario ID 格式依當前 BDD 規範，透過 MCP 取得）對應的 SDD/TDD Issue 編號或「待建立」，確保場景與後續工作保持一對一追蹤
 
 ## 後續行動
 

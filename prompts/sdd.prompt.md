@@ -11,8 +11,7 @@ inputs:
 outputs:
   summary: 以技術規範為主，整理可追蹤的系統設計摘要，準備交由 TDD 進一步展開
   include:
-    - 產出符合目前 SDD Issue 模板格式的草稿（標題格式由 MCP 提供的當前 BDD 規範決定，例如 `S-[功能ID]-[User Story ID] - [設計領域]`）
-    - 使用可用的 MCP / GitHub 工具直接建立 SDD Issue；若無權限才提供草稿
+    - 依據最新的 SDD Issue 模板說明（透過 `markdown-template` 取得）生成草稿或直接建立 Issue
     - 列出契約設計、介面規範、資料模型（包含驗證方式與 Mock 策略）
     - 依照 BDD Scenario 製作「設計任務板」，列出可立即執行的技術任務（至少 3 項），標註 `Scenario ID`、`優先順序 (P0/P1/P2)` 與需要的前置輸入
     - 提供下一個建議 Prompt（預設 `tdd-requirements.prompt.md`）
@@ -77,9 +76,8 @@ outputs:
 ### Step 1：確認狀態
 
 1. **檢查 Sub-Issue 關係與功能 ID**：確認當前 SDD Issue 是否已被設為某個 BDD Issue 的 Sub-Issue，並提取「功能 ID」
-   - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
-   - 從 BDD Issue 的標題中提取「功能 ID」（例如 `[REQ-001] - 功能名稱` → 功能 ID 為 REQ-001）
-   - **重要**：後續建立的 SDD Issue 必須使用相同的功能 ID 在 Title 中（標題格式由 MCP 提供的當前 BDD 規範決定），確保追蹤鏈完整
+  - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
+  - 依最新模板說明得知標題及欄位中對功能 ID 的要求，並確保後續建立的 SDD Issue 與模板規範一致
 
 2. **檢查 BDD Issue 核准狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label
   - 若 BDD Issue 未被核准，拒絕進行 SDD 問答，並提醒使用者「請先將 BDD Issue 加上 `approved` label 後再呼叫本 Prompt」
@@ -106,13 +104,12 @@ outputs:
 
 ### Step 3：整理輸出
 
-1. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 格式，尤其在「對應 BDD Scenario」表格中使用與 BDD 完全一致的 Scenario ID（格式以 MCP 提供的當前 BDD 規範為準）與行為描述
+1. 整理契約對照表、Mock 策略、驗證方式，確保符合 SDD 需求，並維持 BDD Scenario ID 的一對一對應（Scenario ID 格式以 MCP 提供的當前 BDD 規範為準）
 
 2. **使用 MCP 工具格式化 Issue 內容**：
-   - 呼叫 `markdown-template` 工具，從內部挑選合適的 SDD 模板
-   - 傳入收集到的欄位值（規範名稱、要求描述、受影響元件、驗證方式、對應 BDD Scenario、設計任務板等）
-   - 工具會根據模板自動生成格式化的 Issue 內容
-   - 確保所有必填欄位都已正確填入
+  - 呼叫 `markdown-template` 工具，從內部挑選合適的 SDD 模板
+  - 傳入收集到的欄位值，欄位名稱與呈現方式皆以模板回傳版本為準
+  - 模板若提示新的欄位或命名規範，應即時補齊資料或追問使用者，避免沿用舊格式
 
 3. 透過可用的 MCP / GitHub API 建立**新的** SDD Issue（標題格式由 MCP 提供的當前 BDD 規範決定）
    - 使用 `mcp_github_issue_write` 工具建立 Issue，body 內容為步驟 2 格式化後的結果
@@ -136,30 +133,12 @@ outputs:
 
 ### Step 3.5：設計任務板
 
-1. 以 SDD Issue 涵蓋的 Scenario 為列（Scenario ID 依當前 BDD 規範，透過 MCP 取得），製作任務表格（建議欄位：`Task ID`、`Scenario`、`內容`、`優先順序`、`前置輸入`、`預計輸出`），Task ID 格式：`S-{功能ID}-{User Story ID}-TASK-{流水號}`（User Story ID 格式依當前 BDD 規範，透過 MCP 取得）
-2. 任務描述需具體到可啟動的工程活動，例如「產出 API 合約草稿」或「定義資料庫欄位驗證規則」
-3. 為每個任務標註 `P0/P1/P2`，其中 `P0` 任務應在進入 TDD 前完成，並附註所需資源、共用文件或依賴
-4. 指定每個任務的預期交付物與同步對象，確保跨團隊協作時不遺漏資訊
+1. 以 SDD Issue 涵蓋的 Scenario 為列（Scenario ID 依當前 BDD 規範，透過 MCP 取得），製作任務表格（建議欄位：`Task ID`、`Scenario`、`內容`、`優先順序`、`前置輸入`、`預計輸出`）。任務命名規則應以模板或專案既有準則為準，若模板提供規範則必須遵循。
+2. 任務描述需具體到可啟動的工程活動，例如「產出 API 合約草稿」或「定義資料庫欄位驗證規則」。
+3. 為每個任務標註 `P0/P1/P2`，其中 `P0` 任務應在進入 TDD 前完成，並附註所需資源、共用文件或依賴。
+4. 指定每個任務的預期交付物與同步對象，確保跨團隊協作時不遺漏資訊。
 
 > 完整任務板需與輸出的 SDD Issue 連動，確保後續 TDD Prompt 能直接引用任務編號與 Scenario。
-
-#### SDD Issue 格式參考
-
-請參考目前 SDD Issue 模板的欄位定義與範例：
-- **標題格式**：由 MCP 提供的當前 BDD 規範決定（例如：`S-[功能ID]-[User Story ID] - [設計領域]`）
-  - `S-` 前綴表示此 Issue 為 SDD（System Design Document）
-  - `[功能ID]` 必須與 BDD Issue 相同（例如 REQ-001）
-  - `[User Story ID]` 對應 BDD Issue 中的 User Story 編號（格式由當前 BDD 規範決定，透過 MCP 取得）
-  - `[設計領域]` 說明此 SDD 涵蓋的技術設計主題
-- **規範或標準名稱**：說明相關規範或設計主題（例如：API 介面設計、資料安全規範、效能標準）
-- **要求描述**：詳細描述此設計的具體要求
-- **對應 BDD Scenario**：列出本 SDD 涵蓋的所有 BDD Scenario ID
-- **受影響的元件或功能**：列出會影響到的元件或功能
-- **驗證方式**：說明如何驗證此設計是否已實現
-- **對應 BDD Scenario**：列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要
-- **相關 TDD Issue**：列出基於此 SDD 設計而產生的 TDD Issue 編號（由 TDD Prompt 建立時填寫）
-- **參考的舊 SDD Issue**：若參考過去的設計決策，請列出舊 SDD Issue 編號（例如：`參考自 #2, #5`）
-- **其他相關 Issue**：列出相關的技術債、Bug、文件等
 
 ## 後續行動
 
