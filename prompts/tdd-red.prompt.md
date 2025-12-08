@@ -38,7 +38,7 @@ outputs:
 
 ### Step 2：撰寫一定會失敗的測試
 
-1. 根據 Scenario ID（`US<序號>-S<序號>`）、Test ID 與 SDD 契約細節，新增測試檔案
+1. 根據 Scenario ID（格式依當前 BDD 規範，透過 MCP 取得）、Test ID 與 SDD 契約細節，新增測試檔案
 2. **重要**：設計測試使其「一定失敗」，測試預期行為但實現還不存在
    - 使用註解說明「預期行為是什麼」
    - 斷言應指向尚未實現的功能
@@ -58,9 +58,9 @@ outputs:
 2. **為該 Test ID 建立或追加 Comment**：
    
    **首次執行 tdd-red 時（建立新 Comment）**：
-   - 在 TDD Issue 中建立新 Comment，標題為「`## Test: [Test ID] - [Scenario ID]`」（例如 `## Test: REQ-001-T-101 - US1-S1`）
+   - 在 TDD Issue 中建立新 Comment，標題為「`## Test: [Test ID] - [Scenario ID]`」（Scenario ID 格式依當前 BDD 規範，透過 MCP 取得）
    - 記錄以下 6 項必要資訊：
-     - Test ID + Scenario ID（例如 REQ-001-T-101 + US1-S1，強調功能 ID 前綴確保全局唯一）
+     - Test ID + Scenario ID（強調功能 ID 前綴確保全局唯一，Scenario ID 格式依當前 BDD 規範）
      - 測試檔案路徑
      - Red 階段時戳與失敗狀態（🔴）
      - 失敗原因簡述（錯誤訊息前 120 字）
@@ -82,7 +82,7 @@ outputs:
 
 ## Comment Markdown 格式規範
 
-建立 Comment 時，請遵循 `.github/ISSUE_TEMPLATE/comment-template.md` 中定義的 Markdown 格式標準。
+建立 Comment 時，請遵循目前 comment 模板中定義的 Markdown 格式標準。
 
 ## 產出格式建議
 

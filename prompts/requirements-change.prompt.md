@@ -87,7 +87,7 @@ outputs:
 2. **確認現有 Issue 狀態**
    - 讀取相關的 BDD/SDD/TDD Issue（若有）
    - 檢查是否存在相關的 PR、分支或已實作程式碼
-   - 確認受影響的 Scenario ID（例如 US1-S1、US1-S2）
+   - 確認受影響的 Scenario ID（格式依當前 BDD 規範，透過 MCP 取得）
 
 3. **明確更新與確認流程**
    - 按照上述順序，**逐一更新各層級 Issue**
@@ -123,18 +123,23 @@ outputs:
 **重要**：按照 Step 1 決定的更新順序，逐一更新各層級 Issue，每次更新後都要求使用者確認。
 
 1. **第一層 Issue 更新**
-   - 根據變更清單更新第一層 Issue 內容（可透過 GitHub API 或提供 Markdown 草稿）
+   - **使用 MCP 工具格式化 Issue 內容**：
+     - 根據 Issue 類型（BDD/SDD/TDD），呼叫 `markdown-template` 工具
+     - 工具會自動從內部的對應模板中挑選合適的模板
+     - 傳入更新後的欄位值，工具根據模板生成格式化的 Issue 內容
+   - 使用 `mcp_github_issue_write` 工具更新 Issue，body 內容為格式化後的結果
    - 生成更新摘要，清晰展示新增/修改的內容
    - **要求使用者確認**：「以上 Issue #X 的變更內容是否正確？」
    - 只有在使用者確認後，才進行下一層級的更新
 
 2. **第二層 Issue 更新（若需要）**
    - 使用者確認第一層後，執行第二層 Issue 的更新
-   - 同樣生成更新摘要並要求確認
+   - **同樣呼叫 `markdown-template` 工具**格式化 Issue 內容後再更新
+   - 生成更新摘要並要求確認
    - 確認無誤後進行第三層更新
 
 3. **第三層 Issue 更新（若需要）**
-   - 同上流程，更新第三層 Issue 並要求最終確認
+   - 同上流程，**使用 `markdown-template` 工具格式化**後更新第三層 Issue 並要求最終確認
 
 4. **同步 Comment 與關聯**
    - 所有 Issue 確認無誤後，在各 Issue 的 Comment 中互相引用

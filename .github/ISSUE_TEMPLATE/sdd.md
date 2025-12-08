@@ -1,0 +1,91 @@
+---
+name: SDD 規範要求
+about: 用於提交與規範、標準、合規性有關的要求。
+title: 'S-<feature_id>-US<us_number> - <design_domain>'
+labels: 'type: compliance', 'domain: sdd'
+assignees: ''
+---
+
+## SDD 規範要求表單
+請填寫以下資訊，幫助開發團隊確保系統符合相關規範與標準。
+
+### 規範或標準名稱:
+<!-- 請說明是哪一種規範或標準（例如：GDPR、PCI-DSS、WCAG 2.1、ISO 27001） -->
+<standard>
+
+### 要求描述:
+<!--
+請詳細描述此規範的具體要求。
+必須涵蓋本 SDD 對應的各個 BDD Scenario（見「對應 BDD Scenario」欄位），說明每個 Scenario 的具體設計規格。
+如涉及錯誤處理的情況，請使用 table 格式清晰呈現。
+
+Example:
+
+### 核心流程
+
+**US2-S1：BDD 已核准時的 SDD 問答流程**
+- 使用者在 Copilot Chat 中呼叫 `sdd.prompt.md`
+- AI Agent 檢查對應 BDD Issue 是否被加上 `approved` label
+- 若已核准，透過多輪問答蒐集系統設計資訊...
+
+### 錯誤處理
+
+| 場景 | 處理方式 |
+| --- | --- |
+| 完整性判定失敗 | 若對話中欄位缺漏，系統提示使用者「請說明 [缺漏項目]」，不呼叫 GitHub API |
+| API 403（權限不足） | 回傳完整 Markdown 草稿供手動建立 |
+| API 429（速率限制） | 提示「已達 API 限制，請稍後重試」 |
+| API 5xx（伺服器錯誤） | 提示「GitHub 暫時故障，請稍後重試」並記錄 |
+-->
+<requirement_description>
+
+### 受影響的元件或功能:
+<!--
+請列出此規範要求會影響到的元件或功能。
+範例：使用者註冊、資料儲存、登入
+
+Example:
+- 使用者註冊
+- 會員資料儲存
+-->
+<affected_components>
+
+### 驗證方式:
+<!--
+請說明如何驗證此規範是否已實現。
+可以是手動檢查、自動化測試、第三方驗證等。
+
+Example:
+- 自動化測試檢查資料庫中密碼是否已加密
+- 使用工具驗證網站是否符合 WCAG 2.1
+-->
+<verification_method>
+
+### 對應 BDD Scenario:
+<!--
+列出本 SDD 涵蓋的 BDD Scenario ID 與行為摘要（每個 SDD Issue 必須涵蓋至少一個 BDD Scenario）。
+ID 必須沿用 BDD Issue 的 `US<序號>-S<序號>` 命名格式。
+「要求描述」應逐一說明各 Scenario 的具體設計規格。
+
+Example:
+| BDD Scenario ID | 行為摘要 | 備註 |
+| --- | --- | --- |
+| US2-S1 | 開發人員呼叫 SDD Prompt 進行問答並建立 SDD Issue | 已確認 |
+| US2-S2 | BDD 未核准時拒絕進行 SDD 問答 | 已確認 |
+-->
+<bdd_scenarios>
+
+### 設計任務板:
+<!--
+列出依 Scenario 規劃的設計任務，協助後續工程快速啟動。
+- Task ID 命名格式：`S-{功能ID}-US{序號}-TASK-{流水號}`。
+- 描述需明確到可啟動的工程活動，並標示優先順序 (`P0/P1/P2`)。
+- 指出所需的前置輸入、預期輸出與需協作的角色。
+
+Example:
+| Task ID | Scenario | 內容 | 優先順序 | 前置輸入 | 預計輸出 | 協作角色 |
+| --- | --- | --- | --- | --- | --- | --- |
+| S-REQ-001-US1-TASK-01 | US1-S1 | 撰寫 API 合約草稿（路由、欄位、錯誤碼） | P0 | 現有系統 API 文件 | OpenAPI 草稿 | 後端工程師、Domain SME |
+| S-REQ-001-US1-TASK-02 | US1-S1 | 梳理權限邊界條件與驗證規則 | P1 | 角色權限矩陣 | 權限驗證表 | 安全專家 |
+-->
+<design_task_board>

@@ -39,7 +39,7 @@ outputs:
 - 整理實作修改摘要、測試結果與檢查結果
 
 **在 tdd-red 建立的同一 Comment 中追加 Green 階段結果**：
-- 找到該 Test ID 對應的 Comment（由 tdd-red 首次建立，例如 `## Test: REQ-001-T-101 - US1-S1`）
+- 找到該 Test ID 對應的 Comment（由 tdd-red 首次建立，標題格式為 `## Test: [Test ID] - [Scenario ID]`，Scenario ID 格式依當前 BDD 規範）
 - 在 Comment 中追加新的區段，格式為「### Green 階段 - [時戳]」
 - 記錄以下內容：
   - Green 階段時戳與通過狀態（🟢）
@@ -56,7 +56,7 @@ outputs:
 
 ## Comment Markdown 格式規範
 
-更新 Comment 時，請遵循 `.github/ISSUE_TEMPLATE/comment-template.md` 中定義的 Markdown 格式標準。
+更新 Comment 時，請遵循目前 comment 模板中定義的 Markdown 格式標準。
 
 ## 產出格式
 
