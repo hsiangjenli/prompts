@@ -13,7 +13,7 @@
 ```mermaid
 flowchart TD
     A["需求蒐集"] --> B["BDD Issue 建立/更新"]
-  B --> C{"BDD 核准?"}
+    B --> C{"BDD 核准?"}
     C -->|否| B
     C -->|是| D["SDD 提問與建立<br/>Sub-Issue 形式"]
     D --> E["TDD 提問與建立<br/>Sub-Issue 形式"]
@@ -21,9 +21,9 @@ flowchart TD
     
     subgraph TDD["TDD 迴圈"]
         F["Red<br/>撰寫失敗測試"]
-  G["Green<br/>實作程式碼"]
+        G["Green<br/>實作程式碼"]
         H{"Refactor?"}
-  I["Refactor<br/>優化程式碼"]
+        I["Refactor<br/>優化程式碼"]
         F --> G --> H
         H -->|是| I
         I --> F
@@ -38,7 +38,6 @@ flowchart TD
 - BDD Issue 為根源，SDD/TDD Issue 透過 Sub-Issue 自動關聯
 - 所有層級共享相同的功能 ID，方便日後自動追蹤
 
----
 
 ## Prompt 對照表
 
@@ -46,13 +45,12 @@ flowchart TD
 | --- | --- | --- | --- |
 | `requirements.prompt.md` | 新需求或需求分析階段 | 討論需求，蒐集背景資訊 | 結構化需求 |
 | `requirements-change.prompt.md` | 需求在 BDD/SDD/TDD 中途發現變更 | 評估變更影響範圍，逐層更新 BDD/SDD/TDD Issue | 完整的變更鏈與確認表 |
-| `sdd.prompt.md` | BDD Issue 已核准，需進行設計提問 | 透過提問釐清系統設計、介面契約、資料模型 | 建立 SDD Issue（自動成為 BDD 的 Sub-Issue） |
+| `sdd.prompt.md` | BDD Issue 已核准，需進行設計提問 | 透過提問釐清系統設計、介面規格、資料模型 | 建立 SDD Issue（自動成為 BDD 的 Sub-Issue） |
 | `tdd-requirements.prompt.md` | BDD 已核准 + SDD 已建立，開始測試規劃 | 透過提問定義測試場景、資料準備、優先順序 | 建立 TDD Issue（自動成為 SDD 的 Sub-Issue） + 測試矩陣 |
 | `tdd-red.prompt.md` | TDD Issue 已建立，開始 Red 階段 | 撰寫一定會失敗的測試，記錄失敗詳情 | 測試矩陣中對應 Test 狀態改為 🔴 + 獨立 Comment 記錄失敗 |
 | `tdd-green.prompt.md` | Red 階段測試已建立，開始 Green 階段 | 實作最小可行程式碼讓測試通過 | 在同一 Comment 中追加 Green 階段結果，測試狀態改為 🟢 |
 | `tdd-refactor.prompt.md` | Green 階段測試已通過，開始 Refactor 階段（可選） | 優化程式碼品質、提升可維護性 | 在同一 Comment 中追加 Refactor 結果，測試狀態改為 ♻️ |
 
----
 
 ## 工作流程範例
 
@@ -60,14 +58,14 @@ flowchart TD
 
 1. **開發人員**在 Copilot Chat 執行 `requirements.prompt.md` 並提供需求描述
 2. **AI Agent** 提問、記錄、建立 BDD Issue
-   - 標題：`[REQ-001] - 使用者登入`
+   - 標題：`REQ-001 - 使用者登入`
    - 內容：User Story + Gherkin Scenario（US1-S1、US1-S2 等）
    - 初始標籤：`type: feature, domain: bdd`（無 `approved` label）
 
 3. **PM/Reviewer** 審核並加上 `approved` label
 4. **開發人員**在 Copilot Chat 執行 `sdd.prompt.md`
 5. **AI Agent** 提問、記錄、建立 SDD Issue
-  - 標題：`S-REQ-001-US1 - API 介面設計`
+   - 標題：`S-REQ-001-US1 - API 介面設計`
    - 自動設為 BDD Issue 的 Sub-Issue
    - 內容：API 端點、請求/回應格式、驗證規則
 
@@ -75,17 +73,20 @@ flowchart TD
 7. **AI Agent** 提問、記錄、建立 TDD Issue
    - 標題：`T-REQ-001-US1`
    - 自動設為 SDD Issue 的 Sub-Issue
-   - 內容：測試矩陣，包含 T-REQ-001-T-101、T-REQ-001-T-102 等 Test ID
+   - 內容：測試矩陣，包含 REQ-001-T-101、REQ-001-T-102 等 Test ID
 
-8. **開發人員**執行 `tdd-red.prompt.md`
+8. **開發人員**執行 `tdd-red.prompt.md`，提供 TDD Issue 編號與測試案例 ID
+   - AI Agent 建立 Test Branch、撰寫失敗測試
    - AI Agent 建立 Test Comment 記錄失敗（🔴）
-   - 測試矩陣中 T-REQ-001-T-101 狀態改為 `🔴 [查看](#comment-123)`
+   - 測試矩陣中 REQ-001-T-101 狀態改為 `🔴 [查看](#comment-123)`
 
-9.  **開發人員**執行 `tdd-green.prompt.md`
-    - AI Agent 在同一 Comment 追加綠燈結果（🟢）
-    - 測試矩陣中狀態改為 `🟢 [查看](#comment-123)`
+9. **開發人員**執行 `tdd-green.prompt.md`，提供 TDD Issue 編號與測試案例 ID
+   - AI Agent 實作最小可行程式碼讓測試通過
+   - AI Agent 在同一 Comment 追加綠燈結果（🟢）
+   - 測試矩陣中狀態改為 `🟢 [查看](#comment-123)`
 
-10. **開發人員**（可選）執行 `tdd-refactor.prompt.md`
+10. **開發人員**（可選）執行 `tdd-refactor.prompt.md`，提供 TDD Issue 編號與測試案例 ID
+    - AI Agent 進行重構優化
     - AI Agent 在同一 Comment 追加優化結果（♻️）
     - 測試矩陣中狀態改為 `♻️ [查看](#comment-123)`
 
@@ -107,8 +108,8 @@ flowchart TD
    - 最後提醒：「是否需要更新 TDD Issue #3 的測試計畫？」
 
 5. **在各 Issue Comment 中互相引用**，建立完整變更鏈
+6. **於 BDD Issue 建立變更追蹤 Comment**，記錄完整審計軌跡
 
----
 
 ## Issue 標題格式標準化
 
@@ -120,7 +121,6 @@ flowchart TD
 | SDD Issue | `S-[功能ID]-US[序號] - [設計領域]` | `S-REQ-001-US1 - API 介面設計` |
 | TDD Issue | `T-[功能ID]-US[序號]` | `T-REQ-001-US1` |
 
----
 
 ## 重要機制說明
 
@@ -141,14 +141,14 @@ flowchart TD
 - GitHub 介面上自動顯示層級關係（BDD → SDD → TDD）
 - 不需要手動在各 Issue 中填寫關聯資訊
 
-### 3. 測試狀態追蹤機制（Per Issue #1 US3）
+### 3. 測試狀態追蹤機制
 
 **測試矩陣設計**：
 - 單一「狀態」欄位，每個 Test ID 一行
 - 狀態單線進度：⏳（未開始）→ 🔴（失敗）→ 🟢（通過）→ ♻️（已優化）
 
 **Comment 生命週期**：
-- **Red 階段**：為每個 Test ID 建立獨立 Comment，記錄失敗訊息、重試累計、CI 連結
+- **Red 階段**：為每個 Test ID 建立獨立 Comment，記錄失敗訊息、重試累計、分支資訊
 - **Green 階段**：在同一 Comment 中追加實作與測試通過結果
 - **Refactor 階段**：在同一 Comment 中追加優化說明與驗證
 - **目的**：保持 Issue 評論區清潔，每個 Test 的完整生命週期紀錄在一個 Comment 中
@@ -157,27 +157,44 @@ flowchart TD
 - Test ID、Scenario ID
 - 測試檔案路徑
 - 各階段時戳（Red/Green/Refactor）
-- 失敗原因（限 120 字）
+- 失敗原因與錯誤堆疊
 - 重試累計次數
-- CI/CD 執行連結
+- 分支資訊（Dev Branch、Test Branch）
 
-### 4. 需求變更管理（Per Issue #1 US5 + `requirements-change.prompt.md`）
+### 4. TDD 分支策略
+
+**層級關係**：
+```
+BDD Issue（功能需求）
+└── SDD Issue（系統設計）
+    └── TDD Issue（測試計畫，以 User Story 為單位）
+        ├── 測試案例 1（測試矩陣中的一行）
+        ├── 測試案例 2
+        └── 測試案例 3
+```
+
+**分支隔離原則**：
+- 每個測試案例使用獨立的 Test Branch
+- Test Branch 從 Dev Branch checkout
+- 保持開發環境乾淨，避免測試之間互相影響
+
+### 5. 需求變更管理
 
 **何時觸發**：開發過程中的任一階段（BDD/SDD/TDD）發現需要修改需求
 
-**操作流程（5 大步驟）**：
+**操作流程（6 大步驟）**：
 1. **判定變更層級與更新順序**：根據發現位置決定回溯方向
 2. **評估變更影響**：分析 BDD/SDD/TDD 各層的受影響項目
-3. **建立變更方案**：整理清單、標記更新順序
+3. **建立變更方案**：整理清單、標記更新順序、使用 `todos` 建立任務
 4. **逐層執行同步更新**：按序更新各層級 Issue，**每層都要求人工確認**
-5. **同步 Comment 與關聯**：在各 Issue Comment 中互相引用，建立完整變更鏈
+5. **建立變更追蹤 Comment**：於 BDD Issue 建立完整審計軌跡
+6. **輸出摘要與後續行動**：列出所有已更新的 Issue 與後續指引
 
 **更新順序規則**：
 - 在 BDD 發現 → BDD → SDD → TDD（順向更新）
 - 在 SDD 發現 → SDD ← BDD（先回溯驗證）→ TDD（再更新下層）
 - 在 TDD 發現 → TDD ← SDD ← BDD（全面回溯）→ SDD → TDD（依序更新）
 
----
 
 ## 核准機制
 
@@ -186,7 +203,6 @@ flowchart TD
 - **SDD Prompt** 檢查核准狀態：未核准 → 拒絕進行 SDD 提問
 - **TDD Prompt** 檢查核准狀態 + SDD 建立狀態：條件不足 → 拒絕進行 TDD 提問
 
----
 
 ## 使用流程決策樹
 
@@ -225,14 +241,13 @@ TDD Issue 存在？
   └─ 是 → 進行下一步
 
 開始 TDD 紅綠重構循環？
-  ├─ Red 階段 → 呼叫 tdd-red.prompt.md
-  ├─ Green 階段 → 呼叫 tdd-green.prompt.md
-  ├─ Refactor 階段（可選）→ 呼叫 tdd-refactor.prompt.md
+  ├─ Red 階段 → 呼叫 tdd-red.prompt.md（提供 TDD Issue 編號 + 測試案例 ID）
+  ├─ Green 階段 → 呼叫 tdd-green.prompt.md（提供 TDD Issue 編號 + 測試案例 ID）
+  ├─ Refactor 階段（可選）→ 呼叫 tdd-refactor.prompt.md（提供 TDD Issue 編號 + 測試案例 ID）
   │
   └─ 完成 → 提交 PR
 ```
 
----
 
 ## 快速開始
 
@@ -240,14 +255,38 @@ TDD Issue 存在？
 2. **需要建立新功能？** 呼叫 `requirements.prompt.md` 或直接建立 BDD Issue
 3. **BDD 已核准？** 呼叫 `sdd.prompt.md` 進行設計提問
 4. **設計已完成？** 呼叫 `tdd-requirements.prompt.md` 開始測試規劃
-5. **開始實作？** 按順序呼叫 `tdd-red.prompt.md` → `tdd-green.prompt.md` → `tdd-refactor.prompt.md`
+5. **開始實作？** 按順序呼叫：
+   - `tdd-red.prompt.md`（提供 TDD Issue 編號 + 測試案例 ID）
+   - `tdd-green.prompt.md`（提供 TDD Issue 編號 + 測試案例 ID）
+   - `tdd-refactor.prompt.md`（可選，提供 TDD Issue 編號 + 測試案例 ID）
 6. **中途需要改需求？** 呼叫 `requirements-change.prompt.md` 進行評估和同步更新
+
+## TDD Prompt 使用方式
+
+TDD 三階段 Prompt（`tdd-red`、`tdd-green`、`tdd-refactor`）都需要提供：
+
+| 參數 | 說明 | 範例 |
+| --- | --- | --- |
+| TDD Issue 編號 | 目標 TDD Issue | `#123` 或 Issue URL |
+| 測試案例 ID | 測試矩陣中的特定測試案例 | `REQ-001-T-101` |
+
+**呼叫範例**：
+```
+請執行 tdd-red.prompt.md
+- TDD Issue: #123
+- 測試案例 ID: REQ-001-T-101
+```
 
 ## 技術棧與工具
 
 - **互動方式**：GitHub Copilot Chat（Copilot 內建的對話介面）
 - **自動化工具**：MCP（Model Context Protocol）
-- **MCP 操作**：`mcp_github_issue_read`、`mcp_github_issue_write`、`mcp_github_sub_issue_write`
+- **MCP 操作**：
+  - `mcp_github_issue_read`：讀取 Issue 內容
+  - `mcp_github_issue_write`：建立或更新 Issue
+  - `mcp_github_sub_issue_write`：建立 Sub-Issue 關聯
+  - `markdown-template`：取得 Issue 與 Comment 模板
+  - `todos`：管理待辦任務
 - **儲存位置**：所有 Prompt 自動複製到 `$HOME/Library/Application Support/Code/User/prompts/`
 
 ## 更新測試 Prompt 至 GitHub Copilot
@@ -255,3 +294,13 @@ TDD Issue 存在？
 ```shell
 cp -r ./prompts/* "$HOME/Library/Application Support/Code/User/prompts/"
 ```
+
+## Issue 模板說明
+
+| 模板 | 用途 | 位置 |
+| --- | --- | --- |
+| `bdd.md` | BDD 功能需求 Issue | `.github/ISSUE_TEMPLATE/` |
+| `sdd.md` | SDD 規範要求 Issue | `.github/ISSUE_TEMPLATE/` |
+| `tdd.md` | TDD 測試計畫 Issue | `.github/ISSUE_TEMPLATE/` |
+| `tdd-comment.md` | TDD Test Comment（追蹤 Red → Green → Refactor） | `.github/ISSUE_TEMPLATE/` |
+| `change-comment.md` | 變更追蹤 Comment（記錄需求變更審計軌跡） | `.github/ISSUE_TEMPLATE/` |
