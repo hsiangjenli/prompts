@@ -1,6 +1,6 @@
 ---
 mode: agent
-description: 先理解需求並整理成 BDD 使用者故事與 Gherkin 情境，為後續 SDD --> TDD Prompt 提供完整輸入
+description: 先理解需求並整理成 BDD 使用者故事與 Gherkin 情境，為後續 SDD -> TDD Prompt 提供完整輸入
 inputs:
   summary: 使用 Prompt 釐清使用者需求
   required:
@@ -9,20 +9,28 @@ inputs:
 outputs:
   summary: 以使用者情境為主，整理可追蹤的需求摘要，準備交由 SDD/TDD 進一步展開（非技術實作細節）
   include:
-    - 依據最新的 BDD Issue 模板說明（透過 `markdown-template` 取得）生成草稿或直接建立 Issue
+    - 依據 `markdown-template` 取得的 BDD Issue 模板生成草稿或直接建立 Issue
     - 列出使用者故事與 Gherkin 情境（僅含行為與情境，禁止加入技術、API、資料模型或實作細節）
+    - SDD 對接路線圖，標示各 Scenario 的優先順序與設計焦點
 ---
 
 # 需求分析（BDD 導向）
 
 ## 目的
 
-以不斷提問的方式去釐清需求，並使用 BDD 使用者故事（User Story）與 Gherkin 語法整理需求，方便後續對齊 SDD --> TDD 的實作流程，同時輸出與 SDD 對接的優先序路線圖協助快速啟動
+以不斷提問的方式釐清需求，並使用 BDD 使用者故事（User Story）與 Gherkin 語法整理需求，方便後續對齊 SDD → TDD 的實作流程。
+
+## 重要原則
+
+- **模板優先**：所有 ID 格式、欄位名稱、命名規則皆以 `markdown-template` 工具回傳的模板為準，本 Prompt 不定義具體格式
+- **行為導向**：BDD 階段僅聚焦於使用者行為與業務需求，禁止包含任何技術細節（API、資料模型、架構設計等）
+- **可追蹤性**：每個 User Story 與 Scenario 必須有唯一識別碼，便於後續 SDD/TDD 關聯
 
 ## 提問原則
 
 - 採「單一問題 + 選項 + 自訂輸入」格式，便於使用者快速回覆
-- 每題最多 4 個選項，預留「⑤ 其他／自行輸入」
+- 每題最多 4 個選項，預留「其他／自行輸入」選項
+- 一次只問一個問題，避免資訊過載
 
 ### 常用問題題庫
 
@@ -45,46 +53,86 @@ outputs:
 
 ## 操作流程
 
-### Step 1：確認狀態
+### Step 1：確認現有狀態
 
-1. 閱讀使用者提供的文件（如：`README.md`、`CHANGELOG.md`、GitHub Issue 等），了解近期變更與程式邏輯
-2. 檢查是否已有 BDD 需求 Issue。若有，請根據原本的 Issue 進行修改
+1. **檢查是否已有相關 BDD Issue**
+   - 詢問使用者是否有既有的 BDD Issue 編號
+   - 若有，使用 `mcp_github_issue_read` 讀取現有內容，確認是「新增」還是「修改」需求
+   - 若為修改既有需求，提醒使用者考慮是否應改用 `requirements-change.prompt.md`
 
-### Step 2：補齊需求
+2. **閱讀使用者提供的背景資料**
+   - 會議記錄、文件、`README.md`、相關 Issue 等
+   - 整理已知資訊，標記需要釐清的部分
 
-1. 發現需求的不一致、缺漏
-2. 藉由不斷提問，釐清使用者的需求
-3. **重要**：BDD 階段僅聚焦於使用者行為與業務需求，不應包含任何技術細節（API、資料模型、架構設計等）
+### Step 2：需求釐清與補齊
 
-### Step 2.5：確認模板需求
+1. **識別需求缺口**
+   - 根據 Step 1 的資料，列出需要釐清的問題
+   - 使用「常用問題題庫」逐一提問
 
-**重要**：所有欄位與命名規則都以最新的 BDD Issue 模板說明為準，避免在 Prompt 中複製舊格式。
+2. **整理 User Story**
+   - 使用「作為...，我想要...，以便...」格式
+   - 每個 User Story 聚焦於單一使用者的使用情境
 
-1. 呼叫 `markdown-template` 取得目前的 BDD Issue 模板與其欄位說明。
-2. 根據模板要求蒐集必要的欄位資訊（例如功能 ID、優先順序等）。
-3. 若模板要求使用功能 ID 或其他識別碼，請先以 `mcp_github_issue_read` 查詢現有 Issue，確保新識別碼仍然唯一，並遵循模板給出的命名規則。
+3. **發展 Gherkin Scenario**
+   - 為每個 User Story 撰寫至少一個 Scenario
+   - 識別並補充失敗路徑、邊界情況的 Scenario
+   - 確保 Given-When-Then 描述的是「行為」而非「實作」
 
-### Step 3：整理輸出
+4. **確認完整性**
+   - 與使用者確認所有 User Story 和 Scenario 是否完整
+   - 標記任何待確認項目為「待確認」
 
-1. 整理使用者故事與 Gherkin 場景，確保符合 BDD 語法
-2. **使用 MCP 工具格式化 Issue 內容**：
-  - 呼叫 `markdown-template` 工具，從內部挑選合適的 BDD 模板
-  - 傳入收集到的欄位值，並以模板提供的欄位名稱與格式為準
-  - 若模板提示有新的欄位或命名規則，應立即回收資訊並重新詢問使用者補齊資料
-3. 使用 `mcp_github_issue_write` 工具建立 Issue，body 內容為步驟 2 格式化後的結果
-4. 若因權限受限無法建立 Issue，則輸出完整草稿供手動貼上
-5. 在輸出中附上 Issue 連結或草稿，以及建議的下一個 Prompt
+### Step 3：取得模板並建立 Issue
 
-### Step 3.5：SDD 對接路線圖
+1. **取得 BDD Issue 模板**
+   - 呼叫 `markdown-template` 工具取得當前的 BDD Issue 模板
+   - 確認模板要求的所有欄位（功能 ID 格式、Scenario ID 格式、必填欄位等）
 
-1. 將所有使用者故事依當前 BDD 規範彙整，為每個故事挑選最關鍵且應優先進入 SDD 的 Scenario。
-2. 針對每個 Scenario，推導預計要建立的 SDD Issue 標題（格式由 MCP 提供的當前 BDD 規範決定），並簡述預期要討論的設計議題（例如：介面契約、資料模型、錯誤處理）。
-3. 標註每個 Scenario 進入 SDD 的優先順序（`P0/P1/P2`），說明優先的理由與預期需要到場的角色（例如：Domain SME、後端工程師、DevOps）。
-4. 為每個 Scenario 準備 SDD 問答前的必要輸入（既有規格、外部文件、待確認問題），讓後續執行 `sdd.prompt.md` 時可直接引用。
+2. **確保 ID 唯一性**
+   - 使用 `mcp_github_issue_read` 查詢現有 BDD Issue
+   - 依照模板的 ID 命名規則，產生不重複的功能 ID
 
-> 產出時以表格呈現對接資訊（欄位建議：`Scenario ID`、`建議 SDD Issue 標題`、`設計焦點`、`優先順序`、`所需參與角色`、`前置輸入`、`建議下一步 Prompt`），確保 SDD Prompt 能無縫接續。
+3. **填入模板欄位**
+   - 依模板要求填入所有欄位
+   - User Story 與 Scenario 的 ID 格式以模板為準
 
-## 後續行動
+4. **建立或更新 Issue**
+   - 使用 `mcp_github_issue_write` 建立 Issue
+   - 確保標籤包含模板指定的預設標籤（如 `type: feature`, `domain: bdd`）
+   - **不要**加上 `approved` 標籤（需等待 PM/Reviewer 審核）
+   - 若因權限受限無法建立，輸出完整 Markdown 草稿供手動貼上
 
-- 依 SDD 對接路線圖中的 `P0` 項目安排下一步作業，並同步更新關聯 Issue
-- 下一個預計執行的 Prompt（預設 `sdd.prompt.md` 或 `tdd.prompt.md`，視需求類型決定）
+### Step 4：輸出摘要與後續行動
+
+1. **輸出內容**
+   - BDD Issue 連結（或草稿）
+   - User Story 與 Scenario 清單摘要
+   - SDD 對接路線圖（依模板格式）
+   - 待確認項目清單（若有）
+
+2. **後續行動指引**
+   - BDD Issue 已建立，但尚未核准
+   - 請等待 PM/Reviewer 審核並加上 `approved` 標籤
+   - 核准後，執行 `sdd.prompt.md` 進行系統設計
+
+3. **SDD 對接路線圖說明**
+   - 列出建議優先進入 SDD 的 Scenario（P0 優先）
+   - 說明每個 Scenario 預計討論的設計議題
+   - 標註需要參與的角色
+
+## 注意事項
+
+- **禁止技術細節**：本階段不討論 API 設計、資料庫結構、程式架構等技術實作
+- **格式依模板**：所有 ID、欄位名稱、表格結構皆以 `markdown-template` 回傳為準
+- **待確認標註**：對於使用者未明確回答的項目，標註「待確認」並列入待確認清單
+- **不自行核准**：建立的 BDD Issue 不應有 `approved` 標籤，必須等待人工審核
+
+## 錯誤處理
+
+| 情況 | 處理方式 |
+| --- | --- |
+| `markdown-template` 無法取得模板 | 提示使用者確認 MCP 工具是否正常運作，暫停流程 |
+| 使用者提供的資訊不足以建立任何 User Story | 持續提問直到至少有一個完整的 User Story |
+| GitHub API 權限不足 | 輸出完整 Markdown 草稿，指導使用者手動建立 |
+| 發現與既有 Issue 有衝突 | 提示使用者確認是否為需求變更，建議改用 `requirements-change.prompt.md` |
