@@ -1,38 +1,42 @@
 ---
 mode: agent
-description: 透過問答方式釐清測試需求背景，將 SDD 規範轉為具體的測試計畫與驗證策略
+description: 透過問答方式釐清測試需求背景，將 SDD 規範轉為具體的測試計畫與驗證策略  
 inputs:
-  summary: 使用 Prompt 透過互動式問答釐清測試需求
+  summary: 使用 Prompt 透過互動式問答釐清測試需求  
   required:
-    - 直接對話進行釐清
-    - 提供 BDD Issue 編號、SDD Issue 編號（選填，若已有）、測試文件、現有測試案例等相關資訊
+    - 直接對話進行釐清  
+    - 提供 BDD Issue 編號、SDD Issue 編號（必填）、測試文件、現有測試案例等相關資訊  
 outputs:
-  summary: 以測試驗證為主，建立完整測試矩陣與 TDD Issue，準備進入 Red-Green-Refactor 循環
+  summary: 以測試驗證為主，建立完整測試矩陣與 TDD Issue，準備進入 Red-Green-Refactor 循環  
   include:
-    - 依據最新的 TDD Issue 模板說明（透過 `markdown-template` 取得）建立測試矩陣與相關欄位
-    - 直接建立符合目前 TDD Issue 模板格式的 Issue，標題與內容以模板為準
-    - 更新 BDD Issue 的「相關 TDD Issue」表格，建立雙向關聯
-    - 列出測試場景、驗證方式、測試資料準備方式
-    - 依測試矩陣製作「測試執行任務板」，欄位與命名規則遵循模板或專案現行準則
-    - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）
+    - 依據 `markdown-template` 取得的 TDD Issue 模板生成草稿或直接建立 Issue  
+    - 列出測試場景、驗證方式、測試資料準備方式  
+    - 提供下一個建議 Prompt（預設 `tdd-red.prompt.md`）  
 ---
 
 # 測試需求分析（TDD 導向）
 
 ## 目的
 
-以不斷提問的方式釐清測試需求，並將 SDD 技術規範轉換為具體的測試計畫、驗證策略與測試資料，方便後續 TDD 實作，同時輸出可直接執行的測試任務板以安排 Red/Green/Refactor 流程。
+以不斷提問的方式釐清測試需求，並將 SDD 技術規範轉換為具體的測試計畫、驗證策略與測試資料，方便後續 TDD 實作。
+
+## 重要原則
+
+- **模板優先**：所有 ID 格式、欄位名稱、命名規則皆以 `markdown-template` 工具回傳的模板為準，本 Prompt 不定義具體格式
+- **測試導向**：TDD 階段聚焦於測試驗證策略，具體測試案例由後續 Red/Green/Refactor Prompt 撰寫
+- **可追蹤性**：每個測試場景必須對應到 BDD Scenario ID，維持追蹤鏈完整
 
 ## 前置條件
 
-- **重要**：對應的 BDD Issue 必須已被加上 `approved` label，且 SDD Issue 必須已建立完成。若任何一個條件未滿足，請拒絕進行 TDD 問答，並建議使用者先完成相關流程
-- 建議先完成 BDD Issue 與 SDD Issue（或至少有明確的設計規範），若無則透過問答補齊
+- **必要**：對應的 BDD Issue 必須已被加上 `approved` label，且 SDD Issue 必須已建立完成
+- 若任何一個條件未滿足，拒絕進行 TDD 問答，並提醒使用者先完成相關流程
 - 若需求或設計有變動，應先回到 BDD/SDD 更新後再進行 TDD
 
 ## 提問原則
 
 - 採「單一問題 + 選項 + 自訂輸入」格式，便於使用者快速回覆
-- 每題最多 4 個選項，預留「⑤ 其他／自行輸入」
+- 每題最多 4 個選項，預留「其他／自行輸入」選項
+- 一次只問一個問題，避免資訊過載
 
 ### 常用問題題庫
 
@@ -70,129 +74,98 @@ outputs:
 
 ## 操作流程
 
-### Step 1：確認狀態
+### Step 1：確認現有狀態
 
-1. **檢查 Sub-Issue 關係與功能 ID**：確認當前 TDD Issue 是否已被設為某個 BDD Issue 的 Sub-Issue（可能透過 SDD Issue 間接關聯），並提取「功能 ID」
-   - 若已有明確的 BDD Issue 編號（使用者提供或自動偵測），透過 MCP 查詢該 BDD Issue（使用 `mcp_github_issue_read` 工具）
-  - 依目前模板提供的說明取得功能 ID 或其他必要識別碼，並確保以相同方式套用於後續的 TDD Issue
-  - **重要**：後續建立的 TDD Issue 必須遵循模板要求的命名與欄位規範，以維持追蹤鏈完整
+1. **檢查 BDD 與 SDD 完成狀態**
+   - 使用 `mcp_github_issue_read` 查詢 BDD 以及 SDD Issue，確認是否已被加上 `approved` label
+   - 若任一條件未滿足，拒絕進行 TDD 問答，提醒使用者「請先完成 BDD、SDD 核准後再呼叫本 Prompt」
 
-2. **檢查 BDD 與 SDD 完成狀態**：確認對應的 BDD Issue 是否已被加上 `approved` label，且 SDD Issue 是否已建立
-  - 若 BDD Issue 未被核准或 SDD Issue 未建立，拒絕進行 TDD 問答，並提醒使用者「請先完成 BDD 核准與 SDD 建立後再呼叫本 Prompt」
-   - 若兩者都已完成，繼續進行
+2. **閱讀背景資料**
+   - BDD Issue、SDD Issue、測試文件、現有測試案例等
+   - 了解業務需求與規格設計規範
 
-3. 閱讀使用者提供的文件（如：BDD Issue、SDD Issue、測試文件、現有測試案例等），了解業務需求與設計規範
+3. **檢查是否已有對應的 TDD Issue**
+   - 若有，確認是「新增」還是「修改」
+   - 若為修改既有測試計畫，提醒使用者考慮是否應改用 `requirements-change.prompt.md`
 
-4. 檢查是否已有 TDD Issue。若有，請根據原本的 Issue 進行修改
+### Step 2：測試需求釐清與補齊
 
-### Step 2：補齊需求
+1. **識別測試需求缺口**
+   - 根據 Step 1 的資料，列出需要釐清的問題
+   - 使用「常用問題題庫」逐一提問
 
-1. 發現測試需求的不一致、缺漏或技術可行性問題
-2. 藉由不斷提問，釐清測試需求：
+2. **釐清測試需求**
    - 測試場景（成功路徑、失敗路徑、邊界情況）
-  - 每個測試場景都必須對應到 BDD 的 Scenario ID（格式以當前 BDD 規範為準，透過 MCP 取得），確保可追蹤性
    - 測試資料與 Mock 策略
    - 驗證方式與工具
    - 非功能需求（效能、安全、相容性等）
-3. **重要**：TDD 階段聚焦於測試驗證策略，具體測試案例由後續 Prompt 撰寫
 
-### Step 3：建立測試矩陣與 TDD Issue
+3. **維持 BDD Scenario 對應**
+   - 每個測試場景必須對應到 BDD Scenario ID
+   - Scenario ID 格式以 `markdown-template` 取得的模板為準
 
-#### Phase 1：建立測試矩陣
+4. **確認完整性**
+   - 與使用者確認所有測試場景是否完整
+   - 標記任何待確認項目為「待確認」
 
-1. 根據 Step 2 的對話結果與 BDD Issue 中取得的功能 ID（或模板要求的其他識別資訊），為每個測試場景建立測試項目。命名方式、欄位內容與欄位順序以 `markdown-template` 回傳的 TDD Issue 模板說明為準。
-2. 蒐集並填入模板要求的欄位，例如對應的 Scenario ID、測試類型、優先順序或資料準備方式；如模板新增欄位，應回溯詢問使用者以補齊資訊。
-3. 若模板定義了狀態欄位或標記方式，請依其規範初始化（例如未開始狀態或預設符號），避免在 Prompt 中自訂符號。
-4. 確認測試資料、Mock 或外部依賴準備清單，標記負責人與完成時間；如模板提供對應欄位則填入，否則可在備註中補充。
+### Step 3：取得模板並建立 Issue
 
-#### Phase 2：建立 TDD Issue
+1. **取得 TDD Issue 模板**
+   - 呼叫 `markdown-template` 工具取得當前的 TDD Issue 模板
+   - 確認模板要求的所有欄位（標題格式、Test ID 格式、測試矩陣欄位等）
 
-1. **使用 MCP 工具格式化 Issue 內容**：
-   - 呼叫 `markdown-template` 工具，從內部挑選合適的 TDD 模板
-  - 傳入收集到的欄位值（測試矩陣、測試場景、測試資料、預期結果、測試執行任務板等），並以模板指定的欄位名稱與結構為準
-  - 若模板出現新欄位或調整命名，應立即依照模板更新資料，避免沿用舊結構
+2. **建立測試矩陣**
+   - 依模板要求的欄位與格式建立測試矩陣
+   - 若模板定義了狀態欄位或標記方式，依其規範初始化
+   - 確認測試資料、Mock 或外部依賴準備清單
 
-2. 透過 MCP / GitHub API 建立 **TDD Issue**
-   - 使用 `mcp_github_issue_write` 工具建立 Issue，body 內容為步驟 1 格式化後的結果
+3. **建立 TDD Issue**
+   - 使用 `mcp_github_issue_write` 建立 Issue
+   - 確保標籤包含模板指定的預設標籤
+   - 若因權限受限無法建立，輸出完整 Markdown 草稿供手動貼上
 
-3. 在 TDD Issue 的各欄位填入：
-  - 依最新模板提供的欄位名稱與填寫說明輸入資料（例如功能 ID、對應的 BDD/SDD Issue、測試矩陣、測試資料、預期結果等）。
-  - 若模板要求特定格式或命名（包含 Test ID、Scenario ID 呈現方式），應以模板為準；如發現與既有規範不同，需主動告知使用者並更新資料。
+4. **建立 Sub-Issue 關聯**
+   - 使用 `mcp_github_sub_issue_write` 將 TDD Issue 設為 SDD Issue 的 Sub-Issue
+   - 確認關聯成功：SDD Issue 的 GitHub 介面上應顯示此 TDD Issue 為 Sub-Issue
+   - 驗證完整層級結構：BDD Issue -> SDD Issue -> TDD Issue
 
-4. 若因權限受限無法建立 Issue，則輸出完整 Markdown 草稿供手動貼上
+### Step 4：輸出摘要與後續行動
 
-#### 測試狀態追蹤說明
+1. **輸出內容**
+   - TDD Issue 連結（或草稿）
+   - 測試矩陣摘要
+   - 測試資料準備清單
+   - 待確認項目清單（若有）
 
-建立的 TDD Issue 中，測試矩陣應包含單一「狀態」欄位，並配合 Comment 管理完整的測試生命週期：
+2. **後續行動指引**
+   - 下一個預計執行的 Prompt：`tdd-red.prompt.md`
+   - 若測試規劃過程中發現設計問題，建議使用 `requirements-change.prompt.md` 評估變更影響
 
-- **初始狀態**：依模板定義的預設值初始化（例如特定文字或符號）。
-- **Red 階段**：
-  - 首次執行 `tdd-red.prompt.md` 時，為該 Test ID 建立獨立 Comment，記錄失敗訊息
-  - 依模板或專案慣例更新狀態欄位（例如改為失敗符號並加入 Comment 連結）
-  - 若重試同一 Test，則在同一 Comment 中追加新的執行紀錄與重試次數
-- **Green 階段**：
-  - 執行 `tdd-green.prompt.md` 時，在 tdd-red 建立的同一 Comment 中追加 Green 階段結果
-  - 將狀態欄位更新為通過狀態，並保留 Comment 連結
-  - 記錄實作修改摘要、測試通過證據、品質檢查結果
-- **Refactor 階段**（可選）：
-  - 執行 `tdd-refactor.prompt.md` 時，在同一 Comment 中追加 Refactor 階段結果
-  - 將狀態欄位更新為重構完成狀態，並記錄重構改善項目、測試驗證結果、品質檢查
+## 測試狀態追蹤說明
 
-**Comment 結構規範**（詳見 SDD Issue #5）：
-- 每個 Test ID 維持一個獨立 Comment Thread（避免 Issue 評論區混亂）
-- Comment 記錄 6 項必要資訊：Test ID、Scenario ID、測試檔路徑、各階段時戳與結果、失敗原因、重試累計、CI 連結
-- Comment 格式統一，便於追蹤完整的測試生命週期
+TDD Issue 中的測試矩陣應包含「狀態」欄位，配合 Comment 管理完整的測試生命週期：
 
-#### Phase 3：建立 Sub-Issue 關聯
+- **初始狀態**：依模板定義的預設值初始化
+- **Red 階段**：執行 `tdd-red.prompt.md` 時，為該 Test ID 建立獨立 Comment，記錄失敗訊息，更新狀態欄位
+- **Green 階段**：執行 `tdd-green.prompt.md` 時，在同一 Comment 中追加結果，更新狀態欄位
+- **Refactor 階段**（可選）：執行 `tdd-refactor.prompt.md` 時，在同一 Comment 中追加結果，更新狀態欄位
 
-**重要提醒：此步驟是必須的，避免遺漏。**
+每個 Test ID 維持一個獨立 Comment，記錄完整的測試生命週期。
 
-1. **將新建立的 TDD Issue 加入為 SDD Issue 的 Sub-Issue**
-   - 使用 `mcp_github_sub_issue_write` 工具
-   - 參數設定：
-     ```
-     method: add
-     owner: hsiangjenli
-     repo: prompts
-     issue_number: <對應的 SDD Issue 編號>
-     sub_issue_id: <新建立的 TDD Issue ID (node_id)>
-     ```
-   - 確認關聯成功：SDD Issue 的 GitHub 介面上會自動顯示此 TDD Issue 為 Sub-Issue
+## 注意事項
 
-2. **驗證完整的層級結構**
-   - BDD Issue（祖父）→ SDD Issue（父）→ TDD Issue（本 Issue，子）
-   - 確保在各層級 Issue 上都可看到 Sub-Issues 列表
-   - 三個 Issue 之間形成完整的追蹤鏈
+- **禁止實作細節**：本階段不討論具體測試程式碼，專注於測試規劃
+- **格式依模板**：所有 ID、欄位名稱、表格結構皆以 `markdown-template` 回傳為準
+- **待確認標註**：對於使用者未明確回答的項目，標註「待確認」並列入待確認清單
+- **Sub-Issue 必建**：TDD Issue 建立後必須設為 SDD Issue 的 Sub-Issue，維持追蹤鏈完整
 
-#### Phase 4：輸出整理
+## 錯誤處理
 
-1. 在輸出中附上：
-   - 建立的 TDD Issue 連結
-   - 完整的測試矩陣（供後續 `tdd-red.prompt.md` 使用）
-   - 測試資料準備清單與負責人
-   - 待補資料或阻塞清單（如有）
-   - 測試狀態追蹤說明（Red/Green/Refactor 狀態更新方式）
-
-2. 指出下一步應執行 `tdd-red.prompt.md`，並提醒攜帶測試矩陣以及新 TDD Issue 編號
-
-3. **更新完成清單（必須完成）**：
-   - ☐ TDD Issue 已建立並帶有編號
-   - ☐ TDD Issue 已透過 `mcp_github_sub_issue_write` 加入為對應 SDD Issue 的 Sub-Issue
-   - ☐ 在 SDD Issue 的 GitHub 介面上確認可看到此 TDD Issue 顯示為 Sub-Issue
-   - ☐ 完整層級結構已建立：BDD Issue → SDD Issue → TDD Issue
-   - ☐ 三個 Issue 之間的 Sub-Issue 鏈接已建立並可相互追蹤
-
-#### Phase 4.5：測試執行任務板
-
-1. 從測試矩陣擷取 `P0` 與 `P1` 測試項目，建立任務表格（建議欄位：`Task ID`、`Test ID`、`Scenario ID`、`Red/Green/Refactor 階段`、`優先順序`、`前置條件`、`協作角色`、`預計完成時程`）。任務命名與欄位內容應以模板或專案既有準則為準。
-2. 任務內容需對應到實際操作（例如撰寫對應的 Red 測試或配置必要的 Mock Service），避免僅描述產出文件。
-3. 針對需要跨團隊支援的任務，明確標註依賴對象與準備物，降低後續溝通成本。
-4. 將任務板隨輸出一併附上，並在 TDD Issue 內同步列出，確保後續 `tdd-red.prompt.md` 能直接引用 `Task ID`。
-
-## 後續行動
-
-- **在執行 `tdd-red.prompt.md` 前，務必確認 Phase 3 的 Sub-Issue 關聯已建立完成**
-- 根據測試執行任務板的 `P0` 項目，先完成需要的 Red 測試與前置作業
-- 下一個預計執行的 Prompt：`tdd-red.prompt.md`（開始設計失敗測試）
-- 若設計或測試過程中發現需求問題，建議回到 `sdd.prompt.md` 或 `requirements.prompt.md` 更新相應 Issue
-- **重要提醒**：BDD ↔ SDD ↔ TDD 三層 Sub-Issue 關聯建立後，才能確保整個工作流的可追蹤性
+| 情況 | 處理方式 |
+| --- | --- |
+| BDD Issue 未建立、核准 | 拒絕進行 TDD 問答，提醒使用者先完成 BDD 建立或審核 |
+| SDD Issue 未建立、核准 | 拒絕進行 TDD 問答，提醒使用者先完成 SDD 建立或審核 |
+| `markdown-template` 無法取得模板 | 提示使用者確認 MCP 工具是否正常運作，暫停流程 |
+| 使用者提供的資訊不足以建立測試矩陣 | 持續提問直到至少有一個完整的測試場景 |
+| GitHub API 權限不足 | 輸出完整 Markdown 草稿，指導使用者手動建立 |
+| Sub-Issue 關聯建立失敗 | 提示使用者手動在 SDD Issue 中加入 Sub-Issue 關聯 |
