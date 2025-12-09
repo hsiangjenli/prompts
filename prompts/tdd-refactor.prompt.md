@@ -1,17 +1,16 @@
 ---
-mode: agent
-description: '【可選】在測試保持綠燈的前提下進行重構以改善程式碼品質（僅於大型重構或品質改善時執行）'
+mode: agent  
+description: 在測試保持綠燈的前提下進行重構以改善程式碼品質  
 inputs:
-  summary: 本 Prompt 指導可選的 Refactor 階段重構
+  summary: 本 Prompt 指導可選的 Refactor 階段重構  
   required:
-    - 目標 TDD Issue 與測試矩陣（已轉綠的項目）
-    - Green 階段的待辦事項或技術債清單
-    - 語言與輸出格式偏好（預設繁體中文 + Markdown）
+    - 目標 TDD Issue 與測試矩陣
+    - Green 階段的待辦事項或技術債清單  
 outputs:
-  summary: 記錄重構內容、品質檢查結果與驗證證據
+  summary: 記錄重構內容、品質檢查結果與驗證證據  
   include:
-    - 重構項目與改善效果（含測試與品質檢查結果）
-    - 未來技術債追蹤
+    - 重構項目與改善效果
+    - 未來技術債追蹤  
 ---
 
 # tdd-refactor

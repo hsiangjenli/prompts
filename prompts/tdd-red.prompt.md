@@ -1,22 +1,22 @@
 ---
-mode: agent
-description: 根據 TDD Issue 中的測試矩陣，撰寫「一定會失敗的測試」並記錄失敗原因與阻塞
+mode: agent  
+description: 根據 TDD Issue 中的測試矩陣，撰寫「一定會失敗的測試」並記錄失敗原因與阻塞  
 inputs:
-  summary: 以本 Prompt 開始 Red 階段，撰寫失敗測試
+  summary: 以本 Prompt 開始 Red 階段，撰寫失敗測試  
   required:
-    - TDD Issue 編號與測試矩陣（由 tdd-requirements.prompt.md 提供）
-    - 對應的 BDD Scenario / SDD 契約細節
-    - 測試框架與執行指令（例如 `pnpm test --filter ...`）
-    - 測試資料、Mock 或外部依賴的準備情況
-    - 語言與輸出格式偏好（預設繁體中文 + Markdown）
+    - TDD Issue 編號與測試矩陣（由 tdd-requirements.prompt.md 提供）  
+    - 對應的 BDD Scenario / SDD 契約細節 
+    - 測試框架與執行指令（例如 `pnpm test --filter ...`）  
+    - 測試資料、Mock 或外部依賴的準備情況 
+    - 語言與輸出格式偏好（預設繁體中文 + Markdown）  
 outputs:
-  summary: 撰寫失敗測試並更新 TDD Issue 的 Red 階段狀態，準備進入 Green
+  summary: 撰寫失敗測試並更新 TDD Issue 的 Red 階段狀態，準備進入 Green 
   include:
-    - 新增測試檔案的摘要（檔名、情境、預期失敗訊息）
-    - 測試執行結果與錯誤詳情
-    - 失敗原因分析與阻塞清單
-      - 依 TDD Issue 模板定義更新測試矩陣狀態（包含必要的連結或符號），並在 Comment 中記錄失敗細節
-    - 下一步指向 `tdd-green.prompt.md`
+    - 新增測試檔案的摘要（檔名、情境、預期失敗訊息） 
+    - 測試執行結果與錯誤詳情 
+    - 失敗原因分析與阻塞清單 
+      - 依 TDD Issue 模板定義更新測試矩陣狀態（包含必要的連結或符號），並在 Comment 中記錄失敗細節 
+    - 下一步指向 `tdd-green.prompt.md` 
 ---
 
 # tdd-red

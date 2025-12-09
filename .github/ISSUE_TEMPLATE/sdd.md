@@ -1,6 +1,6 @@
 ---
 name: SDD 規範要求
-about: 用於提交與規範、標準、合規性有關的要求。
+about: 用於提交與規範、標準、合規性有關的要求
 title: 'S-<feature_id>-US<us_number> - <design_domain>'
 labels: 'type: compliance', 'domain: sdd'
 assignees: ''

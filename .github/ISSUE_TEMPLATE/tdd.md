@@ -1,6 +1,6 @@
 ---
 name: TDD 測試驅動
-about: 用於提交測試驅動開發的測試計畫，包含測試矩陣與場景驗證。
+about: 用於提交測試驅動開發的測試計畫 
 title: 'T-<feature_id>-US<us_number>'
 labels: 'type: testing', 'domain: tdd'
 assignees: ''
