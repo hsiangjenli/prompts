@@ -134,13 +134,22 @@ BDD Issue（功能需求）
    - **重試**：找到既有 Comment，在「Red 階段」區段追加新的重試紀錄
    - 依模板填入所有必要欄位（測試檔案路徑、分支資訊、失敗原因、錯誤堆疊等）
 
-3. **更新測試矩陣狀態**
-   - 找到對應的測試案例行
-   - 將狀態欄改為 `🔴 [查看](#comment-XXXX)`
-   - 連結指向該測試案例的 Comment
-   - 若為重試，連結維持指向同一 Comment
+### Step 5：更新測試矩陣狀態
 
-### Step 5：輸出摘要與後續指引
+1. **取得 TDD Issue 模板**
+   - 呼叫 `markdown-template` 工具取得 `tdd` 模板
+   - 確認測試矩陣的狀態欄格式
+
+2. **更新測試矩陣狀態**
+   - 使用 `mcp_github_issue_read` 讀取 TDD Issue，並找到對應的測試案例行
+   - 將狀態欄改為 `🔴 [查看](#comment-XXXX)`
+   - 連結維持指向同一 Comment（由 Red 階段建立）
+
+3. **更新 TDD Issue**
+   - 使用 `mcp_github_issue_write` 更新 Issue 內容
+   - 若無權限，輸出更新後的測試矩陣供手動貼上
+
+### Step 6：輸出摘要與後續指引
 
 回覆內容需包含：
 - **分支資訊**：Dev Branch / Test Branch / 是否新建
