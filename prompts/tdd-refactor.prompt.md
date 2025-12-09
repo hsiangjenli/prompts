@@ -153,9 +153,8 @@ outputs:
 
 3. **在既有 Comment 中追加 Refactor 階段結果**
    - 定位到 Red 階段建立的 Comment（標題為 `## Test: [Test ID] - [Scenario ID]`）
-   - 在 Comment 中找到「### Green 階段 - <timestamp>」區段之後
-   - 追加新的區段，格式為「### Refactor 階段 - <timestamp>」
-     （其中 <timestamp> 應填入當前執行時間，格式依 `tdd-comment` 模板為準）
+   - 在 Comment 中找到「### Green 階段」區段之後
+   - 追加新的區段，格式為「### Refactor 階段」
    - 依 `tdd-comment` 模板填入所有必要欄位
    - 使用 GitHub API 或手動編輯 Comment 內容
 

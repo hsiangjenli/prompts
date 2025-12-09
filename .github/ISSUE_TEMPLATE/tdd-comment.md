@@ -14,7 +14,7 @@ tests/unit/auth/login.test.ts
 -->
 <test_file_path>
 
-### Red 階段 - <timestamp>
+### Red 階段:
 <!--
 請記錄測試失敗的詳細資訊。
 
@@ -25,7 +25,7 @@ Example:
 -->
 <red_phase>
 
-### Green 階段 - <timestamp>
+### Green 階段:
 <!--
 請記錄測試通過的詳細資訊（由 tdd-green 追加）。
 
@@ -36,7 +36,7 @@ Example:
 -->
 <green_phase>
 
-### Refactor 階段 - <timestamp>
+### Refactor 階段:
 <!--
 請記錄重構的詳細資訊（由 tdd-refactor 追加，可選）。
 
