@@ -5,7 +5,7 @@ inputs:
   summary: 以本 Prompt 開始 Red 階段，撰寫失敗測試  
   required:
     - TDD Issue 編號與測試矩陣（由 tdd-requirements.prompt.md 提供）  
-    - 對應的 BDD Scenario / SDD 契約細節 
+    - 對應的 BDD Scenario / SDD 規格細節 
     - 測試框架與執行指令（例如 `pnpm test --filter ...`）  
     - 測試資料、Mock 或外部依賴的準備情況 
     - 語言與輸出格式偏好（預設繁體中文 + Markdown）  
@@ -37,7 +37,7 @@ outputs:
 
 ### Step 2：撰寫一定會失敗的測試
 
-1. 根據 Scenario ID（格式依當前 BDD 規範，透過 MCP 取得）、Test ID 與 SDD 契約細節，新增測試檔案
+1. 根據 Scenario ID（格式依當前 BDD 規範，透過 MCP 取得）、Test ID 與 SDD 規格細節，新增測試檔案
 2. **重要**：設計測試使其「一定失敗」，測試預期行為但實現還不存在
    - 使用註解說明「預期行為是什麼」
    - 斷言應指向尚未實現的功能

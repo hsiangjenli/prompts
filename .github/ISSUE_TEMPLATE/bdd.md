@@ -106,7 +106,7 @@ Scenario US2-S3: 摘要產生失敗，使用者稍後重試
 Example:
 | Scenario ID | 建議 SDD Issue 標題 | 設計焦點 | 優先順序 | 所需參與角色 | 前置輸入 | 建議下一步 Prompt |
 | --- | --- | --- | --- | --- | --- | --- |
-| US1-S1 | S-REQ-001-US1 - API 契約整理 | REST 介面欄位、錯誤碼 | P0 | 後端工程師、Domain SME | 現有 API 文件、錯誤碼清單 | sdd.prompt.md |
+| US1-S1 | S-REQ-001-US1 - API 規格整理 | REST 介面欄位、錯誤碼 | P0 | 後端工程師、Domain SME | 現有 API 文件、錯誤碼清單 | sdd.prompt.md |
 | US1-S2 | S-REQ-001-US1 - 權限驗證規範 | 權限矩陣、例外處理 | P1 | 安全專家、後端工程師 | 角色權限圖、審計需求 | sdd.prompt.md |
 -->
 <sdd_bridge_plan>
