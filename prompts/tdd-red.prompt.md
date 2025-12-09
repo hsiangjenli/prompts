@@ -26,7 +26,7 @@ outputs:
 
 - **單一測試案例**：每次執行只處理使用者指定的一個測試案例，不批量處理
 - **模板優先**：所有 ID 格式、分支命名規則、Comment 格式皆以 `markdown-template` 工具回傳的模板為準
-- **分支隔離**：每個測試案例使用獨立的 Test Branch，從 Dev Branch checkout，保持開發環境乾淨
+- **分支繼承**：新測試案例的 Test Branch 須從前一個測試案例的 Test Branch 建立
 - **Comment 追蹤**：每個測試案例在 TDD Issue 中有一個專屬 Comment，記錄完整的 Red → Green → Refactor 生命週期
 
 ## 使用方式
